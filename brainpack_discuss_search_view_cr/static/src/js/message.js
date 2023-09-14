@@ -18,7 +18,7 @@ registerPatch({
 
                     for (const thread of this.threads) {
                         for (const threadView of thread.threadViews) {
-                            if(threadView.threadCache && threadView.threadViewer.threadCache.SearchMessages){
+                            if(threadView.threadViewer && threadView.threadViewer.threadCache && threadView.threadViewer.threadCache.SearchMessages){
                                 var message = threadView.threadViewer.threadCache.SearchMessages.filter(x => x.id == this.id)
 
                                 if(message.length > 0){
