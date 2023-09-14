@@ -19,9 +19,11 @@ registerPatch({
                 if (!this.lastFetchedMessage) {
                     newerMessages = this.thread.messages;
                 } else {
-                    newerMessages = this.thread.messages.filter(message =>
-                        message.id > this.lastFetchedMessage.id
-                    );
+                    if(this.thread.messages){
+                        newerMessages = this.thread.messages.filter(message =>
+                            message.id > this.lastFetchedMessage.id
+                        );
+                    }
                 }
                 return [...this.fetchedMessages, ...this.temporaryMessages, ...newerMessages];
             },
@@ -89,10 +91,14 @@ registerPatch({
             };
 
             if(this.thread && this.thread.isWaMsgs && !this.thread.isChatterWa){
-                search_messages = search_messages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+                if(search_messages){
+                    search_messages = search_messages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+                }
             }
             else{
-                search_messages = search_messages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+                if(search_messages){
+                    search_messages = search_messages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+                }
             }
             // maxId is only valid when called from load more
             if (maxId) {
@@ -150,10 +156,14 @@ registerPatch({
             this.update({ isLoadingMore: false });
 
             if(this.thread && this.thread.isWaMsgs && !this.thread.isChatterWa){
-                fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+                if(fetchedSearchMessages){
+                    fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+                }
             }
             else{
-                fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+                if(fetchedSearchMessages){
+                    fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+                }
             }
 
             this.update({ SearchMessages: fetchedSearchMessages });
@@ -252,10 +262,14 @@ registerPatch({
         }
 
         if(this.thread.isWaMsgs && !this.thread.isChatterWa){
-            fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+            if(fetchedSearchMessages){
+                fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
+            }
         }
         else{
-            fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+            if(fetchedSearchMessages){
+                fetchedSearchMessages = fetchedSearchMessages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
+            }
         }
         this.update({ SearchMessages: fetchedSearchMessages });
 

@@ -22,7 +22,7 @@ class DiscussControllerCr(DiscussController):
         if kwargs and 'stringifiedDomain' in kwargs:
             search_domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
         return request.env['mail.message']._message_fetch(domain=domain, max_id=max_id,
-                                                          min_id=min_id, limit=limit),request.env['mail.message']._message_fetch(domain=search_domain, max_id=None,
+                                                          min_id=min_id, limit=limit).message_format(),request.env['mail.message']._message_fetch(domain=search_domain, max_id=None,
                                                           min_id=None, limit=50).message_format()
 
     @http.route('/mail/starred/messages', methods=['POST'], type='json', auth='user')
