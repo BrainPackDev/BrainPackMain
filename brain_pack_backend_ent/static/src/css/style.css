@@ -69,6 +69,15 @@ o_tooltip.active::before {
         background-image: unset !important;
 }
 
+.o_onboarding_main.o_onboarding_blue .o_onboarding_wrap{
+     background-color: #137ee8 !important;
+        background-image: unset !important;
+}
+.o_onboarding_main.o_onboarding_blue {
+    background-color: #137ee8 !important;
+        background-image: unset !important;
+}
+
 .o_onboarding_main .o_onboarding_step .o_onboarding_dot{
      background-color: #ffffff !important;
 }
