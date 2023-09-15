@@ -17,3 +17,15 @@
     background-color: rgb(255 255 255 / 80%) !important;
     color: #FFF;
 }
+
+@media (max-width: 991.98px){
+    .appdrawer_section .apps-list .row {
+        padding-bottom: 56px;
+    }
+    .appdrawer_section .o_logo{
+        margin-top: 2rem !important;
+    }
+    .appdrawer_section .input-group {
+        padding: 5px 8px !important;
+    }
+}
