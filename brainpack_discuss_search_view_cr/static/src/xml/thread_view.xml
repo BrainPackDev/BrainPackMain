@@ -4,7 +4,7 @@
         <xpath expr="//t[@t-if='threadView.callView']" position="before">
                <div class="row chat_mobile" t-if="threadView">
                     <div class="o_cp_searchview d-flex flex-grow-1" role="search" style="    padding-top: 5px;
-                            padding-bottom: 5px;">
+                            padding-bottom: 5px;    padding-right: 0px !important;">
                     <div class="o_searchview pb-1 align-self-center flex-grow-1" role="search"
                          aria-autocomplete="list" style="    padding: 10px;
                             border: 1px solid;
