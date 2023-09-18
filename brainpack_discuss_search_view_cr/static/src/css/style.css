@@ -19,7 +19,8 @@
 @media (min-width: 0px) and (max-width: 575px) {
 
     .chat_mobile{
-        display:block !important
+        display:block !important;
+        width: 100%;
     }
     .search_desktop{
         display:none !important;

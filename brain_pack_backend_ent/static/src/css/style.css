@@ -94,6 +94,35 @@ body.o_web_client.custom_drawer_color .o_main_navbar.appdrawer-toggle .appdrawer
     color: #137EE8 !important;
 }
 
+b, strong {
+    font-weight: 600;
+}
+.note-description img{
+    width:100%;
+}
+.note-description-input{
+    overflow-y: scroll;
+    height: 500px;
+}
+@media (min-width: 0px) and (max-width: 575px) {
+.note-description-input{
+    overflow-y: scroll;
+    height: 320px;
+}
+}
+@media (min-width: 576px) and (max-width: 767px) {
+.note-description-input{
+    overflow-y: scroll;
+    height: 320px;
+}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+.note-description-input{
+    overflow-y: scroll;
+    height: 400px;
+}
+}
+
 /*body.o_web_client {
     &.custom_drawer_color{
         .appdrawer_section {
