@@ -25,7 +25,7 @@
         'web.assets_backend': [
             '/brainpack_access_rights/static/src/js/form_controller.js',
             '/brainpack_access_rights/static/src/js/settings_form_controller.js',
-            '/brainpack_access_rights/static/src/js/systray_item.js',
+            # '/brainpack_access_rights/static/src/js/systray_item.js',
             '/brainpack_access_rights/static/src/js/group_by_menu.js',
             '/brainpack_access_rights/static/src/js/filter_menu.js',
         ],

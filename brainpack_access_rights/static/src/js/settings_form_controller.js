@@ -16,19 +16,19 @@ patch(SettingsFormController.prototype, "brainpack_access_rights.SettingsFormCon
                 if(session.field_lst.length > 0){
                     $('.o_field_widget').each(function() {
                         if(session.field_lst.includes($(this).attr("name"))){
-                            $(this).closest('.o_setting_box').remove()
+                            $(this).closest('.o_setting_box').hide()
                         }
                     });
                 }
                 if(session.menu_lst.length > 0){
                     $('.settings_tab').find('.tab').each(function() {
                         if(session.menu_lst.includes($(this).data('key'))){
-                            $(this).remove()
+                            $(this).hide()
                         }
                     });
                 }
-                $('.o_widget_res_config_dev_tool').remove()
-                $('.o_widget_iap_buy_more_credits').closest('.o_setting_box').remove()
+                $('.o_widget_res_config_dev_tool').hide()
+                $('.o_widget_iap_buy_more_credits').closest('.o_setting_box').hide()
             }
 
 //            this.user.hasGroup("brainpack_access_rights.client_admin").then(function(result){
