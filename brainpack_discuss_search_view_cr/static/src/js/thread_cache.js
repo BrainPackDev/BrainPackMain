@@ -126,7 +126,12 @@ registerPatch({
             }
             this.update({ isLoadingMore: true });
             const messageIds = this.fetchedMessages.map(message => message.id);
-            const limit = 30;
+            var limit = 30;
+            for (const threadView of this.threadViews) {
+                if(threadView.searchMessage && threadView.searchUpDown){
+                    limit = 100
+                }
+            }
             let fetchedMessages;
             let fetchedMessagess;
             let fetchedSearchMessages;
@@ -168,8 +173,6 @@ registerPatch({
 
             this.update({ SearchMessages: fetchedSearchMessages });
 
-
-
             for (const threadView of this.threadViews) {
                 if(threadView.searchMessage && threadView.searchUpDown){
                     var massage_available = this.fetchedMessages.filter(a => a.id == threadView.searchMessageId)
@@ -185,14 +188,13 @@ registerPatch({
                         }, 200);
                     }
                     else{
-//                        setTimeout(function(){
-//                            if(self.fetchedMessages.length > 0 && $('.o_Message[data-id='+self.fetchedMessages[self.fetchedMessages.length-1].id+']').length > 0){
-//                                $('.o_ThreadView_messageList').animate({
-//                                        scrollTop: $('.o_Message[data-id='+self.fetchedMessages[self.fetchedMessages.length-1].id+']')[0].offsetTop + 1000,
-//                                }, 50);
-//                            }
-//                        }, 100);
-                        $.blockUI()
+                        setTimeout(function(){
+                            if(self.fetchedMessages.length > 0 && $('.o_Message[data-id='+self.fetchedMessages[self.fetchedMessages.length-1].id+']').length > 0){
+                                $('.o_ThreadView_messageList').animate({
+                                        scrollTop: $('.o_Message[data-id='+self.fetchedMessages[self.fetchedMessages.length-1].id+']')[0].offsetTop + 1000,
+                                }, 50);
+                            }
+                        }, 100);
                         await this.loadMoreMessages();
                     }
                 }
@@ -383,7 +385,7 @@ registerPatch({
 //                            }, 400);
 //                        }
 //                    }, 300);
-
+                    $.blockUI({ message: '<h1><img src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     threadView.update({searchUpDown:true})
                     await this.loadMoreMessages();
                 }

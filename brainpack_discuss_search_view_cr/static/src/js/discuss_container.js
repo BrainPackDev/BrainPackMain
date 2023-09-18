@@ -73,7 +73,7 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
                 }
                 else{
                     self.discuss.threadView.update({searchUpDown:true})
-                    $.blockUI()
+                    $.blockUI({ message: '<h1><img src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     self.discuss.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 1000);
@@ -123,7 +123,7 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
                 }
                 else{
                     self.discuss.threadView.update({searchUpDown:true})
-                    $.blockUI()
+                    $.blockUI({ message: '<h1><img src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     self.discuss.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 300);
