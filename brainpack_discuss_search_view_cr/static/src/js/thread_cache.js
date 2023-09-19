@@ -217,7 +217,7 @@ registerPatch({
                             }
                             self.update({ isAllHistoryLoaded: false });
                             await self.loadMoreMessages();
-                        }, 20);
+                        }, 50);
                     }
                 }
 
