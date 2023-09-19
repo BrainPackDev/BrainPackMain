@@ -133,7 +133,7 @@ registerPatch({
                     var msg_available = self.fetchedMessages.filter(a => a.id == threadView.searchMessageId)
                     if(msg_available.length == 0){
                         limit = 500
-                        if((Math.min(...messageIds)-threadView.searchMessageId - 1) > 120){
+                        if((Math.min(...messageIds)-threadView.searchMessageId - 1) > 400){
                             minId = threadView.searchMessageId - 1
                         }
                     }
