@@ -38,7 +38,7 @@ class DiscussControllerCr(DiscussController):
     #
     @http.route('/mail/channel/messages', methods=['POST'], type='json', auth='public')
     def mail_channel_messages(self, channel_id, max_id=None, min_id=None, limit=30, **kwargs):
-
+        # print(">>>>>>>....max_id", max_id, min_id, limit)
         channel_member_sudo = request.env['mail.channel.member']._get_as_sudo_from_request_or_raise(request=request,
                                                                                                     channel_id=int(
                                                                                                         channel_id))

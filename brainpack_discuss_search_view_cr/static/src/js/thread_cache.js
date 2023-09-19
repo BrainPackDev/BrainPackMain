@@ -127,9 +127,16 @@ registerPatch({
             this.update({ isLoadingMore: true });
             const messageIds = this.fetchedMessages.map(message => message.id);
             var limit = 30;
+            var minId = false
             for (const threadView of this.threadViews) {
                 if(threadView.searchMessage && threadView.searchUpDown){
-                    limit = 100
+                    var msg_available = self.fetchedMessages.filter(a => a.id == threadView.searchMessageId)
+                    if(msg_available.length == 0){
+                        limit = false
+                        if((Math.min(...messageIds)-threadView.searchMessageId - 1) > 100){
+                            minId = threadView.searchMessageId - 1
+                        }
+                    }
                 }
             }
             let fetchedMessages;
@@ -138,7 +145,12 @@ registerPatch({
             let success;
 
             try {
+                if(minId){
+                fetchedMessagess = await this._loadMessages({ limit, maxId: Math.min(...messageIds), minId:minId });
+                }
+                else{
                 fetchedMessagess = await this._loadMessages({ limit, maxId: Math.min(...messageIds) });
+                }
 
                 fetchedMessages = fetchedMessagess[0]
                 fetchedSearchMessages = fetchedMessagess[1]
@@ -147,6 +159,7 @@ registerPatch({
             } catch (_e) {
                 success = false;
             }
+
             if (!this.exists()) {
                 return;
             }
@@ -195,6 +208,11 @@ registerPatch({
                                 }, 50);
                             }
                         }, 100);
+
+                        if($("body").find('.chatter_loader').length == 0){
+                            $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                        }
+
                         await this.loadMoreMessages();
                     }
                 }
@@ -385,7 +403,6 @@ registerPatch({
 //                            }, 400);
 //                        }
 //                    }, 300);
-                    $.blockUI({ message: '<h1><img src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     threadView.update({searchUpDown:true})
                     await this.loadMoreMessages();
                 }
