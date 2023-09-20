@@ -86,7 +86,8 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
                 }
                 else{
                     self.threadView.update({searchUpDown:true})
-                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:height: 150px;"/></h1>' })
+//                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:height: 150px;"/></h1>' })
+                    $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     self.threadView.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 1000);
@@ -135,7 +136,8 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
                 }
                 else{
                     self.threadView.update({searchUpDown:true})
-                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+//                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                    $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     self.threadView.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 700);
