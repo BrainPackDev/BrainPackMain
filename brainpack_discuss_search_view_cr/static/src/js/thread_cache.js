@@ -198,7 +198,8 @@ registerPatch({
                                 }, 200);
                             }
                             threadView.update({'searchUpDown':false})
-                            $.unblockUI()
+//                            $.unblockUI()
+                            $('.o_ThreadView').unblock()
                         }, 200);
                     }
                     else{
@@ -213,7 +214,8 @@ registerPatch({
 
                         setTimeout(async function(){
                             if($("body").find('.chatter_loader').length == 0){
-                                $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+//                                $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                                $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                             }
                             self.update({ isAllHistoryLoaded: false });
                             await self.loadMoreMessages();
@@ -409,7 +411,8 @@ registerPatch({
 //                    }, 300);
 //                    console.log(">>>>>>>",this)
                     if(threadView.searchMessage){
-                        $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+//                        $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                           $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     }
                     threadView.update({searchUpDown:true})
                     await this.loadMoreMessages();
