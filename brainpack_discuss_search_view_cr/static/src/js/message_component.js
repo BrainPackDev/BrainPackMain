@@ -3,6 +3,18 @@ import { Message } from '@mail/components/message/message';
 import { patch } from 'web.utils';
 
 patch(Message.prototype, 'brainpack_discuss_search_view_cr.message_component', {
+    _getStyle(){
+        for (const thread of this.props.record.message.threads) {
+            for (const threadView of thread.threadViews) {
+                if(threadView.messageFilter){
+                    return "cursor: pointer;"
+                }
+                else{
+                    return ""
+                }
+            }
+        }
+    },
     _onClickMessage(ev){
         for (const thread of this.props.record.message.threads) {
             for (const threadView of thread.threadViews) {
@@ -38,5 +50,5 @@ patch(Message.prototype, 'brainpack_discuss_search_view_cr.message_component', {
             }
         }
         return true
-    }
+    },
 });
