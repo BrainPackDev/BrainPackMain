@@ -9,6 +9,11 @@ class DiscussControllerCr(DiscussController):
     def discuss_inbox_messages(self, max_id=None, min_id=None, limit=30, **kwargs):
         domain = [('needaction', '=', True)]
         search_domain = []
+        if kwargs and 'messageFilter' in kwargs and kwargs.get('messageFilter'):
+            domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
+            return request.env['mail.message']._message_fetch(
+                domain=domain, max_id=max_id, min_id=min_id,
+                limit=limit).message_format(), []
         if kwargs and 'stringifiedDomain' in kwargs:
             search_domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
         return request.env['mail.message']._message_fetch(domain=domain, max_id=max_id,
@@ -19,6 +24,11 @@ class DiscussControllerCr(DiscussController):
     def discuss_history_messages(self, max_id=None, min_id=None, limit=30, **kwargs):
         domain = [('needaction', '=', False)]
         search_domain = []
+        if kwargs and 'messageFilter' in kwargs and kwargs.get('messageFilter'):
+            domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
+            return request.env['mail.message']._message_fetch(
+                domain=domain, max_id=max_id, min_id=min_id,
+                limit=limit).message_format(), []
         if kwargs and 'stringifiedDomain' in kwargs:
             search_domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
         return request.env['mail.message']._message_fetch(domain=domain, max_id=max_id,
@@ -29,6 +39,11 @@ class DiscussControllerCr(DiscussController):
     def discuss_starred_messages(self, max_id=None, min_id=None, limit=30, **kwargs):
         domain = [('starred_partner_ids', 'in', [request.env.user.partner_id.id])]
         search_domain = []
+        if kwargs and 'messageFilter' in kwargs and kwargs.get('messageFilter'):
+            domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
+            return request.env['mail.message']._message_fetch(
+                domain=domain, max_id=max_id, min_id=min_id,
+                limit=limit).message_format(), []
         if kwargs and 'stringifiedDomain' in kwargs:
             search_domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
         return request.env['mail.message']._message_fetch(
@@ -38,7 +53,6 @@ class DiscussControllerCr(DiscussController):
     #
     @http.route('/mail/channel/messages', methods=['POST'], type='json', auth='public')
     def mail_channel_messages(self, channel_id, max_id=None, min_id=None, limit=30, **kwargs):
-        # print(">>>>>>>....max_id", max_id, min_id, limit)
         channel_member_sudo = request.env['mail.channel.member']._get_as_sudo_from_request_or_raise(request=request,
                                                                                                     channel_id=int(
                                                                                                         channel_id))
@@ -48,8 +62,14 @@ class DiscussControllerCr(DiscussController):
             ('message_type', '!=', 'user_notification'),
         ]
         search_domain = []
+
         if kwargs and 'stringifiedDomain' in kwargs:
             search_domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
+        if kwargs and 'messageFilter' in kwargs and kwargs.get('messageFilter'):
+            domain = expression.AND([domain, kwargs.get('stringifiedDomain')])
+            messages = channel_member_sudo.env['mail.message']._message_fetch(domain, max_id=max_id, min_id=min_id,
+                                                                              limit=limit)
+            return messages.message_format(), []
         messages = channel_member_sudo.env['mail.message']._message_fetch(domain, max_id=max_id, min_id=min_id, limit=limit)
         search_messages = channel_member_sudo.env['mail.message']._message_fetch(search_domain, max_id=None, min_id=None, limit=50)
         if not request.env.user._is_public():

@@ -28,7 +28,7 @@
                                            placeholder="Search..."
                                            role="searchbox"
                                            title="Search for records"
-
+                                            t-on-keyup="_onKeyUpSearch"
                                     />
                                 </div>
                             </div>

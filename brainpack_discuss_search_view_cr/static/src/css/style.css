@@ -17,7 +17,9 @@
 }
 
 @media (min-width: 0px) and (max-width: 575px) {
-
+    .chatter_loader{
+        height:70px !important;
+    }
     .chat_mobile{
         display:block !important;
         width: 100%;
@@ -31,7 +33,7 @@
     background-color: white !important;
     border: 0 !important;
     border-radius: 10px;
-    padding: 0px 10px 0px 10px;
+    padding: 0px 2px 0px 2px;
     align-items: center;
     margin-left: 5px;
     box-shadow: 0 4px 10px rgb(0 0 0 / 3%);

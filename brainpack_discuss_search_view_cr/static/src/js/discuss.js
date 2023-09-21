@@ -7,6 +7,7 @@ registerPatch({
     fields: {
         searchMessageId: attr({default: false}),
         searchMessage: attr({default: false}),
+        messageFilter:  attr({default: false}),
         searchUpDown: attr({default: false}),
         upDisable: attr({default: true}),
         downDisable: attr({default: true}),

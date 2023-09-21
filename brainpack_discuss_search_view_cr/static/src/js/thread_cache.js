@@ -42,7 +42,6 @@ registerPatch({
     recordMethods: {
        async _loadMessages({ limit = 30, maxId, minId } = {}) {
 //          const messages = await this._super(...arguments);
-
           this.update({ isLoading: true });
             let messages_list,messages,search_messages;
             try {
@@ -100,7 +99,25 @@ registerPatch({
                     search_messages = search_messages.filter(message => !message.isEmpty && message.message_type!='wa_msgs');
                 }
             }
+
             // maxId is only valid when called from load more
+
+             for (const threadView of this.threadViews) {
+                if(threadView.messageFilter){
+                    if (maxId) {
+                      vals.fetchedMessages = link(messages);
+                    } else {
+                      vals.fetchedMessages = messages;
+                    }
+                }
+                else{
+                    if (maxId) {
+                        vals.fetchedMessages = link(messages);
+                    } else {
+                      vals.fetchedMessages = messages;
+                    }
+                }
+             }
             if (maxId) {
               vals.SearchMessages = link(search_messages);
             } else {
@@ -145,7 +162,6 @@ registerPatch({
             let success;
 
             try {
-                debugger;
                 if(minId){
                 fetchedMessagess = await this._loadMessages({ limit, maxId: Math.min(...messageIds), minId:minId });
                 }
@@ -313,6 +329,18 @@ registerPatch({
                             threadView.update({
                                 currentSearchCount : 1,
                                 searchMessageId : fetchedSearchMessages[0].id,
+                                downDisable:true,
+                            })
+                        }
+                        else if(threadView.searchMessageId && threadView.currentSearchCount == 0){
+                            var index = fetchedSearchMessages.findIndex(t => t.id === threadView.searchMessageId);
+                            let currentSearchCon = 0
+                            if(index > -1){
+                                currentSearchCon = index + 1
+                            }
+                            threadView.update({
+                                currentSearchCount : currentSearchCon,
+                                searchMessageId : threadView.searchMessageId,
                                 downDisable:true,
                             })
                         }

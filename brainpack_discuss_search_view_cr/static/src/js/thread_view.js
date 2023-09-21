@@ -9,6 +9,7 @@ registerPatch({
         stringifiedDomain: attr({ related: "threadViewer.stringifiedDomain" }),
         searchMessageId: attr({related: "threadViewer.searchMessageId"}),
         searchMessage: attr({related: "threadViewer.searchMessage"}),
+        messageFilter: attr({related: "threadViewer.messageFilter"}),
         searchUpDown: attr({related: "threadViewer.searchUpDown"}),
         upDisable: attr({related: "threadViewer.upDisable"}),
         downDisable: attr({related: "threadViewer.downDisable"}),
