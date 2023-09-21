@@ -54,16 +54,28 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
     _onClickCancle(ev){
         $('.o_searchview_input').val("")
         var domain = ['|',['subject','ilike',''],['body','ilike','']]
+        this.discuss.threadView.update({
+          searchMessage: false,
+          upDisable:true,
+          downDisable:true,
+          searchString:"",
+          currentSearchCount : 0,
+          messageFilter: false,
+          numberOfSearch : 0,
+        });
         this.discuss.update({
           searchMessage: false,
           upDisable:true,
           downDisable:true,
           messageFilter: false,
-          searchString: $('.o_searchview_input').val(),
+          currentSearchCount:0,
+          numberOfSearch:0,
+          searchString: "",
         });
         this.discuss.update({
           stringifiedDomain: JSON.stringify(domain),
         });
+
         $('.o_ThreadView').unblock()
     },
     _onClickSearch(ev) {
