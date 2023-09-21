@@ -25,6 +25,11 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
 //              searchString: ev.target.value,
 //            });
 //        }
+        var messageFilter = true
+        if(query == ''){
+            messageFilter = false
+         }
+
         this.discuss.threadView.update({
             stringifiedDomain: JSON.stringify(domain),
           searchMessageId: false,
@@ -33,11 +38,12 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
           searchString: ev.target.value,
           upDisable:true,
           downDisable:true,
-          messageFilter:true,
+          messageFilter:messageFilter,
           currentSearchCount:0,
           numberOfSearch:0,
         })
-        this.discuss.update({
+
+         this.discuss.update({
           stringifiedDomain: JSON.stringify(domain),
           searchMessageId: false,
           searchMessage: false,
@@ -45,10 +51,11 @@ patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_cont
           searchString: ev.target.value,
           upDisable:true,
           downDisable:true,
-          messageFilter:true,
+          messageFilter:messageFilter,
           currentSearchCount:0,
           numberOfSearch:0,
         });
+
 
     },
     _onClickCancle(ev){

@@ -19,9 +19,26 @@ registerPatch({
                     for (const thread of this.threads) {
                         for (const threadView of thread.threadViews) {
                             if(threadView.threadViewer && threadView.threadViewer.threadCache && threadView.threadViewer.threadCache.SearchMessages){
+                                if(threadView.messageFilter){
+                                    var searchText = threadView.searchString;
+                                    newText = $(this.body).mark(threadView.searchString,{"accuracy": "partially",
+                                                "iframes": true,
+                                                "ignoreJoiners": true,
+                                                "acrossElements": true,
+                                                "separateWordSearch": true,
+                                                "diacritics": false,
+                                                })[0].outerHTML
+                                    if(threadView.searchMessageId && threadView.searchMessageId == this.id){
+                                        newText = newText.replaceAll('<mark data-markjs="true">','<mark data-markjs="true" class="highlight search_message active">')
+                                    }
+                                    else{
+                                        newText = newText.replaceAll('<mark data-markjs="true">','<mark data-markjs="true" class="highlight search_message">')
+                                    }
+                                }
                                 var message = threadView.threadViewer.threadCache.SearchMessages.filter(x => x.id == this.id)
 
                                 if(message.length > 0){
+
                                     if(threadView.searchMessage){
                                         var searchText = threadView.searchString;
                                         newText = $(this.body).mark(threadView.searchString,{"accuracy": "partially",
@@ -60,7 +77,6 @@ registerPatch({
 //                            }
 //                        }
 //                    }
-
                     // add anchor tags to urls
                     return parseAndTransform(newText, addLink);
     //                return parseAndTransform(this.body.replace(this.messaging.discuss.searchString,'<span style="background-color:#eb9834;">'+this.messaging.discuss.searchString+'</span>'), addLink);

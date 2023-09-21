@@ -24,7 +24,7 @@
 <!--                    t-on-keyup="_onKeyUpSearch"-->
                     </div>
                         <div class="o_searchview_count pb-1 align-self-center" style="    border: 1px solid #C9CCD2 !important;">
-                            <button type="button" t-attf-class="#{threadView and threadView.searchMessage ? 'btn btn-primary fa fa-search' : 'btn fa fa-search'}" t-on-click="_onClickSearch"/>
+<!--                            <button type="button" t-attf-class="#{threadView and threadView.searchMessage ? 'btn btn-primary fa fa-search' : 'btn fa fa-search'}" t-on-click="_onClickSearch"/>-->
                             <button type="button" class="btn fa fa-times-circle-o" t-on-click="_onClickCancle"/>
 
 <!--                                <span class="current_search"><t t-if="messaging and messaging.discuss" t-esc="messaging.discuss.currentSearchCount"/></span> / <span class="total_search_message" ><t t-if="messaging and messaging.discuss" t-esc="messaging.discuss.numberOfSearch"/></span> <span t-if="messaging and messaging.discuss" t-on-click="_onClickUp" t-att-class="'fa fa-angle-up %s' % ('span_disabled' if messaging.discuss.upDisable else '')"/> <span t-att-class="'fa fa-angle-down %s' % ('span_disabled' if messaging.discuss.downDisable else '')" t-on-click="_onClickDown"/>-->

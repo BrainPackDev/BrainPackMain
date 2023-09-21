@@ -6,7 +6,6 @@ const { Component, useRef, onMounted } = owl;
 patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_component', {
     setup() {
         onMounted(() => {
-            console.log(">>>>>>>",this)
              this.threadView.update({
                 searchMessageId: false,
                 searchMessage: false,
@@ -23,6 +22,12 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
      async _onKeyUpSearch(ev) {
          const query = ev.target.value.trim().toLowerCase();
          var domain = ['|',['subject','ilike',query],['body','ilike',query]]
+
+         var messageFilter = true
+        if(query == ''){
+            messageFilter = false
+         }
+
          this.threadView.update({
           stringifiedDomain: JSON.stringify(domain),
           searchMessageId: false,
@@ -31,7 +36,7 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
           searchString: ev.target.value,
           upDisable:true,
           downDisable:true,
-          messageFilter:true,
+          messageFilter:messageFilter,
           currentSearchCount:0,
           numberOfSearch:0,
         });
