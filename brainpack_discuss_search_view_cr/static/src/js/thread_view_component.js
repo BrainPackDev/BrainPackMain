@@ -3,7 +3,7 @@ import { ThreadView } from '@mail/components/thread_view/thread_view';
 import { patch } from 'web.utils';
 
 patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_component', {
-     _onKeyUpSearch(ev) {
+     async _onKeyUpSearch(ev) {
          const query = ev.target.value.trim().toLowerCase();
          var domain = ['|',['subject','ilike',query],['body','ilike',query]]
          this.threadView.update({

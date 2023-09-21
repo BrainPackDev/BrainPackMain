@@ -368,6 +368,11 @@ registerPatch({
                         numberOfSearch : 0
                     })
                 }
+                if(threadView.messageFilter){
+                    threadView.update({
+                        numberOfSearch : fetchedMessages.length
+                    })
+                }
             }
         }
 

@@ -3,7 +3,7 @@ import { DiscussContainer } from '@mail/components/discuss_container/discuss_con
 import { patch } from 'web.utils';
 
 patch(DiscussContainer.prototype, 'brainpack_discuss_search_view_cr.discuss_container', {
-     _onKeyUpSearch(ev) {
+     async _onKeyUpSearch(ev) {
         const query = ev.target.value.trim().toLowerCase()
         var domain = ['|',['subject','ilike',query],['body','ilike',query]]
 
