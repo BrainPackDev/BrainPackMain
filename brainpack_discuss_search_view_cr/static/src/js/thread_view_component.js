@@ -44,7 +44,7 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
           searchMessage: false,
           upDisable:true,
           downDisable:true,
-          searchString: $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val(),
+          searchString:"",
           currentSearchCount : 0,
           messageFilter: false,
           numberOfSearch : 0,

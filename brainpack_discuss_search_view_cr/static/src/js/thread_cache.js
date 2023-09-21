@@ -338,11 +338,22 @@ registerPatch({
                             if(index > -1){
                                 currentSearchCon = index + 1
                             }
+
                             threadView.update({
                                 currentSearchCount : currentSearchCon,
                                 searchMessageId : threadView.searchMessageId,
-                                downDisable:true,
                             })
+
+                            if(fetchedSearchMessages.length > currentSearchCon){
+                                threadView.update({
+                                    downDisable:false,
+                                })
+                            }
+                            else{
+                                threadView.update({
+                                    downDisable:true,
+                                })
+                            }
                         }
                         else{
                             threadView.update({
