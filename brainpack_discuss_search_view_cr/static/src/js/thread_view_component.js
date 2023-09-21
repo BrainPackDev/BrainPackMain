@@ -3,23 +3,50 @@ import { ThreadView } from '@mail/components/thread_view/thread_view';
 import { patch } from 'web.utils';
 
 patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_component', {
-//     _onKeyUpSearch(ev) {
-//         const query = ev.target.value.trim().toLowerCase();
-//         var domain = ['|',['subject','ilike',query],['body','ilike',query]]
-//         this.threadView.update({
-//          stringifiedDomain: JSON.stringify(domain),
-//        });
-//        this.threadView._onChangeStringifiedDomain()
-//    }
-    _onKeyUpSearch(ev) {
-        const query = ev.target.value.trim().toLowerCase()
+     _onKeyUpSearch(ev) {
+         const query = ev.target.value.trim().toLowerCase();
+         var domain = ['|',['subject','ilike',query],['body','ilike',query]]
+         this.threadView.update({
+          stringifiedDomain: JSON.stringify(domain),
+          searchMessageId: false,
+          searchMessage: false,
+          searchUpDown: false,
+          searchString: ev.target.value,
+          upDisable:false,
+          downDisable:false,
+          messageFilter:true,
+          currentSearchCount:0,
+          numberOfSearch:0,
+        });
+        this.threadView._onChangeStringifiedDomain()
+    },
+    _onClickCancle(ev){
+        $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val("")
+        var domain = ['|',['subject','ilike',''],['body','ilike','']]
+        this.threadView.update({
+          searchMessage: false,
+          upDisable:true,
+          downDisable:true,
+          searchString: $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val(),
+          currentSearchCount : 0,
+          messageFilter: false,
+          numberOfSearch : 0,
+        });
+        this.threadView.update({
+          stringifiedDomain: JSON.stringify(domain),
+        });
+        $('.o_ThreadView').unblock()
+    },
+    _onClickSearch(ev){
+        const query = $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val().trim().toLowerCase()
         var domain = ['|',['subject','ilike',query],['body','ilike',query]]
 
         if(query != ''){
             this.threadView.update({
               searchMessage: true,
-              searchString: ev.target.value,
+              searchString: $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val(),
               upDisable:false,
+              messageFilter: false,
               downDisable:false,
             });
         }
@@ -28,7 +55,7 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
               searchMessage: false,
               upDisable:true,
               downDisable:true,
-              searchString: ev.target.value,
+              searchString: $(ev.currentTarget).closest('.o_cp_searchview').find('.o_searchview_input').val(),
             });
         }
         this.threadView.update({
@@ -36,6 +63,31 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
         });
         this.threadView._onChangeStringifiedDomain()
     },
+//    _onKeyUpSearch(ev) {
+//        const query = ev.target.value.trim().toLowerCase()
+//        var domain = ['|',['subject','ilike',query],['body','ilike',query]]
+//
+//        if(query != ''){
+//            this.threadView.update({
+//              searchMessage: true,
+//              searchString: ev.target.value,
+//              upDisable:false,
+//              downDisable:false,
+//            });
+//        }
+//        else{
+//            this.threadView.update({
+//              searchMessage: false,
+//              upDisable:true,
+//              downDisable:true,
+//              searchString: ev.target.value,
+//            });
+//        }
+//        this.threadView.update({
+//          stringifiedDomain: JSON.stringify(domain),
+//        });
+//        this.threadView._onChangeStringifiedDomain()
+//    },
     _onClickUp(){
         var self = this
         var nextMessage = 0
@@ -88,6 +140,7 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
                     self.threadView.update({searchUpDown:true})
 //                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:height: 150px;"/></h1>' })
                     $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                     self.threadView.threadViewer.threadCache.update({ isAllHistoryLoaded: false });
                     self.threadView.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 1000);
@@ -138,6 +191,7 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
                     self.threadView.update({searchUpDown:true})
 //                    $.blockUI({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
                     $('.o_ThreadView').block({ message: '<h1><img class="chatter_loader" src="/brainpack_discuss_search_view_cr/static/images/imgpsh_fullsize_anim.gif" style="height:150px;"/></h1>' })
+                    self.threadView.threadViewer.threadCache.update({ isAllHistoryLoaded: false });
                     self.threadView.threadViewer.threadCache.loadMoreMessages();
                 }
             }, 700);

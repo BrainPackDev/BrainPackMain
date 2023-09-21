@@ -8,6 +8,7 @@ registerPatch({
          discussStringifiedDomain: attr({ related: "discuss.stringifiedDomain" }),
          searchMessageId: attr({related: "discuss.searchMessageId"}),
         searchMessage: attr({related: "discuss.searchMessage"}),
+        messageFilter: attr({related: "discuss.messageFilter"}),
         searchUpDown: attr({related: "discuss.searchUpDown"}),
         upDisable: attr({related: "discuss.upDisable"}),
         downDisable: attr({related: "discuss.downDisable"}),
@@ -31,7 +32,7 @@ registerPatch({
     },
      onChanges: [
         {
-            dependencies: ['stringifiedDomain'],
+            dependencies: ['stringifiedDomain','messageFilter'],
             methodName: '_onChangeStringifiedDomain',
         },
     ],

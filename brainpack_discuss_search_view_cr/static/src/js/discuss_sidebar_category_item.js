@@ -31,6 +31,7 @@ registerPatch({
                                 searchMessage: false,
                                 searchUpDown: false,
                                 upDisable:true,
+                                messageFilter: false,
                                 downDisable:true,
                                 stringifiedDomain: "",
                                 currentSearchCount: 0,
