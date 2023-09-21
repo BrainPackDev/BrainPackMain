@@ -1,8 +1,25 @@
  /** @odoo-module **/
 import { ThreadView } from '@mail/components/thread_view/thread_view';
 import { patch } from 'web.utils';
+const { Component, useRef, onMounted } = owl;
 
 patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_component', {
+    setup() {
+        onMounted(() => {
+            console.log(">>>>>>>",this)
+             this.threadView.update({
+                searchMessageId: false,
+                searchMessage: false,
+                messageFilter:  false,
+                searchUpDown: false,
+                upDisable: true,
+                downDisable: true,
+                searchString: '',
+                currentSearchCount: 0,
+                numberOfSearch: 0,
+            })
+        });
+    },
      async _onKeyUpSearch(ev) {
          const query = ev.target.value.trim().toLowerCase();
          var domain = ['|',['subject','ilike',query],['body','ilike',query]]
@@ -12,8 +29,8 @@ patch(ThreadView.prototype, 'brainpack_discuss_search_view_cr.thread_view_compon
           searchMessage: false,
           searchUpDown: false,
           searchString: ev.target.value,
-          upDisable:false,
-          downDisable:false,
+          upDisable:true,
+          downDisable:true,
           messageFilter:true,
           currentSearchCount:0,
           numberOfSearch:0,
