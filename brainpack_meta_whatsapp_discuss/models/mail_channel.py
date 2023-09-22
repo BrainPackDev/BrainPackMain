@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models, modules, Command
-
+import json
 class Channel(models.Model):
 
     _inherit = 'mail.channel'
@@ -134,3 +134,22 @@ class Channel(models.Model):
     @api.constrains('channel_member_ids', 'channel_partner_ids')
     def _constraint_partners_chat(self):
         pass
+    def _set_last_seen_message(self, last_message):
+        """
+        When Message Seen/Read in odoo, Double Blue Tick (Read Receipts) in WhatsApp
+        """
+        res = super(Channel, self)._set_last_seen_message(last_message)
+        last_message.write({'isWaMsgsRead': True})
+        if last_message.isWaMsgsRead == True:
+            channel_company_line_id = self.env['channel.provider.line'].search(
+                [('channel_id', '=', last_message.res_id)])
+            if channel_company_line_id.provider_id:
+                provider_id = channel_company_line_id.provider_id
+                if provider_id:
+                    answer = provider_id.graph_api_wamsg_mark_as_read(last_message.wa_message_id)
+                    if answer.status_code == 200:
+                        dict = json.loads(answer.text)
+                        if provider_id.provider == 'graph_api':  # if condition for Graph API
+                            if 'success' in dict and dict.get('success'):
+                                last_message.write({'isWaMsgsRead': True})
+        return res

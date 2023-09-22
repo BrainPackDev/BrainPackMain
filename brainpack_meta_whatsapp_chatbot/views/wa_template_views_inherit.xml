@@ -1,0 +1,12 @@
+<odoo>
+    <record id="wa_template_view_form_inherit" model="ir.ui.view">
+        <field name="name">wa.template.view.form</field>
+        <field name="model">wa.template</field>
+        <field name="inherit_id" ref="brainpack_meta_whatsapp.wa_template_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category']" position="after">
+                <field name="template_type" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

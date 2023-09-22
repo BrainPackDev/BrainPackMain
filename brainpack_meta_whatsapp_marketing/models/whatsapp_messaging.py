@@ -221,6 +221,511 @@ class WhatsAppMessaging(models.Model):
         ramaning_partner_ids = [x for x in partners.ids if x not in res_ids]
         return self.env['res.partner'].browse(ramaning_partner_ids)
 
+    # @api.model
+    # def _process_whatsapp_messaging_queue(self):
+    #     whatsapp_messagings = self.search(
+    #         [('state', 'in', ('in_queue', 'sending')), '|', ('schedule_date', '<', fields.Datetime.now()),
+    #          ('schedule_date', '=', False)])
+    #     for whatsapp_messaging in whatsapp_messagings:
+    #         # Multi Companies and Multi Providers Code Here, We have passed Default Provider for Scheduled Actions
+    #         # provider_id = whatsapp_messaging.user_id.provider_ids.filtered(lambda x: x.company_id == self.env.company and x.chat_api_authenticated)
+    #         provider_id = whatsapp_messaging.provider_id
+    #         user = whatsapp_messaging.user_id
+    #         # mass_mailing = mass_mailing.with_context(**user.sudo(user=user).context_get())
+    #         # if len(mass_mailing.get_remaining_recipients()) > 0:
+    #         #     mass_mailing.state = 'sending'
+    #         #     mass_mailing.send_mail()
+    #         # else:
+    #         #     mass_mailing.write({'state': 'done', 'sent_date': fields.Datetime.now()})
+    #         #
+    #         if whatsapp_messaging.is_partner:
+    #             partners = False
+    #             if whatsapp_messaging.wa_messaging_domain and whatsapp_messaging.domain:
+    #                 domain = safe_eval(whatsapp_messaging.wa_messaging_domain)
+    #                 partners = self.env['res.partner'].search(domain)
+    #             else:
+    #                 partners = whatsapp_messaging.partner_ids
+    #
+    #             if partners:
+    #                 partners = whatsapp_messaging.remaining_partners(partners)
+    #                 for partner in partners:
+    #                     whatsapp_messaging.write({'state': 'sending'})
+    #                     if partner.mobile:
+    #                         whatsapp_messaging.write({'marketing_contact_mes_history_ids': [
+    #                                         (0, 0, {'phone': partner.mobile})]})
+    #
+    #                         _logger.info("partner Mobile (Whatsapp Number) %s", partner.mobile)
+    #                         flag = True
+    #                         if provider_id.provider == 'chat_api':
+    #                             flag = False
+    #                             answer = provider_id.check_phone(partner.mobile.strip('+').replace(" ", ""))
+    #                             if answer.status_code == 200:
+    #                                 dict_val = json.loads(answer.text)
+    #                                 _logger.info("partner Mobile (Whatsapp Number) %s", dict_val.get('result'))
+    #                                 if 'result' in dict_val:
+    #                                     if dict_val['result'] == 'exists':
+    #                                         flag = True
+    #                         if flag:
+    #                             partner.write({'mobile': partner.mobile.strip('+').replace(' ', '')})
+    #                             user_partner = user.partner_id
+    #                             # users = request.env['res.users'].sudo().search([])
+    #                             part_lst = []
+    #                             part_lst.append(partner.id)
+    #                             part_lst.append(user_partner.id)
+    #                             # Multi Companies and Multi Providers Code Here
+    #                             # provider_channel_id = partner.channel_provider_line_ids.filtered(
+    #                             #     lambda s: s.provider_id == whatsapp_messaging.user_id.provider_id)
+    #                             provider_channel_id = partner.channel_provider_line_ids.filtered(
+    #                                 lambda s: s.provider_id == provider_id)
+    #                             if provider_channel_id:
+    #                                 channel = provider_channel_id.channel_id
+    #                                 if user_partner.id not in channel.channel_partner_ids.ids and whatsapp_messaging.user_id.has_group(
+    #                                         'base.group_user') and whatsapp_messaging.user_id.has_group(
+    #                                     'brainpack_meta_whatsapp.whatsapp_group_user'):
+    #                                     channel.sudo().write({'channel_partner_ids': [(4, user_partner.id)]})
+    #                             else:
+    #                                 name = partner.mobile
+    #                                 channel = self.env['mail.channel'].create({
+    #                                     #'public': 'public',
+    #                                     'channel_type': 'chat',
+    #                                     'name': name,
+    #                                     'whatsapp_channel': True,
+    #                                     'channel_partner_ids': [(4, partner.id)],
+    #                                 })
+    #                                 channel.write({'channel_member_ids': [(5, 0, 0)] + [
+    #                                     (0, 0, {'partner_id': line_vals}) for line_vals in part_lst]})
+    #                                 # self.partner_id.write({'channel_id': channel.id})
+    #                                 # Multi Companies and Multi Providers Code Here
+    #                                 # partner.write({'channel_provider_line_ids': [
+    #                                 #     (0, 0, {'channel_id': channel.id, 'provider_id': whatsapp_messaging.user_id.provider_id.id})]})
+    #                                 partner.write({'channel_provider_line_ids': [
+    #                                     (0, 0, {'channel_id': channel.id, 'provider_id': provider_id.id})]})
+    #                             if channel:
+    #                                 if whatsapp_messaging.template_id:
+    #                                     wa_message_values = {}
+    #                                     if whatsapp_messaging.body_html != '':
+    #                                         wa_message_values.update({'body':
+    #                                                                       whatsapp_messaging.template_id._render_field(
+    #                                                                           'body_html', [partner.id],
+    #                                                                           compute_lang=True)[partner.id]})
+    #                                     if whatsapp_messaging.attachment_ids:
+    #                                         wa_message_values.update(
+    #                                             {'attachment_ids': [(4, attac_id.id) for attac_id in
+    #                                                                 whatsapp_messaging.attachment_ids]})
+    #                                     wa_message_values.update({
+    #                                         'author_id': user_partner.id,
+    #                                         'email_from': user_partner.email or '',
+    #                                         'model': 'mail.channel',
+    #                                         'message_type': 'wa_msgs',
+    #                                         'isWaMsgs': True,
+    #                                         'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                             'mail.mt_comment'),
+    #                                         # 'channel_ids': [(4, channel.id)],
+    #                                         'partner_ids': [(4, user_partner.id)],
+    #                                         'res_id': channel.id,
+    #                                         'reply_to': user_partner.email,
+    #                                         'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                     })
+    #                                     wa_attach_message = self.env['mail.message'].sudo().with_context(
+    #                                         {'template_send': True, 'wa_template': whatsapp_messaging.template_id,
+    #                                          'active_model_id': partner.id, 'active_model': self._name,
+    #                                          'attachment_ids': whatsapp_messaging.attachment_ids.ids, 'user_id': user,
+    #                                          'cron': True}).create(
+    #                                         wa_message_values)
+    #                                     notifications = channel._channel_message_notifications(wa_attach_message)
+    #                                     self.env['bus.bus']._sendmany(notifications)
+    #
+    #                                     message_values = {
+    #                                         'body':
+    #                                             whatsapp_messaging.template_id._render_field('body_html', [partner.id],
+    #                                                                                          compute_lang=True)[
+    #                                                 partner.id],
+    #                                         'author_id': user_partner.id,
+    #                                         'email_from': user_partner.email or '',
+    #                                         'model': 'res.partner',
+    #                                         'message_type': 'comment',
+    #                                         'isWaMsgs': True,
+    #                                         'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                             'mail.mt_comment'),
+    #                                         # 'channel_ids': [(4, channel.id)],
+    #                                         'partner_ids': [(4, user_partner.id)],
+    #                                         'res_id': partner.id,
+    #                                         'reply_to': user_partner.email,
+    #                                         'attachment_ids': [(4, attac_id.id) for attac_id in self.attachment_ids],
+    #                                         'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                     }
+    #                                     if whatsapp_messaging.attachment_ids:
+    #                                         message_values.update({})
+    #                                     message = self.env['mail.message'].sudo().create(
+    #                                         message_values)
+    #                                     wa_attach_message.chatter_wa_model = 'res.partner'
+    #                                     wa_attach_message.chatter_wa_res_id = partner.id
+    #                                     wa_attach_message.chatter_wa_message_id = message.id
+    #                                     notifications = channel._channel_message_notifications(message)
+    #                                     self.env['bus.bus']._sendmany(notifications)
+    #                                 else:
+    #                                     if tools.html2plaintext(whatsapp_messaging.body_html) != '':
+    #                                         message_values = {
+    #                                             'body': tools.html2plaintext(whatsapp_messaging.body_html),
+    #                                             'author_id': user_partner.id,
+    #                                             'email_from': user_partner.email or '',
+    #                                             'model': 'mail.channel',
+    #                                             'message_type': 'wa_msgs',
+    #                                             'isWaMsgs': True,
+    #                                             'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                                 'mail.mt_comment'),
+    #                                             # 'channel_ids': [(4, channel.id)],
+    #                                             'partner_ids': [(4, user_partner.id)],
+    #                                             'res_id': channel.id,
+    #                                             'reply_to': user_partner.email,
+    #                                             'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                         }
+    #                                         if whatsapp_messaging.template_id:
+    #                                             wa_message_body = self.env['mail.message'].sudo().with_context(
+    #                                                 {'template_send': True,
+    #                                                  'wa_template': whatsapp_messaging.template_id,
+    #                                                  'active_model_id': partner.id, 'active_model': self._name,
+    #                                                  'user_id': user, 'cron': True}).create(message_values)
+    #                                         else:
+    #                                             wa_message_body = self.env['mail.message'].sudo().with_context(
+    #                                                 {'cron': True, 'user_id': user}).create(
+    #                                                 message_values)
+    #                                         notifications = channel._channel_message_notifications(wa_message_body)
+    #                                         self.env['bus.bus']._sendmany(notifications)
+    #
+    #                                         message_values = {
+    #                                             'body': whatsapp_messaging.body_html,
+    #                                             'author_id': user_partner.id,
+    #                                             'email_from': user_partner.email or '',
+    #                                             'model': 'res.partner',
+    #                                             'message_type': 'comment',
+    #                                             'isWaMsgs': True,
+    #                                             'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                                 'mail.mt_comment'),
+    #                                             # 'channel_ids': [(4, channel.id)],
+    #                                             'partner_ids': [(4, user_partner.id)],
+    #                                             'res_id': partner.id,
+    #                                             'reply_to': user_partner.email,
+    #                                             'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                         }
+    #                                         message = self.env['mail.message'].sudo().create(
+    #                                             message_values)
+    #                                         wa_message_body.chatter_wa_model = 'res.partner'
+    #                                         wa_message_body.chatter_wa_res_id = partner.id
+    #                                         wa_message_body.chatter_wa_message_id = message.id
+    #                                         notifications = channel._channel_message_notifications(message)
+    #                                         self.env['bus.bus']._sendmany(notifications)
+    #
+    #                                     if whatsapp_messaging.attachment_ids:
+    #                                         message_values = {
+    #                                             'body': "",
+    #                                             'author_id': user_partner.id,
+    #                                             'email_from': user_partner.email or '',
+    #                                             'model': 'mail.channel',
+    #                                             'message_type': 'wa_msgs',
+    #                                             'isWaMsgs': True,
+    #                                             'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                                 'mail.mt_comment'),
+    #                                             # 'channel_ids': [(4, channel.id)],
+    #                                             'partner_ids': [(4, user_partner.id)],
+    #                                             'res_id': channel.id,
+    #                                             'reply_to': user_partner.email,
+    #                                             'attachment_ids': [(4, attac_id.id) for attac_id in
+    #                                                                whatsapp_messaging.attachment_ids],
+    #                                             'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                         }
+    #                                         if whatsapp_messaging.template_id:
+    #                                             wa_attach_message = self.env['mail.message'].sudo().with_context(
+    #                                                 {'template_send': True,
+    #                                                  'wa_template': whatsapp_messaging.template_id,
+    #                                                  'active_model_id': partner.id, 'active_model': self._name,
+    #                                                  'attachment_ids': whatsapp_messaging.attachment_ids.ids,
+    #                                                  'user_id': user, 'cron': True}).create(
+    #                                                 message_values)
+    #                                         else:
+    #                                             wa_attach_message = self.env['mail.message'].sudo().with_context(
+    #                                                 {'cron': True, 'user_id': user}).create(
+    #                                                 message_values)
+    #                                         # wa_attach_message = self.env['mail.message'].sudo().create(
+    #                                         #     message_values)
+    #                                         notifications = channel._channel_message_notifications(wa_attach_message)
+    #                                         self.env['bus.bus']._sendmany(notifications)
+    #
+    #                                         message_values = {
+    #                                             'author_id': user_partner.id,
+    #                                             'email_from': user_partner.email or '',
+    #                                             'model': 'res.partner',
+    #                                             'message_type': 'comment',
+    #                                             'isWaMsgs': True,
+    #                                             'subtype_id': self.env['ir.model.data'].sudo()._xmlid_to_res_id(
+    #                                                 'mail.mt_comment'),
+    #                                             # 'channel_ids': [(4, channel.id)],
+    #                                             'partner_ids': [(4, user_partner.id)],
+    #                                             'res_id': partner.id,
+    #                                             'reply_to': user_partner.email,
+    #                                             'attachment_ids': [(4, attac_id.id) for attac_id in
+    #                                                                whatsapp_messaging.attachment_ids],
+    #                                             'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                         }
+    #                                         if whatsapp_messaging.attachment_ids:
+    #                                             message_values.update({})
+    #                                         message = self.env['mail.message'].sudo().create(
+    #                                             message_values)
+    #                                         wa_attach_message.chatter_wa_model = 'res.partner'
+    #                                         wa_attach_message.chatter_wa_res_id = partner.id
+    #                                         wa_attach_message.chatter_wa_message_id = message.id
+    #                                         notifications = channel._channel_message_notifications(message)
+    #                                         self.env['bus.bus']._sendmany(notifications)
+    #                             self._cr.commit()
+    #                             # message_values = {
+    #                             #     'body': tools.html2plaintext(whatsapp_messaging.body_html) or '',
+    #                             #     'author_id': user_partner.id,
+    #                             #     'email_from': user_partner.email or '',
+    #                             #     'model': 'mail.channel',
+    #                             #     'message_type': 'wa_msgs',
+    #                             #     'isWaMsgs': True,
+    #                             #     'subtype_id': self.env['ir.model.data'].sudo().xmlid_to_res_id('mail.mt_comment'),
+    #                             #     'channel_ids': [(4, channel.id)],
+    #                             #     'partner_ids': [(4, user_partner.id)],
+    #                             #     'res_id': channel.id,
+    #                             #     'reply_to': user_partner.email,
+    #                             # }
+    #                             # message = self.env['mail.message'].sudo().with_context({'company_id': whatsapp_messaging.company_id.id}).create(
+    #                             #     message_values)
+    #                             # channel._notify_thread(message)
+    #         else:
+    #             for whatsapp_messaging_lists_id in whatsapp_messaging.whatsapp_messaging_lists_ids:
+    #                 contacts = whatsapp_messaging.remaining_contacts(whatsapp_messaging_lists_id.contacts_ids)
+    #                 for contact in contacts:
+    #                     if contact.phone:
+    #                         _logger.info("contact Mobile (Whatsapp Number) %s", contact.phone)
+    #
+    #                         print(">>>>>>>>>>>>>>>..................", contact.phone, whatsapp_messaging)
+    #                         whatsapp_messaging.write({'marketing_contact_mes_history_ids': [
+    #                             (0, 0, {'phone': contact.phone})]})
+    #
+    #                         flag = True
+    #                         if provider_id.provider == 'chat_api':
+    #                             flag = False
+    #                             answer = provider_id.check_phone(contact.phone.strip('+').replace(" ", "").replace("-", ""))
+    #                             if answer.status_code == 200:
+    #                                 dict_val = json.loads(answer.text)
+    #                                 _logger.info("contact Mobile (Whatsapp Number) %s", dict_val.get('result'))
+    #                                 if 'result' in dict_val:
+    #                                     if dict_val['result'] == 'exists':
+    #                                         flag = True
+    #                         if flag:
+    #                             if whatsapp_messaging.template_id:
+    #                                 params = []
+    #                                 for component in whatsapp_messaging.template_id.components_ids:
+    #                                     template_dict = {}
+    #
+    #                                     if component.type in ['body', 'footer']:
+    #                                         if component.variables_ids:
+    #                                             template_dict.update({'type': component.type})
+    #                                             parameters = []
+    #                                             template_dict.update({'parameters': parameters})
+    #
+    #                                     if component.type == 'header':
+    #                                         if component.formate == 'text':
+    #                                             if component.variables_ids:
+    #                                                 template_dict.update({'type': component.type})
+    #                                                 parameters = []
+    #                                                 template_dict.update({'parameters': parameters})
+    #                                         if component.formate == 'media':
+    #                                             IrConfigParam = self.env['ir.config_parameter'].sudo()
+    #                                             base_url = IrConfigParam.get_param('web.base.url', False)
+    #
+    #                                             if component.media_type == 'document':
+    #                                                 if whatsapp_messaging.attachment_ids:
+    #                                                     template_dict.update({'type': component.type})
+    #                                                     parameters = [
+    #                                                         {'type': component.media_type, 'document': {
+    #                                                             "link": base_url + "/web/content/" + str(
+    #                                                                 whatsapp_messaging.attachment_ids.ids[0]),
+    #                                                             "filename": self.env[
+    #                                                                 'ir.attachment'].sudo().browse(
+    #                                                                 whatsapp_messaging.attachment_ids.ids[
+    #                                                                     0]).name}}]
+    #                                                     template_dict.update({'parameters': parameters})
+    #                                             if component.media_type == 'video':
+    #                                                 if self.env.context.get('attachment_ids'):
+    #                                                     template_dict.update({'type': component.type})
+    #                                                     parameters = [{'type': component.media_type, 'video': {
+    #                                                         "link": base_url + "/web/content/" + str(
+    #                                                             whatsapp_messaging.attachment_ids.ids[0]),
+    #                                                         "filename": self.env['ir.attachment'].sudo().browse(
+    #                                                             whatsapp_messaging.attachment_ids.ids[
+    #                                                                 0]).name}}]
+    #                                                     template_dict.update({'parameters': parameters})
+    #                                             if component.media_type == 'image':
+    #                                                 template_dict.update({'type': component.type})
+    #                                                 parameters = [{'type': component.media_type, 'image': {
+    #                                                     "link": base_url + "/web/image/ir.attachment/" + str(
+    #                                                         whatsapp_messaging.attachment_ids.ids[
+    #                                                             0]) + "/datas",
+    #                                                 }}]
+    #                                                 template_dict.update({'parameters': parameters})
+    #
+    #                                     if bool(template_dict):
+    #                                         params.append(template_dict)
+    #
+    #                                 if provider_id.provider == 'chat_api':
+    #                                     answer = provider_id.direct_send_template(
+    #                                         whatsapp_messaging.template_id.name,
+    #                                         whatsapp_messaging.template_id.lang.iso_code,
+    #                                         whatsapp_messaging.template_id.namespace, contact.phone, params)
+    #                                     if answer.status_code == 200:
+    #                                         dict = json.loads(answer.text)
+    #                                         if 'sent' in dict and dict.get('sent'):
+    #                                             vals = {
+    #                                                 'provider_id': provider_id.id,
+    #                                                 'author_id': user.partner_id.id,
+    #                                                 'message': tools.html2plaintext(
+    #                                                     whatsapp_messaging.body_html),
+    #                                                 'type': 'in queue',
+    #                                                 'message_id': dict['id'],
+    #                                                 'phone': contact.phone,
+    #                                                 'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                             }
+    #                                             self.env['whatsapp.history'].sudo().create(vals)
+    #
+    #                                 if provider_id.provider == 'graph_api':
+    #                                     answer = provider_id.direct_send_template(
+    #                                         whatsapp_messaging.template_id.name,
+    #                                         whatsapp_messaging.template_id.lang.iso_code,
+    #                                         whatsapp_messaging.template_id.namespace, contact, params)
+    #                                     if answer.status_code == 200:
+    #                                         dict = json.loads(answer.text)
+    #                                         if 'messages' in dict and dict.get('messages') and dict.get('messages')[
+    #                                             0].get('id'):
+    #                                             vals = {
+    #                                                 'provider_id': provider_id.id,
+    #                                                 'author_id': user.partner_id.id,
+    #                                                 'message': tools.html2plaintext(
+    #                                                     whatsapp_messaging.body_html),
+    #                                                 'type': 'in queue',
+    #                                                 'message_id': dict.get('messages')[0].get('id'),
+    #                                                 'phone': contact.phone,
+    #                                                 'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                                 'model': self._name,
+    #                                             }
+    #                                             self.env['whatsapp.history'].sudo().create(vals)
+    #
+    #                             else:
+    #                                 if tools.html2plaintext(whatsapp_messaging.body_html) != '':
+    #
+    #                                     if provider_id.provider == 'chat_api':
+    #                                         answer = provider_id.direct_send_message(contact.phone,
+    #                                                                                  tools.html2plaintext(
+    #                                                                                      whatsapp_messaging.body_html))
+    #                                         if answer.status_code == 200:
+    #                                             dict = json.loads(answer.text)
+    #
+    #                                             if 'sent' in dict and dict.get('sent'):
+    #                                                 vals = {
+    #                                                     'provider_id': provider_id.id,
+    #                                                     'author_id': user.partner_id.id,
+    #                                                     'message': tools.html2plaintext(
+    #                                                         whatsapp_messaging.body_html),
+    #                                                     'type': 'in queue',
+    #                                                     'message_id': dict['id'],
+    #                                                     'phone': contact.phone,
+    #                                                     'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                                 }
+    #                                                 self.env['whatsapp.history'].sudo().create(vals)
+    #                                     if provider_id.provider == 'graph_api':
+    #                                         answer = provider_id.direct_send_message(contact,
+    #                                                                                  tools.html2plaintext(
+    #                                                                                      whatsapp_messaging.body_html))
+    #                                         if answer.status_code == 200:
+    #                                             dict = json.loads(answer.text)
+    #
+    #                                             if 'messages' in dict and dict.get('messages') and dict.get('messages')[
+    #                                                 0].get('id'):
+    #                                                 vals = {
+    #                                                     'provider_id': provider_id.id,
+    #                                                     'author_id': user.partner_id.id,
+    #                                                     'message': tools.html2plaintext(
+    #                                                         whatsapp_messaging.body_html),
+    #                                                     'type': 'in queue',
+    #                                                     'message_id': dict.get('messages')[0].get('id'),
+    #                                                     'phone': contact.phone,
+    #                                                     'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                                     'model': self._name,
+    #                                                 }
+    #                                                 self.env['whatsapp.history'].sudo().create(vals)
+    #
+    #                                 if whatsapp_messaging.attachment_ids:
+    #                                     for attachment in whatsapp_messaging.attachment_ids:
+    #                                         if provider_id.provider == 'chat_api':
+    #                                             answer = provider_id.direct_send_file(contact.phone,
+    #                                                                                   attachment)
+    #                                             if answer.status_code == 200:
+    #                                                 dict = json.loads(answer.text)
+    #                                                 if 'sent' in dict and dict.get('sent'):
+    #                                                     vals = {
+    #                                                         'provider_id': provider_id.id,
+    #                                                         'author_id': user.partner_id.id,
+    #                                                         'attachment_ids': [(4, attachment.id)],
+    #                                                         'type': 'in queue',
+    #                                                         'message_id': dict['id'],
+    #                                                         'phone': contact.phone,
+    #                                                         'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                                     }
+    #                                                     self.env['whatsapp.history'].sudo().create(vals)
+    #
+    #                                         if provider_id.provider == 'graph_api':
+    #                                             sent_type = False
+    #                                             if attachment.mimetype in image_type:
+    #                                                 sent_type = 'image'
+    #                                             elif attachment.mimetype in document_type:
+    #                                                 sent_type = 'document'
+    #                                             elif attachment.mimetype in audio_type:
+    #                                                 sent_type = 'audio'
+    #                                             elif attachment.mimetype in video_type:
+    #                                                 sent_type = 'video'
+    #                                             else:
+    #                                                 sent_type = 'image'
+    #
+    #                                             answer = provider_id.send_image(contact, attachment)
+    #                                             if answer.status_code == 200:
+    #                                                 dict = json.loads(answer.text)
+    #                                                 media_id = dict.get('id')
+    #                                                 getimagebyid = provider_id.direct_get_image_by_id(media_id,
+    #                                                                                            contact,
+    #                                                                                            sent_type,
+    #                                                                                            attachment)
+    #                                                 if getimagebyid.status_code == 200:
+    #                                                     imagedict = json.loads(getimagebyid.text)
+    #                                                     if 'messages' in imagedict and imagedict.get('messages'):
+    #                                                         vals = {
+    #                                                             'provider_id': provider_id.id,
+    #                                                             'author_id': user.partner_id.id,
+    #                                                             'attachment_ids': [(4, attachment.id)],
+    #                                                             'type': 'in queue',
+    #                                                             'message_id': imagedict.get('id'),
+    #                                                             'phone': contact.phone,
+    #                                                             'whatsapp_messaging_id': whatsapp_messaging.id,
+    #                                                             'model': self._name,
+    #                                                         }
+    #                                                         self.env['whatsapp.history'].sudo().create(vals)
+    #
+    #                                         # else:
+    #                                         #     res.write({'type': 'fail'})
+    #                                         #     if 'error' in dict:
+    #                                         #         res.write({'fail_reason': dict.get('error').get('message')})
+    #                                         # else:
+    #                                         #     if 'message' in dict:
+    #                                         #         raise UserError(
+    #                                         #             (dict.get('message')))
+    #                                         #     if 'error' in dict:
+    #                                         #         raise UserError(
+    #                                         #             (dict.get('error').get('message')))
+    #                         self._cr.commit()
+    #
+    #         whatsapp_messaging.write({'state': 'done'})
+
     @api.model
     def _process_whatsapp_messaging_queue(self):
         whatsapp_messagings = self.search(
@@ -252,7 +757,7 @@ class WhatsAppMessaging(models.Model):
                         whatsapp_messaging.write({'state': 'sending'})
                         if partner.mobile:
                             whatsapp_messaging.write({'marketing_contact_mes_history_ids': [
-                                            (0, 0, {'phone': partner.mobile})]})
+                                (0, 0, {'phone': partner.mobile})]})
 
                             _logger.info("partner Mobile (Whatsapp Number) %s", partner.mobile)
                             flag = True
@@ -286,7 +791,7 @@ class WhatsAppMessaging(models.Model):
                                 else:
                                     name = partner.mobile
                                     channel = self.env['mail.channel'].create({
-                                        #'public': 'public',
+                                        # 'public': 'public',
                                         'channel_type': 'chat',
                                         'name': name,
                                         'whatsapp_channel': True,
@@ -507,7 +1012,8 @@ class WhatsAppMessaging(models.Model):
                             flag = True
                             if provider_id.provider == 'chat_api':
                                 flag = False
-                                answer = provider_id.check_phone(contact.phone.strip('+').replace(" ", ""))
+                                answer = provider_id.check_phone(
+                                    contact.phone.strip('+').replace(" ", "").replace("-", ""))
                                 if answer.status_code == 200:
                                     dict_val = json.loads(answer.text)
                                     _logger.info("contact Mobile (Whatsapp Number) %s", dict_val.get('result'))
@@ -517,84 +1023,92 @@ class WhatsAppMessaging(models.Model):
                             if flag:
                                 if whatsapp_messaging.template_id:
                                     params = []
-                                    for component in whatsapp_messaging.template_id.components_ids:
-                                        template_dict = {}
 
-                                        if component.type in ['body', 'footer']:
-                                            if component.variables_ids:
-                                                template_dict.update({'type': component.type})
-                                                parameters = []
-                                                template_dict.update({'parameters': parameters})
+                                    if whatsapp_messaging.template_id.template_type == 'interactive':
 
-                                        if component.type == 'header':
-                                            if component.formate == 'text':
-                                                if component.variables_ids:
-                                                    template_dict.update({'type': component.type})
-                                                    parameters = []
-                                                    template_dict.update({'parameters': parameters})
-                                            if component.formate == 'media':
-                                                IrConfigParam = self.env['ir.config_parameter'].sudo()
-                                                base_url = IrConfigParam.get_param('web.base.url', False)
+                                        for component in whatsapp_messaging.template_id.components_ids:
+                                            template_dict = {}
+                                            if component.type == 'interactive':
+                                                if component.interactive_type == 'product_list':
+                                                    if component.interactive_product_list_ids:
+                                                        section = []
+                                                        for product in component.interactive_product_list_ids:
+                                                            product_items = []
 
-                                                if component.media_type == 'document':
-                                                    if whatsapp_messaging.attachment_ids:
-                                                        template_dict.update({'type': component.type})
-                                                        parameters = [
-                                                            {'type': component.media_type, 'document': {
-                                                                "link": base_url + "/web/content/" + str(
-                                                                    whatsapp_messaging.attachment_ids.ids[0]),
-                                                                "filename": self.env[
-                                                                    'ir.attachment'].sudo().browse(
-                                                                    whatsapp_messaging.attachment_ids.ids[
-                                                                        0]).name}}]
-                                                        template_dict.update({'parameters': parameters})
-                                                if component.media_type == 'video':
-                                                    if self.env.context.get('attachment_ids'):
-                                                        template_dict.update({'type': component.type})
-                                                        parameters = [{'type': component.media_type, 'video': {
-                                                            "link": base_url + "/web/content/" + str(
-                                                                whatsapp_messaging.attachment_ids.ids[0]),
-                                                            "filename": self.env['ir.attachment'].sudo().browse(
-                                                                whatsapp_messaging.attachment_ids.ids[
-                                                                    0]).name}}]
-                                                        template_dict.update({'parameters': parameters})
-                                                if component.media_type == 'image':
-                                                    template_dict.update({'type': component.type})
-                                                    parameters = [{'type': component.media_type, 'image': {
-                                                        "link": base_url + "/web/image/ir.attachment/" + str(
-                                                            whatsapp_messaging.attachment_ids.ids[
-                                                                0]) + "/datas",
-                                                    }}]
-                                                    template_dict.update({'parameters': parameters})
+                                                            for products in product.product_list_ids:
+                                                                product_item = {
+                                                                    "product_retailer_id": products.product_retailer_id
+                                                                }
 
-                                        if bool(template_dict):
-                                            params.append(template_dict)
+                                                                product_items.append(product_item)
 
-                                    if provider_id.provider == 'chat_api':
-                                        answer = provider_id.direct_send_template(
-                                            whatsapp_messaging.template_id.name,
-                                            whatsapp_messaging.template_id.lang.iso_code,
-                                            whatsapp_messaging.template_id.namespace, contact.phone, params)
-                                        if answer.status_code == 200:
-                                            dict = json.loads(answer.text)
-                                            if 'sent' in dict and dict.get('sent'):
-                                                vals = {
-                                                    'provider_id': provider_id.id,
-                                                    'author_id': user.partner_id.id,
-                                                    'message': tools.html2plaintext(
-                                                        whatsapp_messaging.body_html),
-                                                    'type': 'in queue',
-                                                    'message_id': dict['id'],
-                                                    'phone': contact.phone,
-                                                    'whatsapp_messaging_id': whatsapp_messaging.id,
-                                                }
-                                                self.env['whatsapp.history'].sudo().create(vals)
+                                                            section.append({
+                                                                "title": product.main_title,
+                                                                "product_items": product_items
+                                                            })
 
-                                    if provider_id.provider == 'graph_api':
-                                        answer = provider_id.direct_send_template(
+                                                        action = {
+                                                            "catalog_id": component.catalog_id,
+                                                            "sections": section
+                                                        }
+
+                                                        template_dict.update(action)
+
+                                                elif component.interactive_type == 'button':
+                                                    if component.interactive_button_ids:
+                                                        buttons = []
+                                                        for btn_id in component.interactive_button_ids:
+                                                            buttons.append({
+                                                                "type": "reply",
+                                                                "reply": {
+                                                                    "id": btn_id.id,
+                                                                    "title": btn_id.title
+                                                                }
+                                                            })
+                                                        action = {
+                                                            "buttons": buttons
+                                                        }
+
+                                                        template_dict.update(action)
+
+                                                elif component.interactive_type == 'list':
+                                                    if component.interactive_list_ids:
+                                                        section = []
+                                                        for list_id in component.interactive_list_ids:
+                                                            rows = []
+                                                            for lists in list_id.title_ids:
+                                                                title_ids = {
+                                                                    "id": lists.id,
+                                                                    "title": lists.title,
+                                                                    "description": lists.description or ''
+                                                                }
+                                                                rows.append(title_ids)
+
+                                                            section.append({
+                                                                'title': list_id.main_title,
+                                                                'rows': rows
+                                                            })
+                                                        action = {
+                                                            "button": list_id.main_title,
+                                                            "sections": section
+                                                        }
+                                                        template_dict.update(action)
+
+                                                elif component.interactive_type == 'product':
+                                                    action = {
+                                                        "catalog_id": component.catalog_id,
+                                                        "product_retailer_id": component.product_retailer_id
+                                                    }
+                                                    template_dict.update(action)
+
+                                            if bool(template_dict):
+                                                params.append(template_dict)
+
+                                        answer = provider_id.direct_send_mpm_template(
                                             whatsapp_messaging.template_id.name,
                                             whatsapp_messaging.template_id.lang.iso_code,
                                             whatsapp_messaging.template_id.namespace, contact, params)
+
                                         if answer.status_code == 200:
                                             dict = json.loads(answer.text)
                                             if 'messages' in dict and dict.get('messages') and dict.get('messages')[
@@ -611,6 +1125,102 @@ class WhatsAppMessaging(models.Model):
                                                     'model': self._name,
                                                 }
                                                 self.env['whatsapp.history'].sudo().create(vals)
+
+                                    else:
+                                        for component in whatsapp_messaging.template_id.components_ids:
+                                            template_dict = {}
+
+                                            if component.type in ['body', 'footer']:
+                                                if component.variables_ids:
+                                                    template_dict.update({'type': component.type})
+                                                    parameters = []
+                                                    template_dict.update({'parameters': parameters})
+
+                                            if component.type == 'header':
+                                                if component.formate == 'text':
+                                                    if component.variables_ids:
+                                                        template_dict.update({'type': component.type})
+                                                        parameters = []
+                                                        template_dict.update({'parameters': parameters})
+                                                if component.formate == 'media':
+                                                    IrConfigParam = self.env['ir.config_parameter'].sudo()
+                                                    base_url = IrConfigParam.get_param('web.base.url', False)
+
+                                                    if component.media_type == 'document':
+                                                        if whatsapp_messaging.attachment_ids:
+                                                            template_dict.update({'type': component.type})
+                                                            parameters = [
+                                                                {'type': component.media_type, 'document': {
+                                                                    "link": base_url + "/web/content/" + str(
+                                                                        whatsapp_messaging.attachment_ids.ids[0]),
+                                                                    "filename": self.env[
+                                                                        'ir.attachment'].sudo().browse(
+                                                                        whatsapp_messaging.attachment_ids.ids[
+                                                                            0]).name}}]
+                                                            template_dict.update({'parameters': parameters})
+                                                    if component.media_type == 'video':
+                                                        if self.env.context.get('attachment_ids'):
+                                                            template_dict.update({'type': component.type})
+                                                            parameters = [{'type': component.media_type, 'video': {
+                                                                "link": base_url + "/web/content/" + str(
+                                                                    whatsapp_messaging.attachment_ids.ids[0]),
+                                                                "filename": self.env['ir.attachment'].sudo().browse(
+                                                                    whatsapp_messaging.attachment_ids.ids[
+                                                                        0]).name}}]
+                                                            template_dict.update({'parameters': parameters})
+                                                    if component.media_type == 'image':
+                                                        template_dict.update({'type': component.type})
+                                                        parameters = [{'type': component.media_type, 'image': {
+                                                            "link": base_url + "/web/image/ir.attachment/" + str(
+                                                                whatsapp_messaging.attachment_ids.ids[
+                                                                    0]) + "/datas",
+                                                        }}]
+                                                        template_dict.update({'parameters': parameters})
+
+                                            if bool(template_dict):
+                                                params.append(template_dict)
+
+                                        if provider_id.provider == 'chat_api':
+                                            answer = provider_id.direct_send_template(
+                                                whatsapp_messaging.template_id.name,
+                                                whatsapp_messaging.template_id.lang.iso_code,
+                                                whatsapp_messaging.template_id.namespace, contact.phone, params)
+                                            if answer.status_code == 200:
+                                                dict = json.loads(answer.text)
+                                                if 'sent' in dict and dict.get('sent'):
+                                                    vals = {
+                                                        'provider_id': provider_id.id,
+                                                        'author_id': user.partner_id.id,
+                                                        'message': tools.html2plaintext(
+                                                            whatsapp_messaging.body_html),
+                                                        'type': 'in queue',
+                                                        'message_id': dict['id'],
+                                                        'phone': contact.phone,
+                                                        'whatsapp_messaging_id': whatsapp_messaging.id,
+                                                    }
+                                                    self.env['whatsapp.history'].sudo().create(vals)
+
+                                        if provider_id.provider == 'graph_api':
+                                            answer = provider_id.direct_send_template(
+                                                whatsapp_messaging.template_id.name,
+                                                whatsapp_messaging.template_id.lang.iso_code,
+                                                whatsapp_messaging.template_id.namespace, contact, params)
+                                            if answer.status_code == 200:
+                                                dict = json.loads(answer.text)
+                                                if 'messages' in dict and dict.get('messages') and dict.get('messages')[
+                                                    0].get('id'):
+                                                    vals = {
+                                                        'provider_id': provider_id.id,
+                                                        'author_id': user.partner_id.id,
+                                                        'message': tools.html2plaintext(
+                                                            whatsapp_messaging.body_html),
+                                                        'type': 'in queue',
+                                                        'message_id': dict.get('messages')[0].get('id'),
+                                                        'phone': contact.phone,
+                                                        'whatsapp_messaging_id': whatsapp_messaging.id,
+                                                        'model': self._name,
+                                                    }
+                                                    self.env['whatsapp.history'].sudo().create(vals)
 
                                 else:
                                     if tools.html2plaintext(whatsapp_messaging.body_html) != '':
@@ -693,9 +1303,9 @@ class WhatsAppMessaging(models.Model):
                                                     dict = json.loads(answer.text)
                                                     media_id = dict.get('id')
                                                     getimagebyid = provider_id.direct_get_image_by_id(media_id,
-                                                                                               contact,
-                                                                                               sent_type,
-                                                                                               attachment)
+                                                                                                      contact,
+                                                                                                      sent_type,
+                                                                                                      attachment)
                                                     if getimagebyid.status_code == 200:
                                                         imagedict = json.loads(getimagebyid.text)
                                                         if 'messages' in imagedict and imagedict.get('messages'):

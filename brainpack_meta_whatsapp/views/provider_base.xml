@@ -21,6 +21,29 @@
                         <page string="Credentials" name="provider_credentials">
                             <group name="provider"/>
                         </page>
+                        <page string="Operators" name="operators">
+                                <field name="user_ids">
+                                    <kanban>
+                                        <field name="id"/>
+                                        <field name="name"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click">
+                                                    <div class="o_kanban_image">
+                                                        <img t-att-src="kanban_image('res.users', 'avatar_1024', record.id.raw_value)"
+                                                             alt="User"/>
+                                                    </div>
+                                                    <div class="o_kanban_details">
+                                                        <h4 class="o_kanban_record_title">
+                                                            <field name="name"/>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
                     </notebook>
                 </sheet>
             </form>

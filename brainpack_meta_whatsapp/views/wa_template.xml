@@ -43,6 +43,7 @@
                                 <field name="provider_id" required="1" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
                                 <field name="template_status" invisible="1"/>
                                 <field name="category" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
+                                <field name="template_type" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
                                 <field name="lang" required="1" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
                                 <field name="namespace" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>
                                 <field name="model_id" required="1" options="{'no_create': True}" attrs="{'readonly': [('template_status', '=', 'APPROVED')]}"/>

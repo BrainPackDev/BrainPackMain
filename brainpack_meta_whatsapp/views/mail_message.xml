@@ -13,6 +13,7 @@
                 <field name="chatter_wa_message_id"/>
                 <field name="wa_delivery_status"/>
                 <field name="wa_error_message"/>
+                <field name="isWaMsgsRead" readonly="1"/>
             </field>
         </field>
     </record>

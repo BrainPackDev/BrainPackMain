@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="mail_channel_view_form_inherit" model="ir.ui.view">
+        <record id="mail_channel_view_form_base_meta_inherit" model="ir.ui.view">
             <field name="name">mail.channel.form.view</field>
             <field name="model">mail.channel</field>
             <field name="inherit_id" ref="mail.mail_channel_view_form"/>

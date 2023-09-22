@@ -502,3 +502,34 @@ class Provider(models.Model):
             raise UserError(
                 ("please authenticated your whatsapp."))
 
+    def graph_api_wamsg_mark_as_read(self, message_id):
+        """
+        When Message Seen/Read in odoo, Double Blue Tick (Read Receipts) in WhatsApp
+        """
+        if self.graph_api_authenticated:
+            url = self.graph_api_url + self.graph_api_instance_id + "/messages"
+            data = {
+                  "messaging_product": "whatsapp",
+                  "status": "read",
+                  "message_id": message_id,
+                }
+            payload = json.dumps(data)
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + self.graph_api_token
+            }
+            try:
+                answer = requests.post(url, headers=headers, data=payload)
+            except requests.exceptions.ConnectionError:
+                raise UserError(
+                    ("please check your internet connection."))
+            # if answer.status_code != 200:
+            #     if json.loads(answer.text) and 'error' in json.loads(answer.text) and 'message' in json.loads(
+            #             answer.text).get('error'):
+            #         dict = json.loads(answer.text).get('error').get('message')
+            #         raise UserError(_(dict))
+            return answer
+        else:
+            raise UserError(
+                ("please authenticated your whatsapp."))                
+
