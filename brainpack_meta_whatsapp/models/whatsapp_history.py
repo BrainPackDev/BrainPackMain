@@ -46,9 +46,25 @@ class WhatsappHistory(models.Model):
 
     @api.model
     def create(self, vals):
+        # res = super(WhatsappHistory, self).create(vals)
+        # user_partner = self.env.ref('base.user_root').partner_id.id
+        # if self.env.context.get('from_chatboat'):
+        #    return res
+        #print("1((((((((((((((((first (WhatsappHistory))))))))))))))))))))))", vals, self.env.context)
+        if vals.get('is_interactive'):
+            vals.pop('is_interactive')
+            #print("2((((((((((((((((first super(WhatsappHistory))))))))))))))))))))))", vals, self.env.context)
+            return super(WhatsappHistory, self).create(vals)
+        if vals.get('is_chatbot'):
+            vals.pop('is_chatbot')
+            #print("2((((((((((((((((first super(WhatsappHistory))))))))))))))))))))))", vals, self.env.context)
+            return super(WhatsappHistory, self).create(vals)
         res = super(WhatsappHistory, self).create(vals)
+        operators = res.provider_id.mapped('user_ids')
+        #print("3((((((((((((((((super(WhatsappHistory))))))))))))))))))))))", vals, self.env.context)
         if res.provider_id and res.partner_id and res.partner_id.mobile:
             res.partner_id.write({'mobile':res.partner_id.mobile.strip('+').replace(' ', '')})
+            # partner = self.env['res.partner'].browse
             part_lst = []
             part_lst.append(res.partner_id.id)
             part_lst.append(int(vals.get('author_id')))
@@ -128,91 +144,142 @@ class WhatsappHistory(models.Model):
                         message_values)
                     notifications = channel._channel_message_notifications(message)
                     self.env['bus.bus']._sendmany(notifications)
+
+                if operators:
+                    for operator in operators:
+                        operator_channel = operator.partner_id.channel_provider_line_ids.channel_id
+                        if operator_channel:
+                            if channel.whatsapp_channel:
+                                channel.sudo().write(
+                                    {'channel_partner_ids': [(4, operator.partner_id.id)]})
+                                mail_channel_partner = self.env[
+                                    'mail.channel.member'].sudo().search(
+                                    [('channel_id', '=', channel.id),
+                                     ('partner_id', '=', operator.partner_id.id)])
+                                mail_channel_partner.write({'is_pinned': True})
+
             else:
                 if not self.env.context.get('whatsapp_application'):
                     if 'template_send' in self.env.context and self.env.context.get('template_send'):
                         wa_template = self.env.context.get('wa_template')
                         params = []
-                        for component in wa_template.components_ids:
-                            object_data = self.env[wa_template.model_id.model].search_read(
-                                [('id', '=', self.env.context.get('active_model_id'))])[0]
 
-                            template_dict = {}
+                        if wa_template.template_type == 'interactive':
+                            for component in wa_template.components_ids:
+                                template_dict = {}
+                                if component.type == 'interactive':
+                                    if component.interactive_type == 'product_list':
+                                        if component.interactive_product_list_ids:
+                                            section = []
+                                            for product in component.interactive_product_list_ids:
+                                                product_items = []
 
-                            if component.type in ['body', 'footer']:
-                                if component.variables_ids:
-                                    template_dict.update({'type': component.type})
-                                    parameters = []
-                                    for variable in component.variables_ids:
-                                        parameter_dict = {}
-                                        if variable.field_id.ttype == 'text':
-                                            if object_data.get(variable.field_id.name):
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': object_data.get(variable.field_id.name)})
-                                            else:
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': ''})
-                                        if variable.field_id.ttype == 'many2one':
-                                            if object_data.get(variable.field_id.name):
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': object_data.get(variable.field_id.name)[1]})
-                                            else:
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': ''})
-                                        if variable.field_id.ttype == 'integer':
-                                            parameter_dict.update(
-                                                {'type': 'text',
-                                                 'text': str(object_data.get(variable.field_id.name))})
-                                        if variable.field_id.ttype == 'float':
-                                            parameter_dict.update(
-                                                {'type': 'text',
-                                                 'text': str(object_data.get(variable.field_id.name))})
-                                        if variable.field_id.ttype == 'monetary':
-                                            text = False
-                                            if 'currency_id' in object_data:
-                                                currency_id = object_data.get('currency_id')[0]
-                                                currency = self.env['res.currency'].browse(currency_id)
-                                                if currency.position == 'after':
-                                                    text = str(
-                                                        object_data.get(variable.field_id.name)) + currency.symbol
-                                                else:
-                                                    text = currency.symbol + str(
-                                                        object_data.get(variable.field_id.name))
-                                            parameter_dict.update(
-                                                {'type': 'text', 'text': text})
-                                        if variable.field_id.ttype in ['char', 'selection']:
-                                            if object_data.get(variable.field_id.name):
-                                                parameter_dict.update({'type': 'text', 'text': object_data.get(
-                                                    variable.field_id.name)})
-                                            else:
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': ''})
-                                        if variable.field_id.ttype in ['date']:
-                                            if object_data.get(variable.field_id.name):
-                                                parameter_dict.update({'type': 'text', 'text': object_data.get(
-                                                    variable.field_id.name).strftime("%m/%d/%Y")})
-                                            else:
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': ''})
-                                        if variable.field_id.ttype in ['datetime']:
-                                            if object_data.get(variable.field_id.name):
-                                                parameter_dict.update({'type': 'text', 'text': object_data.get(
-                                                    variable.field_id.name).strftime("%m/%d/%Y")})
-                                            else:
-                                                parameter_dict.update(
-                                                    {'type': 'text',
-                                                     'text': ''})
-                                        parameters.append(parameter_dict)
-                                    template_dict.update({'parameters': parameters})
+                                                for products in product.product_list_ids:
+                                                    product_item = {
+                                                        "product_retailer_id": products.product_retailer_id
+                                                    }
 
-                            if component.type == 'header':
-                                if component.formate == 'text':
+                                                    product_items.append(product_item)
+
+                                                section.append({
+                                                    "title": product.main_title,
+                                                    "product_items": product_items
+                                                })
+
+                                            action = {
+                                                "catalog_id": component.catalog_id,
+                                                "sections": section
+                                            }
+
+                                            template_dict.update(action)
+
+                                    elif component.interactive_type == 'button':
+                                        if component.interactive_button_ids:
+                                            buttons = []
+                                            for btn_id in component.interactive_button_ids:
+                                                buttons.append({
+                                                    "type": "reply",
+                                                    "reply": {
+                                                        "id": btn_id.id,
+                                                        "title": btn_id.title
+                                                    }
+                                                })
+                                            action = {
+                                                "buttons": buttons
+                                            }
+
+                                            template_dict.update(action)
+
+                                    elif component.interactive_type == 'list':
+                                        if component.interactive_list_ids:
+                                            section = []
+                                            for list_id in component.interactive_list_ids:
+                                                rows = []
+                                                for lists in list_id.title_ids:
+                                                    title_ids = {
+                                                        "id": lists.id,
+                                                        "title": lists.title,
+                                                        "description": lists.description or ''
+                                                    }
+                                                    rows.append(title_ids)
+
+                                                section.append({
+                                                    'title': list_id.main_title,
+                                                    'rows': rows
+                                                })
+                                            action = {
+                                                "button": list_id.main_title,
+                                                "sections": section
+                                            }
+                                            template_dict.update(action)
+
+                                    elif component.interactive_type == 'product':
+                                        action = {
+                                            "catalog_id": component.catalog_id,
+                                            "product_retailer_id": component.product_retailer_id
+                                        }
+                                        template_dict.update(action)
+
+                                if bool(template_dict):
+                                    params.append(template_dict)
+                            answer = res.provider_id.send_mpm_template(wa_template.name, wa_template.lang.iso_code,
+                                                                   wa_template.namespace,  res.partner_id,
+                                                                   params)
+                            if answer.status_code == 200:
+                                dict = json.loads(answer.text)
+                                if res.provider_id.provider == 'graph_api':  # if condition for Graph API
+                                    if 'messages' in dict and dict.get('messages') and dict.get('messages')[0].get(
+                                            'id'):
+
+                                        vals['message_id'] = dict.get('messages')[0].get('id')
+                                        if self.env.context.get('wa_messsage_id'):
+                                            self.env.context.get('wa_messsage_id').wa_message_id = \
+                                                dict.get('messages')[0].get('id')
+                                else:
+                                    if 'sent' in dict and dict.get('sent'):
+                                        message_id = dict['id']
+                                        if self.env.context.get('wa_messsage_id'):
+                                            self.env.context.get('wa_messsage_id').wa_message_id = dict['id']
+                                    else:
+                                        if not self.env.context.get('cron'):
+                                            if 'message' in dict:
+                                                raise UserError(
+                                                    (dict.get('message')))
+                                            if 'error' in dict:
+                                                raise UserError(
+                                                    (dict.get('error').get('message')))
+                                        else:
+                                            vals.update({'type': 'fail'})
+                                            if 'error' in dict:
+                                                vals.update({'fail_reason': dict.get('error').get('message')})
+                        else:
+                            for component in wa_template.components_ids:
+                                object_data = self.env[wa_template.model_id.model].search_read(
+                                    [('id', '=', self.env.context.get('active_model_id'))])[0]
+
+                                template_dict = {}
+
+                                if component.type in ['body', 'footer']:
                                     if component.variables_ids:
                                         template_dict.update({'type': component.type})
                                         parameters = []
@@ -246,12 +313,15 @@ class WhatsappHistory(models.Model):
                                                      'text': str(object_data.get(variable.field_id.name))})
                                             if variable.field_id.ttype == 'monetary':
                                                 text = False
-                                                if currency.position == 'after':
-                                                    text = str(
-                                                        object_data.get(variable.field_id.name)) + currency.symbol
-                                                else:
-                                                    text = currency.symbol + str(
-                                                        object_data.get(variable.field_id.name))
+                                                if 'currency_id' in object_data:
+                                                    currency_id = object_data.get('currency_id')[0]
+                                                    currency = self.env['res.currency'].browse(currency_id)
+                                                    if currency.position == 'after':
+                                                        text = str(
+                                                            object_data.get(variable.field_id.name)) + currency.symbol
+                                                    else:
+                                                        text = currency.symbol + str(
+                                                            object_data.get(variable.field_id.name))
                                                 parameter_dict.update(
                                                     {'type': 'text', 'text': text})
                                             if variable.field_id.ttype in ['char', 'selection']:
@@ -262,65 +332,135 @@ class WhatsappHistory(models.Model):
                                                     parameter_dict.update(
                                                         {'type': 'text',
                                                          'text': ''})
+                                            if variable.field_id.ttype in ['date']:
+                                                if object_data.get(variable.field_id.name):
+                                                    parameter_dict.update({'type': 'text', 'text': object_data.get(
+                                                        variable.field_id.name).strftime("%m/%d/%Y")})
+                                                else:
+                                                    parameter_dict.update(
+                                                        {'type': 'text',
+                                                         'text': ''})
+                                            if variable.field_id.ttype in ['datetime']:
+                                                if object_data.get(variable.field_id.name):
+                                                    parameter_dict.update({'type': 'text', 'text': object_data.get(
+                                                        variable.field_id.name).strftime("%m/%d/%Y")})
+                                                else:
+                                                    parameter_dict.update(
+                                                        {'type': 'text',
+                                                         'text': ''})
                                             parameters.append(parameter_dict)
-                                            template_dict.update({'parameters': parameters})
-
-                                if component.formate == 'media':
-                                    IrConfigParam = self.env['ir.config_parameter'].sudo()
-                                    base_url = IrConfigParam.get_param('web.base.url', False)
-                                    if component.media_type == 'document':
-                                        if self.env.context.get('attachment_ids'):
-                                            template_dict.update({'type': component.type})
-                                            parameters = [{'type': component.media_type, 'document': {
-                                                "link": base_url + "/web/content/" + str(
-                                                    self.env.context.get('attachment_ids')[0]),
-                                                "filename": self.env['ir.attachment'].sudo().browse(
-                                                    self.env.context.get('attachment_ids')[0]).name}}]
-                                            template_dict.update({'parameters': parameters})
-                                    if component.media_type == 'video':
-                                        if self.env.context.get('attachment_ids'):
-                                            template_dict.update({'type': component.type})
-                                            parameters = [{'type': component.media_type, 'video': {
-                                                "link": base_url + "/web/content/" + str(
-                                                    self.env.context.get('attachment_ids')[0]),
-                                                "filename": self.env['ir.attachment'].sudo().browse(
-                                                    self.env.context.get('attachment_ids')[0]).name}}]
-                                            template_dict.update({'parameters': parameters})
-                                    if component.media_type == 'image':
-                                        template_dict.update({'type': component.type})
-                                        parameters = [{'type': component.media_type, 'image': {
-                                            "link": base_url + "/web/image/ir.attachment/" + str(
-                                                self.env.context.get('attachment_ids')[0]) + "/datas",
-                                        }}]
                                         template_dict.update({'parameters': parameters})
 
-                            if bool(template_dict):
-                                params.append(template_dict)
-                        answer = res.provider_id.send_template(wa_template.name, wa_template.lang.iso_code, wa_template.namespace, res.partner_id,params)
-                        if answer.status_code == 200:
-                            dict = json.loads(answer.text)
-                            if res.provider_id.provider == 'graph_api': # if condition for Graph API
-                                if 'messages' in dict and dict.get('messages') and dict.get('messages')[0].get('id'):
-                                    res.message_id = dict.get('messages')[0].get('id')
-                                    if self.env.context.get('wa_messsage_id'):
-                                        self.env.context.get('wa_messsage_id').wa_message_id = dict.get('messages')[0].get('id')
-                            else:
-                                if 'sent' in dict and dict.get('sent'):
-                                    res.message_id = dict['id']
-                                    if self.env.context.get('wa_messsage_id'):
-                                        self.env.context.get('wa_messsage_id').wa_message_id = dict['id']
+                                if component.type == 'header':
+                                    if component.formate == 'text':
+                                        if component.variables_ids:
+                                            template_dict.update({'type': component.type})
+                                            parameters = []
+                                            for variable in component.variables_ids:
+                                                parameter_dict = {}
+                                                if variable.field_id.ttype == 'text':
+                                                    if object_data.get(variable.field_id.name):
+                                                        parameter_dict.update(
+                                                            {'type': 'text',
+                                                             'text': object_data.get(variable.field_id.name)})
+                                                    else:
+                                                        parameter_dict.update(
+                                                            {'type': 'text',
+                                                             'text': ''})
+                                                if variable.field_id.ttype == 'many2one':
+                                                    if object_data.get(variable.field_id.name):
+                                                        parameter_dict.update(
+                                                            {'type': 'text',
+                                                             'text': object_data.get(variable.field_id.name)[1]})
+                                                    else:
+                                                        parameter_dict.update(
+                                                            {'type': 'text',
+                                                             'text': ''})
+                                                if variable.field_id.ttype == 'integer':
+                                                    parameter_dict.update(
+                                                        {'type': 'text',
+                                                         'text': str(object_data.get(variable.field_id.name))})
+                                                if variable.field_id.ttype == 'float':
+                                                    parameter_dict.update(
+                                                        {'type': 'text',
+                                                         'text': str(object_data.get(variable.field_id.name))})
+                                                if variable.field_id.ttype == 'monetary':
+                                                    text = False
+                                                    if currency.position == 'after':
+                                                        text = str(
+                                                            object_data.get(variable.field_id.name)) + currency.symbol
+                                                    else:
+                                                        text = currency.symbol + str(
+                                                            object_data.get(variable.field_id.name))
+                                                    parameter_dict.update(
+                                                        {'type': 'text', 'text': text})
+                                                if variable.field_id.ttype in ['char', 'selection']:
+                                                    if object_data.get(variable.field_id.name):
+                                                        parameter_dict.update({'type': 'text', 'text': object_data.get(
+                                                            variable.field_id.name)})
+                                                    else:
+                                                        parameter_dict.update(
+                                                            {'type': 'text',
+                                                             'text': ''})
+                                                parameters.append(parameter_dict)
+                                                template_dict.update({'parameters': parameters})
+
+                                    if component.formate == 'media':
+                                        IrConfigParam = self.env['ir.config_parameter'].sudo()
+                                        base_url = IrConfigParam.get_param('web.base.url', False)
+                                        if component.media_type == 'document':
+                                            if self.env.context.get('attachment_ids'):
+                                                template_dict.update({'type': component.type})
+                                                parameters = [{'type': component.media_type, 'document': {
+                                                    "link": base_url + "/web/content/" + str(
+                                                        self.env.context.get('attachment_ids')[0]),
+                                                    "filename": self.env['ir.attachment'].sudo().browse(
+                                                        self.env.context.get('attachment_ids')[0]).name}}]
+                                                template_dict.update({'parameters': parameters})
+                                        if component.media_type == 'video':
+                                            if self.env.context.get('attachment_ids'):
+                                                template_dict.update({'type': component.type})
+                                                parameters = [{'type': component.media_type, 'video': {
+                                                    "link": base_url + "/web/content/" + str(
+                                                        self.env.context.get('attachment_ids')[0]),
+                                                    "filename": self.env['ir.attachment'].sudo().browse(
+                                                        self.env.context.get('attachment_ids')[0]).name}}]
+                                                template_dict.update({'parameters': parameters})
+                                        if component.media_type == 'image':
+                                            template_dict.update({'type': component.type})
+                                            parameters = [{'type': component.media_type, 'image': {
+                                                "link": base_url + "/web/image/ir.attachment/" + str(
+                                                    self.env.context.get('attachment_ids')[0]) + "/datas",
+                                            }}]
+                                            template_dict.update({'parameters': parameters})
+
+                                if bool(template_dict):
+                                    params.append(template_dict)
+                            answer = res.provider_id.send_template(wa_template.name, wa_template.lang.iso_code, wa_template.namespace, res.partner_id,params)
+                            if answer.status_code == 200:
+                                dict = json.loads(answer.text)
+                                if res.provider_id.provider == 'graph_api': # if condition for Graph API
+                                    if 'messages' in dict and dict.get('messages') and dict.get('messages')[0].get('id'):
+                                        res.message_id = dict.get('messages')[0].get('id')
+                                        if self.env.context.get('wa_messsage_id'):
+                                            self.env.context.get('wa_messsage_id').wa_message_id = dict.get('messages')[0].get('id')
                                 else:
-                                    if not self.env.context.get('cron'):
-                                        if 'message' in dict:
-                                            raise UserError(
-                                                (dict.get('message')))
-                                        if 'error' in dict:
-                                            raise UserError(
-                                                (dict.get('error').get('message')))
+                                    if 'sent' in dict and dict.get('sent'):
+                                        res.message_id = dict['id']
+                                        if self.env.context.get('wa_messsage_id'):
+                                            self.env.context.get('wa_messsage_id').wa_message_id = dict['id']
                                     else:
-                                        res.write({'type': 'fail'})
-                                        if 'error' in dict:
-                                            res.write({'fail_reason': dict.get('error').get('message')})
+                                        if not self.env.context.get('cron'):
+                                            if 'message' in dict:
+                                                raise UserError(
+                                                    (dict.get('message')))
+                                            if 'error' in dict:
+                                                raise UserError(
+                                                    (dict.get('error').get('message')))
+                                        else:
+                                            res.write({'type': 'fail'})
+                                            if 'error' in dict:
+                                                res.write({'fail_reason': dict.get('error').get('message')})
 
 
                     else:
@@ -417,4 +557,18 @@ class WhatsappHistory(models.Model):
                                                 res.write({'type': 'fail'})
                                                 if 'messages' in imagedict:
                                                     res.write({'fail_reason': imagedict.get('message')})
+
+                        if operators:
+                            for operator in operators:
+                                if res.author_id != operator.partner_id:
+                                    channel = res.partner_id.channel_provider_line_ids.channel_id
+                                    if channel.whatsapp_channel:
+                                        mail_channel_partner = self.env[
+                                            'mail.channel.member'].sudo().search(
+                                            [('channel_id', '=', channel.id),
+                                             ('partner_id', '=', operator.partner_id.id)])
+                                        mail_channel_partner.write({'is_pinned': False})
+                                        channel.sudo().write(
+                                            {'channel_partner_ids': [(3, operator.partner_id.id)]})
+
         return res

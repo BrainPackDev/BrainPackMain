@@ -11,7 +11,7 @@
         'data/cron.xml',
         'data/wa_template.xml',
         'wizard/wa_compose_message_view.xml',
-        # 'views/res_config_settings_views.xml',
+        'views/res_config_settings_views.xml',
         'views/provider_base.xml',
         'views/res_users.xml',
         'views/channel_provider_line.xml',
@@ -24,6 +24,8 @@
         'views/mail_message.xml',
         'views/provider_meta.xml',
         'views/ir_actions.xml',
+        'views/interactive_list_views.xml',
+        'views/interactive_product_list_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

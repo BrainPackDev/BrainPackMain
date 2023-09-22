@@ -27,6 +27,7 @@ class Message(models.Model):
     chatter_wa_message_id = fields.Integer('Chatter Wa Message Id')
     wa_delivery_status = fields.Char('Whatsapp Delivery Status')
     wa_error_message = fields.Char('Whatsapp Error')
+    isWaMsgsRead = fields.Boolean("WA msgs Read")
     wp_status = fields.Selection([
         ('in queue', 'In queue'),
         ('sent', 'Sent'),
@@ -122,9 +123,9 @@ class Message(models.Model):
                 if values.get('message_type') == 'wa_msgs':
                     vals = {}
                     user = self.env.user
+                    if 'user_id' in self.env.context and self.env.context.get('user_id'):
+                        user = self.env.context.get('user_id')
                     if user.id != self.env.ref('base.public_user').id:
-                        if 'user_id' in self.env.context and self.env.context.get('user_id'):
-                            user = self.env.context.get('user_id')
                         if values.get('model') == 'mail.channel':
                             channel_company_line_id = self.env['channel.provider.line'].search(
                                 [('channel_id', '=', message.res_id)])
@@ -266,14 +267,21 @@ class Message(models.Model):
                             'message') != 'received' and not self.env.context.get('template_send'):
                             self.env['whatsapp.history'].sudo().with_context({'wa_messsage_id': message}).create(vals)
                         if self.env.context.get('template_send'):
-                            self.env['whatsapp.history'].sudo().with_context(
-                                {'wa_messsage_id': message, 'template_send': True,
+                            dict = {'wa_messsage_id': message, 'template_send': True,
                                  'wa_template': self.env.context.get(
                                      'wa_template'),
                                  'attachment_ids': self.env.context.get(
                                      'attachment_ids'),
                                  'active_model_id': self.env.context.get(
-                                     'active_model_id')}).create(vals)
+                                     'active_model_id')}
+
+                            if 'active_model_id_chat_bot' in self.env.context and 'active_model_chat_bot' in self.env.context:
+                                dict.update({
+                                    'active_model_id_chat_bot': self.env.context.get('active_model_id_chat_bot'),
+                                    'active_model_chat_bot': self.env.context.get('active_model_chat_bot'),
+                                })
+                            self.env['whatsapp.history'].sudo().with_context(
+                                ).create(vals)
         return messages
 
     def _get_message_format_fields(self):

@@ -30,7 +30,7 @@ class Message(models.Model):
         tracking_values_list = []
         for values in values_list:
             if 'email_from' not in values:  # needed to compute reply_to
-                _author_id, email_from = self.env['mail.thread']._message_compute_author(values.get('author_id'),
+                author_id, email_from = self.env['mail.thread']._message_compute_author(values.get('author_id'),
                                                                                          email_from=None,
                                                                                          raise_on_email=False)
                 values['email_from'] = email_from
@@ -116,9 +116,9 @@ class Message(models.Model):
             if values.get('message_type') == 'wa_msgs':
                 vals = {}
                 user = self.env.user
+                if 'user_id' in self.env.context and self.env.context.get('user_id'):
+                    user = self.env.context.get('user_id')
                 if user.id != self.env.ref('base.public_user').id:
-                    if 'user_id' in self.env.context and self.env.context.get('user_id'):
-                        user = self.env.context.get('user_id')
                     if values.get('model') == 'mail.channel':
                         channel_company_line_id = self.env['channel.provider.line'].search(
                             [('channel_id', '=', message.res_id)])
@@ -277,13 +277,19 @@ class Message(models.Model):
                         self.env['whatsapp.history'].sudo().with_context({'wa_messsage_id': message,'cron':self.env.context.get(
                                  'cron')}).create(vals)
                     if self.env.context.get('template_send'):
+                        dict = {'wa_messsage_id': message, 'template_send': True,
+                                'wa_template': self.env.context.get(
+                                    'wa_template'),
+                                'attachment_ids': self.env.context.get(
+                                    'attachment_ids'),
+                                'active_model_id': self.env.context.get(
+                                    'active_model_id')}
+
+                        if 'active_model_id_chat_bot' in self.env.context and 'active_model_chat_bot' in self.env.context:
+                            dict.update({
+                                'active_model_id_chat_bot': self.env.context.get('active_model_id_chat_bot'),
+                                'active_model_chat_bot': self.env.context.get('active_model_chat_bot'),
+                            })
                         self.env['whatsapp.history'].sudo().with_context(
-                            {'wa_messsage_id': message, 'template_send': True,'cron':self.env.context.get(
-                                 'cron'),
-                             'wa_template': self.env.context.get(
-                                 'wa_template'),
-                             'attachment_ids': self.env.context.get(
-                                 'attachment_ids'),
-                             'active_model_id': self.env.context.get(
-                                 'active_model_id')}).create(vals)
+                        ).create(vals)
         return messages

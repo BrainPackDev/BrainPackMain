@@ -115,31 +115,39 @@ class WebHook2(http.Controller):
                                 channel = self.get_channel([int(partner.id)], provider)
                                 wa_mail_message = request.env['mail.message'].sudo().search(
                                     [('wa_message_id', '=', acknowledgment.get('id'))], limit=1)
-                                #print("***********************222222222222", acknowledgment, acknowledgment.get('status'), wa_mail_message, wp_msgs)
-                                if acknowledgment.get('status') == 'sent':
-                                    wp_msgs.sudo().write({'type': 'sent'})
-                                    wa_mail_message.write({'wp_status': acknowledgment.get('status')})
-                                    notifications = channel._channel_message_notifications(wa_mail_message)
-                                    request.env['bus.bus']._sendmany(notifications)
-                                elif acknowledgment.get('status') == 'delivered':
-                                    wp_msgs.sudo().write({'type': 'delivered'})
-                                    wa_mail_message.write({'wp_status': acknowledgment.get('status')})
-                                    notifications = channel._channel_message_notifications(wa_mail_message)
-                                    request.env['bus.bus']._sendmany(notifications)
-                                elif acknowledgment.get('status') == 'read':
-                                    wp_msgs.sudo().write({'type': 'read'})
-                                    wa_mail_message.write({'wp_status': acknowledgment.get('status')})
-                                    notifications = channel._channel_message_notifications(wa_mail_message)
-                                    request.env['bus.bus']._sendmany(notifications)
 
-                                elif acknowledgment.get('status') == 'failed':
-                                    wp_msgs.sudo().write(
-                                        {'type': 'fail', 'fail_reason': acknowledgment.get('errors')[0].get('title')})
-                                    wa_mail_message.write({'wp_status': 'fail', 'wa_delivery_status': acknowledgment.get('status'),
-                                                           'wa_error_message': acknowledgment.get('errors')[0].get(
-                                                               'error_data').get('details')})
-                                    notifications = channel._channel_message_notifications(wa_mail_message)
-                                    request.env['bus.bus']._sendmany(notifications)
+                                if wp_msgs:
+                                    if acknowledgment.get('status') == 'sent':
+                                        wp_msgs.sudo().write({'type': 'sent'})
+                                    elif acknowledgment.get('status') == 'delivered':
+                                        wp_msgs.sudo().write({'type': 'delivered'})
+                                    elif acknowledgment.get('status') == 'read':
+                                        wp_msgs.sudo().write({'type': 'read'})
+                                    elif acknowledgment.get('status') == 'failed':
+                                        wp_msgs.sudo().write(
+                                            {'type': 'fail',
+                                             'fail_reason': acknowledgment.get('errors')[0].get('title')})
+
+                                if wa_mail_message:
+                                    if acknowledgment.get('status') == 'sent':
+                                        wa_mail_message.write({'wp_status': acknowledgment.get('status')})
+                                        notifications = channel._channel_message_notifications(wa_mail_message)
+                                        request.env['bus.bus']._sendmany(notifications)
+                                    elif acknowledgment.get('status') == 'delivered':
+                                        wa_mail_message.write({'wp_status': acknowledgment.get('status')})
+                                        notifications = channel._channel_message_notifications(wa_mail_message)
+                                        request.env['bus.bus']._sendmany(notifications)
+                                    elif acknowledgment.get('status') == 'read':
+                                        wa_mail_message.write({'wp_status': acknowledgment.get('status')})
+                                        notifications = channel._channel_message_notifications(wa_mail_message)
+                                        request.env['bus.bus']._sendmany(notifications)
+
+                                    elif acknowledgment.get('status') == 'failed':
+                                        wa_mail_message.write({'wp_status': 'fail', 'wa_delivery_status': acknowledgment.get('status'),
+                                                               'wa_error_message': acknowledgment.get('errors')[0].get(
+                                                                   'error_data').get('details')})
+                                        notifications = channel._channel_message_notifications(wa_mail_message)
+                                        request.env['bus.bus']._sendmany(notifications)
 
         if provider.graph_api_authenticated:
             user_partner = provider.user_id.partner_id

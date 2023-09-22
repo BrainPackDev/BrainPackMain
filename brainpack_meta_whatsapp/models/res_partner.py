@@ -15,29 +15,29 @@ class ResPartner(models.Model):
         action['context'] = {}
         return action
 
-    def check_whatsapp_number(self):
-        # Multi Companies and Multi Providers Code Here
-        # provider = self.env.user.provider_id
-        # provider = self.env.user.provider_ids.filtered(lambda x: x.company_id == self.env.company)
-        provider = False
-        if self.env.user:
-            provider = self.env.user.provider_ids.filtered(lambda x: x.company_id == self.env.company)
-            if provider:
-                provider = provider[0]
-        if provider:
-            # phone change to mobile
-            if self.mobile:
-                answer = provider.check_phone(self.mobile.strip('+').replace(" ", ""))
-                if answer.status_code == 200:
-                    dict = json.loads(answer.text)
-                    if 'result' in dict:
-                        if dict['result'] == 'exists':
-                            self.is_whatsapp_number = True
-                        else:
-                            raise UserError(
-                                ("please check your whatsapp number."))
-        else:
-            raise AccessError(_("Please add provider in User!"))
+    # def check_whatsapp_number(self):
+    #     # Multi Companies and Multi Providers Code Here
+    #     # provider = self.env.user.provider_id
+    #     # provider = self.env.user.provider_ids.filtered(lambda x: x.company_id == self.env.company)
+    #     provider = False
+    #     if self.env.user:
+    #         provider = self.env.user.provider_ids.filtered(lambda x: x.company_id == self.env.company)
+    #         if provider:
+    #             provider = provider[0]
+    #     if provider:
+    #         # phone change to mobile
+    #         if self.mobile:
+    #             answer = provider.check_phone(self.mobile.strip('+').replace(" ", ""))
+    #             if answer.status_code == 200:
+    #                 dict = json.loads(answer.text)
+    #                 if 'result' in dict:
+    #                     if dict['result'] == 'exists':
+    #                         self.is_whatsapp_number = True
+    #                     else:
+    #                         raise UserError(
+    #                             ("please check your whatsapp number."))
+    #     else:
+    #         raise AccessError(_("Please add provider in User!"))
 
     @api.model
     def im_search(self, name, limit=20):
