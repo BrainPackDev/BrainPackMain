@@ -15,11 +15,11 @@
         <field name="company_id" ref="base.main_company" />
         <field eval="&quot;1&quot;" name="active" />
     </record>
-    <record id="helpdesk_category_3" model="helpdesk.ticket.category">
-        <field eval="&quot;Odoo&quot;" name="name" />
-        <field name="company_id" ref="base.main_company" />
-        <field eval="&quot;1&quot;" name="active" />
-    </record>
+<!--    <record id="helpdesk_category_3" model="helpdesk.ticket.category">-->
+<!--        <field eval="&quot;Odoo&quot;" name="name" />-->
+<!--        <field name="company_id" ref="base.main_company" />-->
+<!--        <field eval="&quot;1&quot;" name="active" />-->
+<!--    </record>-->
     <!-- Mail aliases -->
     <record id="mail_alias_1" model="mail.alias">
         <field eval="&quot;General Alias for tickets&quot;" name="alias_name" />
