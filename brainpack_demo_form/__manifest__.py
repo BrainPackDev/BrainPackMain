@@ -11,6 +11,7 @@
     'depends': ['website','website_crm'],
     'data': [
         'views/website_data.xml',
+        'data/data.xml',
     ],
     'installable': True,
     'application': True,

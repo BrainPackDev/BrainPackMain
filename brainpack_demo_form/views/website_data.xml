@@ -12,14 +12,17 @@
             }"/>
             <span class="hidden" data-for="contactus_form" t-att-data-values="contactus_form_values"/>
             <div id="wrap" class="oe_structure oe_empty">
-                <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001"
+                <section class="s_title parallax s_parallax_is_fixed pt24 pb24" data-vcss="001"
                          data-snippet="s_title" data-scroll-background-ratio="1">
-                    <span class="s_parallax_bg oe_img_bg"
-                          style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"/>
-                    <div class="o_we_bg_filter bg-black-50"/>
+<!--                    style="background-color: #137EE8;color:#FFFFFF;"-->
                     <div class="container">
-                        <h1>Try Demo</h1>
+                        <h1><font class="text-o-color-1">Get Access To Brainpack</font></h1>
                     </div>
+<!--                    <span class="s_parallax_bg oe_img_bg"/>-->
+<!--&lt;!&ndash;                    <div class="o_we_bg_filter bg-black-50"/>&ndash;&gt;-->
+<!--                    <div class="container">-->
+<!--                        <h1>Get Access To Brainpack</h1>-->
+<!--                    </div>-->
                 </section>
                 <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
                     <div class="container s_allow_columns">
@@ -32,12 +35,20 @@
                                 <!--                                </p>-->
                                 <t t-set="additional_title">Try Demo</t>
                                 <div class="container">
-                                    <h2 class="text-muted">
-                                        Try Demo
+                                    <p>
+                                        <span style="font-size: 18px;">
+                                            Get access to Brainpack.io and experience the power of unified business activities.<br/><br/>
+
+                                        To get access - fill in your details on the form below, and within the next 3 minutes you will get an email with your demo access credentials.
+                                        </span>
+                                    </p>
+                                    <h4 class="text-muted">
+
                                         <t t-if="multiple_teams">-
                                             <t t-out="team.name"/>
                                         </t>
-                                    </h2>
+                                    </h4>
+
                                     <div class="oe_structure" id="oe_structure_whelpdesk_form_1"/>
                                     <span class="hidden" data-for="helpdesk_ticket_form"
                                           t-att-data-values="{'team_id': team and team.id or ''}"/>
@@ -61,7 +72,7 @@
                                                                     <span class="s_website_form_mark">*</span>
                                                                 </label>
                                                                 <div class="col-sm">
-                                                                    <input id="contact1" type="text"
+                                                                    <input id="contact1" type="text" placeholder="Name"
                                                                            class="form-control s_website_form_input"
                                                                            name="name" required=""
                                                                            data-fill-with="name"/>
@@ -78,8 +89,8 @@
                                                                     </span>
                                                                 </label>
                                                                 <div class="col-sm">
-                                                                    <input id="contact2" type="tel"
-                                                                           class="form-control s_website_form_input"
+                                                                    <input id="contact2" type="number" placeholder="Phone Number"
+                                                                           class="form-control s_website_form_input" required=""
                                                                            name="phone" data-fill-with="phone"/>
                                                                 </div>
                                                             </div>
@@ -96,7 +107,7 @@
                                                                 <div class="col-sm">
                                                                     <input id="contact3" type="email"
                                                                            class="form-control s_website_form_input"
-                                                                           name="email_from" required=""
+                                                                           name="email_from" required="" placeholder="Email"
                                                                            data-fill-with="email"/>
                                                                 </div>
                                                             </div>
@@ -112,7 +123,7 @@
                                                                 <div class="col-sm">
                                                                     <input id="contact4" type="text"
                                                                            class="form-control s_website_form_input"
-                                                                           name="company"
+                                                                           name="company" required="" placeholder="Company"
                                                                            data-fill-with="commercial_company_name"/>
                                                                 </div>
                                                             </div>
@@ -122,12 +133,12 @@
                                                             <div class="row s_col_no_resize s_col_no_bgcolor">
                                                                 <label class="col-form-label col-sm-auto s_website_form_label"
                                                                        style="width: 200px" for="contact5">
-                                                                    <span class="s_website_form_label_content">Subject
+                                                                    <span class="s_website_form_label_content">Which Apps Are You Interested In?
                                                                     </span>
                                                                     <span class="s_website_form_mark">*</span>
                                                                 </label>
                                                                 <div class="col-sm">
-                                                                    <input id="contact5" type="text"
+                                                                    <textarea id="contact5" placeholder="Example: I need the full scope nof ERP: CRM, Sales, Invoices, POS, Inventory MAnagement, Billing and Everything"
                                                                            class="form-control s_website_form_input"
                                                                            name="subject" required=""/>
                                                                 </div>
@@ -168,23 +179,51 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 mt-4 mt-lg-0">
+                            <div class="col-lg-4 mt-4 mt-lg-0 o_colored_level">
                                 <ul class="list-unstyled mb-0 ps-2">
-                                    <li>My Company</li>
                                     <li>
-                                        <i class="fa fa-map-marker fa-fw me-2"/>
-                                        <span class="o_force_ltr">3575 Fake Buena Vista Avenue</span>
+                                        <strong>
+                                            <span style="font-size: 18px;">BrainPack</span>
+                                        </strong>
                                     </li>
                                     <li>
-                                        <i class="fa fa-phone fa-fw me-2"/>
-                                        <span class="o_force_ltr">+1 (650) 555-0111</span>
+                                        <i class="fa fa-map-marker fa-fw me-2"></i>
+                                        <span class="o_force_ltr">
+                                            <span style="color: rgb(33, 37, 41);font-size: 16px;font-style: normal;font-weight: 400;background-color: rgb(255, 255, 255)">
+                                                Cyprus:
+                                            </span>
+                                        </span>
+                                    </li>
+                                    <ul>
+                                        <li>Agiou Pavlou 61, Nicosia</li>
+                                    </ul>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw me-2"></i>
+                                        <span class="o_force_ltr">+357-960-28784</span>
                                     </li>
                                     <li>
-                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>
-                                        <span>info@yourcompany.example.com</span>
+                                        <i class="fa fa-1x fa-fw fa-envelope me-2"></i>
+                                        <span>Contact@memetech.Ltd</span>
                                     </li>
                                 </ul>
                             </div>
+<!--                            <div class="col-lg-4 mt-4 mt-lg-0">-->
+<!--                                <ul class="list-unstyled mb-0 ps-2">-->
+<!--                                    <li>My Company</li>-->
+<!--                                    <li>-->
+<!--                                        <i class="fa fa-map-marker fa-fw me-2"/>-->
+<!--                                        <span class="o_force_ltr">3575 Fake Buena Vista Avenue</span>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <i class="fa fa-phone fa-fw me-2"/>-->
+<!--                                        <span class="o_force_ltr">+1 (650) 555-0111</span>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>-->
+<!--                                        <span>info@yourcompany.example.com</span>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </section>
