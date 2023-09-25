@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+        <record id="mail_template_create_demo_mail_template" model="mail.template">
+            <field name="name">Crm: Demo Mail Template</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email) }}</field>
+            <field name="email_to">{{ (object.email_from) }}</field>
+            <field name="description"></field>
+            <field name="body_html" type="html">
+                <div summary="o_mail_notification" style="padding: 0px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-top: 5px;">
+                    <tbody>
+                        <tr>
+                            <td valign="center">
+                                <img t-att-src="'/logo.png?company=%s' % (object.company_id.id or 0)" style="padding: 0px; margin: 0px; height: auto; max-width: 200px; max-height: 36px;" t-att-alt="'%s' % object.company_id.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="center">
+                                <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 10px 0px;"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
+Hello <t t-out="object.name or ''">Name</t>,
+<br/><br/>
+
+Please check the demo here.<br/>
+https://runbot.brainpack.io/
+
+<br/><br/>
+</p><div class="row" style="box-sizing: border-box; margin-left: -16px; margin-right: -16px; margin-top: 0px;"><div class="col-lg-6 o_colored_level" style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;" width="50%"><ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;"><li>BrianPack Admin</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Brainpackadmin</li><li>Password: Brainpackadmin</li></ul></li><li>Sales Agent</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Sales</li><li>Password: Sales</li></ul></li><li>Accounting &amp; Invoiving</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Accounting</li><li>Password: Accounting</li></ul></li><li>Website Builder</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Website</li><li>Password: Website</li></ul></li></ul></div><div class="col-lg-6 o_colored_level" style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;" width="50%"><ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;"><li>Point of Sale</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: POS</li><li>Password: POS</li></ul></li><li>Inventory</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Inventory</li><li>Password: Inventory</li></ul></li><li>Ecommerce</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Ecommerce</li><li>Password: Ecommerce</li></ul></li><li>HelpDesk</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Helpdesk</li><li>Password: Helpdesk</li></ul></li></ul></div></div><p style="margin:0px 0 12px 0;box-sizing:border-box;"></p>
+                </div>
+                <div style="margin-top:32px;">
+                <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 4px 0px;"/>
+                <b t-out="object.company_id.name" style="font-size:11px;"/><br/>
+                <p style="color: #999999; margin-top:2px; font-size:11px;">
+                    <t t-out="object.company_id.phone"/>
+                    <t t-if="object.company_id.email and object.company_id.phone"> |</t>
+                    <a t-if="object.company_id.email" t-att-href="'mailto:%s' % object.company_id.email" style="text-decoration:none; color: #999999;" t-out="object.company_id.email"/>
+                    <t t-if="object.company_id.website and (object.company_id.phone or object.company_id.email)"> |</t>
+                    <a t-if="object.company_id.website" t-att-href="'%s' % object.company_id.website" style="text-decoration:none; color: #999999;" t-out="object.company_id.website"/>
+                </p>
+            </div>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

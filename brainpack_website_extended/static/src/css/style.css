@@ -760,3 +760,14 @@ text-align:center;
     padding-left: 15px;
 }
 
+.s_website_form_rows input[name='phone'].s_website_form_input::-webkit-outer-spin-button,
+.s_website_form_rows input[name='phone'].s_website_form_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.s_website_form_rows input[name='phone'].s_website_form_input {
+  -moz-appearance: textfield;
+}
+
