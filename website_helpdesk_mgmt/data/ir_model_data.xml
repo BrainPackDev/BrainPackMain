@@ -16,6 +16,7 @@
         <value eval="[
             'partner_name',
             'partner_email',
+            'partner_phone',
             'name',
             'description',
             'team_id',

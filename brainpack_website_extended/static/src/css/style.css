@@ -766,6 +766,17 @@ text-align:center;
   margin: 0;
 }
 
+.s_website_form_rows input[name='partner_phone'].s_website_form_input::-webkit-outer-spin-button,
+.s_website_form_rows input[name='partner_phone'].s_website_form_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.s_website_form_rows input[name='partner_phone'].s_website_form_input {
+  -moz-appearance: textfield;
+}
+
 /* Firefox */
 .s_website_form_rows input[name='phone'].s_website_form_input {
   -moz-appearance: textfield;

@@ -19,13 +19,22 @@ FormEditorRegistry.add('create_ticket', {
         name: 'partner_email',
         fillWith: 'email',
         string: _t('Your Email'),
-    }, {
+    } ,{
+        type: 'tel',
+        required: true,
+        name: 'partner_phone',
+        fillWith: 'phone',
+        string: _t('Phone Number'),
+    }
+    , {
         type: 'char',
+        required: true,
         modelRequired: true,
         name: 'name',
         string: _t('Subject'),
     }, {
-        type: 'char',
+        type: 'text',
+        required: true,
         name: 'description',
         string: _t('Description'),
     }, {
