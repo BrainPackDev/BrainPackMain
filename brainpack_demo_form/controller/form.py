@@ -28,7 +28,6 @@ class WebsiteFormInherit(WebsiteForm):
 
             for field_name, field_value in values.items():
                 # If the value of the field if a file
-
                 if hasattr(field_value, 'filename'):
                     # Undo file upload field name indexing
                     field_name = field_name.split('[', 1)[0]
@@ -61,9 +60,13 @@ class WebsiteFormInherit(WebsiteForm):
                         # in the body of the email sent.
                         custom_fields.append((_('email'), field_value))
 
-                elif 'try_demo' in values:
+                elif field_name == 'company':
+                    data['record']['partner_name'] = field_value
+
+                elif field_name == 'try_demo':
                     if values.get('try_demo') == 'True':
                         data['record']['try_demo'] = True
+
 
                 # If it's a custom field
                 elif field_name != 'context':

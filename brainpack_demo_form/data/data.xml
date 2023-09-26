@@ -3,7 +3,7 @@
         <record id="mail_template_create_demo_mail_template" model="mail.template">
             <field name="name">Crm: Demo Mail Template</field>
             <field name="model_id" ref="crm.model_crm_lead"/>
-            <field name="subject">{{ object.name }}</field>
+            <field name="subject">{{ object.name }}, Your BrainPack Demo Account Is Ready!</field>
             <field name="email_from">{{ (object.company_id.email) }}</field>
             <field name="email_to">{{ (object.email_from) }}</field>
             <field name="description"></field>
@@ -25,19 +25,100 @@
                 </table>
             </div>
                 <div style="margin: 0px; padding: 0px;">
+                    <h1 style="color:#137EE8 !important;">Your BrainPack demo account is ready!</h1>
+                    <br/>
                     <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
 Hello <t t-out="object.name or ''">Name</t>,
 <br/><br/>
-
-Please check the demo here.<br/>
-https://runbot.brainpack.io/
-
+We are thrilled to give you a demo access to BrainPack account, where you can experience the revolution available for your company: <t t-out="object.partner_name or ''">Company</t>.
 <br/><br/>
-</p><div class="row" style="box-sizing: border-box; margin-left: -16px; margin-right: -16px; margin-top: 0px;"><div class="col-lg-6 o_colored_level" style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;" width="50%"><ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;"><li>BrianPack Admin</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Brainpackadmin</li><li>Password: Brainpackadmin</li></ul></li><li>Sales Agent</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Sales</li><li>Password: Sales</li></ul></li><li>Accounting &amp; Invoiving</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Accounting</li><li>Password: Accounting</li></ul></li><li>Website Builder</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Website</li><li>Password: Website</li></ul></li></ul></div><div class="col-lg-6 o_colored_level" style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;" width="50%"><ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;"><li>Point of Sale</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: POS</li><li>Password: POS</li></ul></li><li>Inventory</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Inventory</li><li>Password: Inventory</li></ul></li><li>Ecommerce</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Ecommerce</li><li>Password: Ecommerce</li></ul></li><li>HelpDesk</li><li class="oe-nested" style="box-sizing:border-box;display:block;"><ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;"><li>Username: Helpdesk</li><li>Password: Helpdesk</li></ul></li></ul></div></div><p style="margin:0px 0 12px 0;box-sizing:border-box;"></p>
+Please note that the demo account is packed with lots of demo data, apps and scenarios.<br/>
+After you review it, or whenever you are ready to launch your real account - please reply to this email or contact us &lt;https://www.brainpack.io/contactus&gt; so we can get you started with the real thing.
+<br/><br/>
+Your demo is available in the following URL:<br/>
+https://runbot.brainpack.io/
+<br/><br/>
+You can use any of the below credentials to log in as a user:
+<br/><br/>
+                    </p>
+                    <div class="row"
+                         style="box-sizing: border-box; margin-left: -16px; margin-right: -16px; margin-top: 0px;">
+                        <div class="col-lg-6 o_colored_level"
+                             style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;"
+                             width="50%">
+                            <ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;">
+                                <li>
+                                    <b>BrianPack Admin</b>
+                                </li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Brainpackadmin</li>
+                                        <li>Password: Brainpackadmin</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sales Agent</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Sales</li>
+                                        <li>Password: Sales</li>
+                                    </ul>
+                                </li>
+                                <li><b>Accounting &amp; Invoiving</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Accounting</li>
+                                        <li>Password: Accounting</li>
+                                    </ul>
+                                </li>
+                                <li><b>Website Builder</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Website</li>
+                                        <li>Password: Website</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 o_colored_level"
+                             style="box-sizing: border-box; margin-top: 0px; padding-left: 16px; padding-right: 16px; max-width: 100%; width: 50%;"
+                             width="50%">
+                            <ul style="padding:0 0 0 24px;margin:0px 0 12px 0;box-sizing:border-box;">
+                                <li><b>Point of Sale</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: POS</li>
+                                        <li>Password: POS</li>
+                                    </ul>
+                                </li>
+                                <li><b>Inventory</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Inventory</li>
+                                        <li>Password: Inventory</li>
+                                    </ul>
+                                </li>
+                                <li><b>Ecommerce</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Ecommerce</li>
+                                        <li>Password: Ecommerce</li>
+                                    </ul>
+                                </li>
+                                <li><b>HelpDesk</b></li>
+                                <li class="oe-nested" style="box-sizing:border-box;display:block;">
+                                    <ul style="padding:0 0 0 24px;margin:0px 0 0px 0;box-sizing:border-box;">
+                                        <li>Username: Helpdesk</li>
+                                        <li>Password: Helpdesk</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="margin:0px 0 12px 0;box-sizing:border-box;"></p>
                 </div>
                 <div style="margin-top:32px;">
                 <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 4px 0px;"/>
-                <b t-out="object.company_id.name" style="font-size:11px;"/><br/>
+                    <b style="font-size:11px;">BrainPack.io</b><br/>
                 <p style="color: #999999; margin-top:2px; font-size:11px;">
                     <t t-out="object.company_id.phone"/>
                     <t t-if="object.company_id.email and object.company_id.phone"> |</t>

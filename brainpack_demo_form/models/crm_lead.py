@@ -8,6 +8,7 @@ class CrmLead(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
+        print(">>>>>>>>>>",vals)
         if res.try_demo and res.type == 'lead':
             mail_template = self.env.ref('brainpack_demo_form.mail_template_create_demo_mail_template').id
             template = self.env['mail.template'].browse(mail_template)
