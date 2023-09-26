@@ -44,6 +44,7 @@ class HelpdeskTicket(models.Model):
     partner_id = fields.Many2one(comodel_name="res.partner", string="Contact")
     partner_name = fields.Char()
     partner_email = fields.Char(string="Email")
+    partner_phone = fields.Char(string="Phone")
 
     last_stage_update = fields.Datetime(default=fields.Datetime.now)
     assigned_date = fields.Datetime()
