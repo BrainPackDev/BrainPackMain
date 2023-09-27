@@ -48,7 +48,7 @@
              </xpath>
             <xpath expr="//div[hasclass('oe_module_vignette')]//div[hasclass('oe_module_action')]" position="after">
                 <div t-if="installed" class="d-flex align-items-center text-muted float-start" groups="brainpack_access_rights.client_admin">Installed</div>
-                <button type="object" class="btn btn-primary btn-sm mt-2" name="button_get_app" groups="brainpack_access_rights.client_admin" states="uninstalled" t-if="! record.to_buy.raw_value">Get App</button>
+                <button type="object" class="btn btn-primary btn-sm mt-2" name="button_get_app" groups="brainpack_access_rights.client_admin" states="uninstalled,uninstallable" t-if="! record.to_buy.raw_value">Get App</button>
             </xpath>
              <xpath expr="//div[hasclass('oe_module_vignette')]//p[hasclass('oe_module_name')]" position="attributes">
                 <attribute name="groups">brainpack_access_rights.main_admin</attribute>

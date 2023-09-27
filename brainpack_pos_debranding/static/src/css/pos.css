@@ -1,0 +1,45 @@
+.pos .pos-topheader{
+    background: #137EE8 !important;
+}
+
+.pos textarea:focus {
+    box-shadow: 0px 0px 0px 3px #137EE8 !important;
+}
+
+.pos .switchpane .order-info {
+    color: #137EE8 !important;
+}
+.pos .switchpane .btn-switchpane {
+    background-color: #137EE8;
+}
+
+.pos .switchpane .btn-switchpane.secondary {
+    color: #137EE8 !important;
+}
+
+.pos .control-button.highlight,
+.pos .button.highlight {
+    background: #137EE8 !important;
+    border: solid 1px #137EE8 !important;
+    color: white !important;
+}
+
+.pos .actionpad .button.pay .pay-circle.highlight {
+    background-color: #137EE8 !important;
+}
+
+.pos .mode-button.selected-mode {
+    background: #137EE8 !important;
+}
+
+.pos .mode-button.selected-mode:hover {
+    background: #137EE8 !important;
+}
+
+.pos .btn-switch-payment {
+    background-color: #137EE8 !important;
+}
+
+.pos .product .price-tag {
+    color: #137EE8 !important;
+}
