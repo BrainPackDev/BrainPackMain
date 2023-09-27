@@ -105,6 +105,7 @@ patch(SettingsPage.prototype, "brainpack_access_rights.SettingsPage", {
                     $('.o_widget_res_config_dev_tool').remove()
                     $('.o_widget_iap_buy_more_credits').closest('.o_setting_box').remove()
                 }
+                $('.o_doc_link').remove()
             })
     }
 

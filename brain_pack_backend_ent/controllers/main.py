@@ -608,7 +608,7 @@ class BackendConfigration(http.Controller):
                 pass
             try:
                 if request.env.ref('maintenance.menu_maintenance_title') == menu:
-                    menu.write({'web_icon': 'brainpack_debranding,static/description/blue/maintainance.png'})
+                    menu.write({'web_icon': 'brainpack_debranding,static/description/blue/mmaintanance.png'})
             except:
                 pass
             try:
