@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Change logo in POS to company logo. -->
+    <t t-name="Chrome" t-inherit="point_of_sale.Chrome" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('pos-branding')]" position="replace">
+                <img t-if="!env.isMobile" class="pos-logo" t-on-click="() => this.trigger('toggle-debug-widget')"
+                         src="/web/pos/company_logo" alt="Logo" />
+                    <CashMoveButton t-if="showCashMoveButton()" />
+                    <TicketButton isTicketScreenShown="isTicketScreenShown" />
+        </xpath>
+    </t>
+</templates>
