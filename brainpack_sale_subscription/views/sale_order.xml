@@ -12,15 +12,41 @@
                 <attribute name="attrs">{}</attribute>
             </xpath>
             <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="url" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-                <field name="db_name" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-                <field name="username" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-                <field name="password" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-                <field name="creation_date_db" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-<!--                <field name="expiration_date_db"/>-->
-                <field name="db_expiration_reason" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
-                <field name="db_enterprise_code" attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
+                <field name="is_subscription" invisible="1"/>
+                <field name="url" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}"/>
+                <field name="db_name" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}"/>
+                <field name="username" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}"/>
+                <field name="password" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}"/>
+                <field name="creation_date_db" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}" readonly="1"/>
+                <field name="db_expiration_date" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}" readonly="1"/>
+<!--                <field name="db_expiration_reason" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}" readonly="1"/>-->
+<!--                <field name="db_enterprise_code" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}"/>-->
             </xpath>
+            <xpath expr="//page[@name='customer_signature']" position='after'>
+                    <page string="User Details" name="user_details">
+                        <group>
+                            <field name="user_details_ids" readonly="1">
+                                <tree>
+                                    <field name="user_name"/>
+                                    <field name="create_time"/>
+                                    <field name="active_user"/>
+                                    <field name="active_day"/>
+                                    <field name="user_exits"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="user_name"/>
+                                        <field name="create_time"/>
+                                        <field name="active_user"/>
+                                        <field name="active_day"/>
+                                        <field name="user_exits"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
         </field>
     </record>
 </odoo>
+

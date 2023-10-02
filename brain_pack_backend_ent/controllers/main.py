@@ -617,6 +617,11 @@ class BackendConfigration(http.Controller):
             except:
                 pass
             try:
+                if request.env.ref('ks_sales_subscription.ks_menu_sale_subscription_root') == menu:
+                    menu.write({'web_icon': 'brainpack_debranding,static/description/blue/subscription.png'})
+            except:
+                pass
+            try:
                 if request.env.ref('marketing_automation.marketing_automation_menu') == menu:
                     menu.write({'web_icon': 'brainpack_debranding,static/description/blue/marketingAutomation.png'})
             except:

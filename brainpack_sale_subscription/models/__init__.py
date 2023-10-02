@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
-from . import brainpack_sale_subscription
+# from . import brainpack_sale_subscription
 from . import sale_order
+from . import user_details
