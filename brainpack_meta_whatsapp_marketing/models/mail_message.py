@@ -96,8 +96,13 @@ class Message(models.Model):
 
         for message, values, tracking_values_cmd in zip(messages, values_list, tracking_values_list):
             if tracking_values_cmd:
-                vals_lst = [dict(cmd[2], mail_message_id=message.id) for cmd in tracking_values_cmd if
-                            len(cmd) == 3 and cmd[0] == 0]
+                vals_lst = []
+                for cmd in tracking_values_cmd:
+                    if len(cmd) == 3 and cmd[0] == 0:
+                        cmd[2].update({'mail_message_id':message.id})
+                        vals_lst.append(cmd[2])
+                # vals_lst = [dict(cmd[2], mail_message_id=message.id) for cmd in tracking_values_cmd if
+                #             len(cmd) == 3 and cmd[0] == 0]
                 other_cmd = [cmd for cmd in tracking_values_cmd if len(cmd) != 3 or cmd[0] != 0]
                 if vals_lst:
                     self.env['mail.tracking.value'].sudo().create(vals_lst)

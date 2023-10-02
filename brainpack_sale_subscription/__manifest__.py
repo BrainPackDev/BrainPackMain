@@ -11,7 +11,7 @@
     'depends': ['base','sale_subscription','brainpack_debranding','base_automation'],
     'data': [
         'data/data.xml',
-        'views/brainpack_sale_subscription_views.xml',
+        # 'views/brainpack_sale_subscription_views.xml',
         'views/sale_order.xml',
         'security/ir.model.access.csv',
     ],

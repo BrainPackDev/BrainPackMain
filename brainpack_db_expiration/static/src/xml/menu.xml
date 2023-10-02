@@ -1,0 +1,12 @@
+<templates id="template" xml:space="preserve">
+	<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div" position="before">
+			<div class="alert alert-info database_block_message" style="display:none"/>
+            <div style="display:none">
+                <div class="block_ui database_block_message alert alert-danger">
+                    Your database is blocked
+                </div>
+            </div>
+		</xpath>
+	</t>
+</templates>
