@@ -102,6 +102,8 @@ class HelpdeskTicket(models.Model):
     )
     active = fields.Boolean(default=True)
 
+    main_url = fields.Char('Main URL Related to this ticket')
+
     def name_get(self):
         res = []
         for rec in self:

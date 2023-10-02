@@ -174,6 +174,7 @@
                             <field name="partner_email" />
                             <field name="partner_phone" />
                             <field name="category_id" />
+                            <field name="main_url"/>
                             <field
                                 name="tag_ids"
                                 widget="many2many_tags"
