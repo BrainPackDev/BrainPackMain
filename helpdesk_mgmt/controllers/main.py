@@ -67,6 +67,8 @@ class HelpdeskTicketController(http.Controller):
             "category_id": category.id,
             "description": plaintext2html(kw.get("description")),
             "name": kw.get("subject"),
+            "main_url": kw.get("main_url"),
+            "priority": kw.get("priority"),
             "attachment_ids": False,
             "channel_id": request.env["helpdesk.ticket.channel"]
             .sudo()
