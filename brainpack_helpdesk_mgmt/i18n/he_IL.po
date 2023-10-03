@@ -1,0 +1,136 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* brainpack_helpdesk_mgmt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-03 13:41+0000\n"
+"PO-Revision-Date: 2023-10-03 13:41+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: brainpack_helpdesk_mgmt
+#: model:mail.template,body_html:brainpack_helpdesk_mgmt.mail_template_create_ticket_mail
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"Hello <t t-out=\"object.name or ''\">Name</t>,\n"
+"<br><br>\n"
+"This message is to inform you that the ticket <t t-out=\"object.number or ''\">XXXXX</t> has been created and is currently being reviewed by our support team.\n"
+"<br>\n"
+"You will get notified via email whenever a reply is made on it.<br>\n"
+"You can also reply to this email or to other notifications to continue the conversation.\n"
+"<br><br>\n"
+"Feel free to let us know if anything else is needed.<br>\n"
+"<br>\n"
+"Thank you<br>\n"
+" <t t-out=\"object.company_id.team_name or ''\">Company</t> Team\n"
+"                    </p>\n"
+"\n"
+"                </div>\n"
+"\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"שלום <t t-out=\"object.name or ''\">Name</t>,\n"
+"<br><br>\n"
+"הודעה זו היא ליידע אותך שהכרטיס <t t-out=\"object.number or ''\">XXXXX</t> נוצר ונבדק כעת על ידי צוות התמיכה שלנו.\n"
+"<br>\n"
+"תקבל הודעה בדואל בכל פעם שתתנה לו תשובה.<br>\n"
+"תוכל גם להשיב לדואל זה או להתראות אחרות כדי להמשיך בשיחה.\n"
+"<br><br>\n"
+"אל תהסס ליידע אותנו אם יש צורך במשהו נוסף.<br>\n"
+"<br>\n"
+"תודה<br>\n"
+" <t t-out=\"object.company_id.team_name or ''\">Company</t> Team\n"
+"                    </p>\n"
+"\n"
+"                </div>\n"
+"\n"
+"            "
+
+#. module: brainpack_helpdesk_mgmt
+#: model:ir.model,name:brainpack_helpdesk_mgmt.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: brainpack_helpdesk_mgmt
+#: model:ir.model,name:brainpack_helpdesk_mgmt.model_helpdesk_ticket
+msgid "Helpdesk Ticket"
+msgstr "כרטיס דלפק"
+
+#. module: brainpack_helpdesk_mgmt
+#: model:mail.template,name:brainpack_helpdesk_mgmt.mail_template_create_ticket_mail
+msgid "Helpdesk: Ticket Create Mail Template"
+msgstr "דלפק עזרה: צור תבנית דואר של כרטיסים"
+
+#. module: brainpack_helpdesk_mgmt
+#: model:ir.model.fields,field_description:brainpack_helpdesk_mgmt.field_res_company__team_name
+msgid "Team Name"
+msgstr ""
+
+#. module: brainpack_helpdesk_mgmt
+#: model:mail.template,subject:brainpack_helpdesk_mgmt.mail_template_create_ticket_mail
+msgid ""
+"Your Ticket {{ (object.number) }} Is created - {{ "
+"(object.company_id.team_name) }}"
+msgstr ""
+"הכרטיס שלך {{ (object.number) }} נוצר - {{ "
+"(object.company_id.team_name) }}"
+
+#. module: helpdesk_mgmt
+#: model:mail.template,body_html:helpdesk_mgmt.closed_ticket_template
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"Hello <t t-out=\"object.name or ''\">Name</t>,\n"
+"<br><br>\n"
+"This message is to inform you that the ticket <t t-out=\"object.number or ''\">XXXXX</t> has been closed.\n"
+"<br>\n"
+"If you want to re-open it you can add your message on the ticket itself, or reply to this email.<br>\n"
+"You can also open a new ticket whenever you need.\n"
+"<br><br>\n"
+"Feel free to let us know if anything else is needed.<br>\n"
+"<br>\n"
+"Thank you<br>\n"
+" <t t-out=\"object.company_id.team_name or ''\">Company</t> Team\n"
+"                    </p>\n"
+"\n"
+"                </div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"שלום <t t-out=\"object.name or ''\">Name</t>,\n"
+"<br><br>\n"
+"הודעה זו היא ליידע אותך שהכרטיס <t t-out=\"object.number or ''\">XXXXX</t>נסגר.\n"
+"<br>\n"
+"אם ברצונך לפתוח אותו מחדש, תוכל להוסיף את הודעתך בכרטיס עצמו, או להשיב למייל זה.<br>\n"
+"אתה יכול גם לפתוח כרטיס חדש בכל פעם שתצטרך.\n"
+"<br><br>\n"
+"אל תהסס ליידע אותנו אם יש צורך במשהו נוסף.<br>\n"
+"<br>\n"
+"תודה<br>\n"
+" <t t-out=\"object.company_id.team_name or ''\">Company</t> Team\n"
+"                    </p>\n"
+"\n"
+"                </div>\n"
+
+#. module: helpdesk_mgmt
+#: model:mail.template,name:helpdesk_mgmt.closed_ticket_template
+msgid "Helpdesk Closed Ticket Notification Email"
+msgstr "דואל הודעת כרטיס סיוע סגור"
+
+#. module: helpdesk_mgmt
+#: model:mail.template,subject:helpdesk_mgmt.closed_ticket_template
+msgid ""
+"הכרטיס {{object.number}} נסגר - {{ "
+"(object.company_id.team_name) }}"
+msgstr ""

@@ -159,7 +159,7 @@
                                 </td>
                                 <td t-if="groupby != 'stage'">
                                     <span
-                                            class="badge badge-pill badge-info"
+                                            class="badge badge-pill badge-info bg-info"
                                             title="Current stage of the ticket"
                                             t-esc="ticket.stage_id.name"
                                     />

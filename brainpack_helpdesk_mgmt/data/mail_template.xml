@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+        <record id="mail_template_create_ticket_mail" model="mail.template">
+            <field name="name">Helpdesk: Ticket Create Mail Template</field>
+            <field name="model_id" ref="helpdesk_mgmt.model_helpdesk_ticket"/>
+            <field name="subject">Your Ticket {{ (object.number) }} Is created - {{ (object.company_id.team_name) }}</field>
+            <field name="email_from">{{ (object.company_id.email) }}</field>
+            <field name="email_to">{{ (object.partner_email) }}</field>
+            <field name="description"></field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
+Hello <t t-out="object.name or ''">Name</t>,
+<br/><br/>
+This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t> has been created and is currently being reviewed by our support team.
+<br/>
+You will get notified via email whenever a reply is made on it.<br/>
+You can also reply to this email or to other notifications to continue the conversation.
+<br/><br/>
+Feel free to let us know if anything else is needed.<br/>
+<br/>
+Thank you<br/>
+ <t t-out="object.company_id.team_name or ''">Company</t> Team
+                    </p>
+
+                </div>
+
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('name', '=', 'closed_ticket_template'),
+            ('module','=','helpdesk_mgmt')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+         <record id="helpdesk_mgmt.closed_ticket_template" model="mail.template">
+            <field name="name">Helpdesk Closed Ticket Notification Email</field>
+            <field name="model_id" ref="helpdesk_mgmt.model_helpdesk_ticket" />
+            <field name="email_from">{{object.company_id.partner_id.email}}</field>
+            <field
+                name="email_cc"
+            >{{not object.partner_id and object.partner_email or ''}},</field>
+            <field name="subject">The Ticket {{object.number}} has been closed - {{ (object.company_id.team_name) }}</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="auto_delete" eval="False" />
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+                 <div style="margin: 0px; padding: 0px;">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
+Hello <t t-out="object.name or ''">Name</t>,
+<br/><br/>
+This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t> has been closed.
+<br/>
+If you want to re-open it you can add your message on the ticket itself, or reply to this email.<br/>
+You can also open a new ticket whenever you need.
+<br/><br/>
+Feel free to let us know if anything else is needed.<br/>
+<br/>
+Thank you<br/>
+ <t t-out="object.company_id.team_name or ''">Company</t> Team
+                    </p>
+
+                </div>
+            </field>
+        </record>
+
+         <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('name', '=', 'closed_ticket_template'),
+            ('module','=','helpdesk_mgmt')] "/>
+            </function>
+            <value eval=" {'noupdate': True} "/>
+        </function>
+    </data>
+</odoo>
