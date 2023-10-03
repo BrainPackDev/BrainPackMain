@@ -19,7 +19,7 @@ class CrmLead(models.Model):
         tracking_emails_count = 0
         if partners_mail.email:
             tracking_emails_count = tracking_emails_count + len(
-                mt_obj.search([("recipient_address", "=", partners_mail.email.lower()),('mail_message_id.res_id','=',str(self.id)),('mail_message_id.model','=','crm.lead')])
+                mt_obj.search([("recipient_address", "=", partners_mail.email.lower())])
             )
         self.tracking_emails_count = tracking_emails_count
 
@@ -28,8 +28,11 @@ class CrmLead(models.Model):
         mt_obj = self.env["mail.tracking.email"].sudo()
         if partners_mail.email:
             mt_obj = mt_obj.search(
-                [("recipient_address", "=", partners_mail.email.lower()), ('mail_message_id.res_id', '=', str(self.id)),
-                 ('mail_message_id.model', '=', 'crm.lead')])
+                [("recipient_address", "=", partners_mail.email.lower())])
+
+            # mt_obj = mt_obj.search(
+            #     [("recipient_address", "=", partners_mail.email.lower()), ('mail_message_id.res_id', '=', str(self.id)),
+            #      ('mail_message_id.model', '=', 'crm.lead')])
         return {
             'name': ('MailTracking emails'),
             'view_mode': 'tree,form',

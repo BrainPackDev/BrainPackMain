@@ -22,7 +22,7 @@ class ProjectProjectInherit(models.Model):
             tracking_emails_count = 0
             for partner in partners_mail:
                 tracking_emails_count = tracking_emails_count + len(
-                    mt_obj.search([("recipient_address", "=", partner.email.lower()),('mail_message_id.res_id','=',str(rec.id)),('mail_message_id.model','=','project.project')])
+                    mt_obj.search([("recipient_address", "=", partner.email.lower())])
                 )
             rec.tracking_emails_cou = tracking_emails_count
 
@@ -31,8 +31,7 @@ class ProjectProjectInherit(models.Model):
         mt_obj = self.env["mail.tracking.email"].sudo()
         if partners_mail:
             mt_obj = mt_obj.search(
-                [("recipient_address", "=", partners_mail.email.lower()), ('mail_message_id.res_id', '=', str(self.id)),
-                 ('mail_message_id.model', '=', 'project.project')])
+                [("recipient_address", "=", partners_mail.email.lower())])
         return {
             'name': ('MailTracking emails'),
             'view_mode': 'tree,form',
