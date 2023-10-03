@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
         tracking_emails_count = 0
         for partner in partners_mail:
             tracking_emails_count = tracking_emails_count + len(
-                mt_obj.search([("recipient_address", "=", partner.email.lower()),('mail_message_id.res_id','=',str(self.id)),('mail_message_id.model','=','sale.order')])
+                mt_obj.search([("recipient_address", "=", partner.email.lower())])
             )
         self.tracking_emails_count = tracking_emails_count
 
@@ -28,8 +28,7 @@ class SaleOrder(models.Model):
         mt_obj = self.env["mail.tracking.email"].sudo()
         if partners_mail:
             mt_obj = mt_obj.search(
-                [("recipient_address", "=", partners_mail.email.lower()), ('mail_message_id.res_id', '=', str(self.id)),
-                 ('mail_message_id.model', '=', 'sale.order')])
+                [("recipient_address", "=", partners_mail.email.lower())])
         return {
             'name': ('MailTracking emails'),
             'view_mode': 'tree,form',

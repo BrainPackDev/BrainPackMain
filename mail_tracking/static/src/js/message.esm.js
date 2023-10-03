@@ -8,6 +8,7 @@ patch(Message.prototype, "mail_tracking/static/src/js/message.js", {
         this._super(...arguments);
     },
     _onTrackingStatusClick(event) {
+        debugger;
         var tracking_email_id = $(event.currentTarget).data("tracking");
         event.preventDefault();
         return  this.env.services['action'].doAction(
