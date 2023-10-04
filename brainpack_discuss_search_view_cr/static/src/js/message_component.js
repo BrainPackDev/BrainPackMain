@@ -48,8 +48,9 @@ patch(Message.prototype, 'brainpack_discuss_search_view_cr.message_component', {
                     threadView._onChangeStringifiedDomain()
                 }
                 else{
+
                     var href =  $(ev.target).attr('href');
-                    if (href) {
+                    if (href && href != '#') {
                         window.open(href, '_blank');
                     }
                 }
