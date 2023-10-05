@@ -3,16 +3,32 @@
         <record id="mail_template_create_ticket_mail" model="mail.template">
             <field name="name">Helpdesk: Ticket Create Mail Template</field>
             <field name="model_id" ref="helpdesk_mgmt.model_helpdesk_ticket"/>
-            <field name="subject">Your Ticket {{ (object.number) }} Is created - {{ (object.company_id.team_name) }}</field>
+            <field name="subject">Your Ticket {{ (object.number) }}-{{object.name}} Is created - {{ (object.company_id.team_name) }}</field>
             <field name="email_from">{{ (object.company_id.email) }}</field>
             <field name="email_to">{{ (object.partner_email) }}</field>
             <field name="description"></field>
             <field name="body_html" type="html">
-                <div style="margin: 0px; padding: 0px;">
-                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
-Hello <t t-out="object.name or ''">Name</t>,
+                 <div summary="o_mail_notification" style="padding: 0px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin-top: 5px;">
+                    <tbody>
+                        <tr>
+                            <td valign="center">
+                                <img t-att-src="'/logo.png?company=%s' % (object.company_id.id or 0)" style="padding: 0px; margin: 0px; height: auto; max-width: 200px; max-height: 36px;" t-att-alt="'%s' % object.company_id.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="center">
+                                <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 10px 0px;"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div style="margin: 0px; padding: 0px;" dir="auto">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;" dir="auto">
+Hello <t t-out="object.partner_name or ''">Name</t>,
 <br/><br/>
-This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t> has been created and is currently being reviewed by our support team.
+This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t>-<t t-out="object.name or ''">Title</t> has been created and is currently being reviewed by our support team.
 <br/>
 You will get notified via email whenever a reply is made on it.<br/>
 You can also reply to this email or to other notifications to continue the conversation.
@@ -24,6 +40,17 @@ Thank you<br/>
                     </p>
 
                 </div>
+                <div style="margin-top:32px;">
+                <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 4px 0px;"/>
+                    <b style="font-size:11px;" dir="auto"><t t-out="object.company_id.name"/></b><br/>
+                <p style="color: #999999; margin-top:2px; font-size:11px;" dir="auto">
+                    <t t-out="object.company_id.phone"/>
+                    <t t-if="object.company_id.email and object.company_id.phone"> |</t>
+                    <a t-if="object.company_id.email" t-att-href="'mailto:%s' % object.company_id.email" style="text-decoration:none; color: #999999;" t-out="object.company_id.email"/>
+                    <t t-if="object.company_id.website and (object.company_id.phone or object.company_id.email)"> |</t>
+                    <a t-if="object.company_id.website" t-att-href="'%s' % object.company_id.website" style="text-decoration:none; color: #999999;" t-out="object.company_id.website"/>
+                </p>
+            </div>
 
             </field>
             <field name="lang">{{ object.partner_id.lang }}</field>
@@ -45,16 +72,17 @@ Thank you<br/>
             <field
                 name="email_cc"
             >{{not object.partner_id and object.partner_email or ''}},</field>
-            <field name="subject">The Ticket {{object.number}} has been closed - {{ (object.company_id.team_name) }}</field>
+            <field name="subject">The Ticket {{object.number}}-{{object.name}} has been closed - {{ (object.company_id.team_name) }}</field>
             <field name="partner_to">{{object.partner_id.id}}</field>
             <field name="auto_delete" eval="False" />
             <field name="lang">{{object.partner_id.lang}}</field>
             <field name="body_html" type="html">
-                 <div style="margin: 0px; padding: 0px;">
-                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
-Hello <t t-out="object.name or ''">Name</t>,
+
+                 <div style="margin: 0px; padding: 0px;" dir="auto">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;" dir="auto">
+Hello <t t-out="object.partner_name or ''">Name</t>,
 <br/><br/>
-This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t> has been closed.
+This message is to inform you that the ticket <t t-out="object.number or ''">XXXXX</t>-<t t-out="object.name or ''">Title</t> has been closed.
 <br/>
 If you want to re-open it you can add your message on the ticket itself, or reply to this email.<br/>
 You can also open a new ticket whenever you need.
