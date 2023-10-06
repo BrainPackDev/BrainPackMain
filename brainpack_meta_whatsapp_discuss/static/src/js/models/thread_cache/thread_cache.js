@@ -9,7 +9,7 @@ registerPatch({
     fields: {
         orderedNonEmptyMessages: {
             compute() {
-                if(this.thread.isWaMsgs && !this.thread.isChatterWa){
+                if(this.thread.isWaMsgs && !this.thread.isChatterWa && this.thread.channel && this.thread.channel.channel_type == 'chat'){
                     return this.orderedMessages.filter(message => !message.isEmpty && message.message_type=='wa_msgs');
                 }
                 else{
