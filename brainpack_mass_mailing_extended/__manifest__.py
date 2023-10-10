@@ -8,14 +8,19 @@
     'images': [],
     'summary': """
     """,
-    'depends': ['mass_mailing'],
+    'depends': ['mass_mailing','mass_mailing_themes'],
     'data': [
+        'views/mass_mailing_themes_templates.xml'
     ],
     'assets': {
         'web.assets_frontend': [
         ],
         'web.assets_backend': [
-            '/brainpack_mass_mailing_extended/static/src/js/mailing_mailing_view_form_full_width.js'
+            '/brainpack_mass_mailing_extended/static/src/js/mailing_mailing_view_form_full_width.js',
+
+        ],
+        'mass_mailing.assets_mail_themes_edition': [
+            '/brainpack_mass_mailing_extended/static/src/css/style.css',
         ],
     },
     'installable': True,
