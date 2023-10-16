@@ -1,5 +1,5 @@
 from odoo import api, http, fields, models, tools
-module_lst = ['brainpack_access_rights','brain_pack_backend_ent','brainpack_debranding','general_settings','crm','sale_management','website','account','project']
+module_lst = ['brainpack_access_rights','brain_pack_backend_ent','brainpack_debranding','brainpack_module_packages','general_settings','crm','sale_management','website','account','project']
 class Company(models.Model):
     _inherit = 'res.company'
 

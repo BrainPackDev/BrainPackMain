@@ -15,6 +15,7 @@
         'iap',
         'crm',
         'website',
+        'payment',
     ],
     'data': [
         'security/ir.model.access.csv',

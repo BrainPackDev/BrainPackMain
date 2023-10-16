@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="brainpack_package_form" model="ir.ui.view">
+            <field name="name">brainpack.package.view.form</field>
+            <field name="model">brainpack.package</field>
+            <field name="arch" type="xml">
+                <form string="BrainPack Module Package" create="0">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                            <group>
+                                <field name="brainpack_base_package"/>
+                                <field name="accounting_package"/>
+                                <field name="whatsapp_package"/>
+                                <field name="subacription_package"/>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="brainpack_package_view_tree" model="ir.ui.view">
+            <field name="name">brainpack.package.view.tree</field>
+            <field name="model">brainpack.package</field>
+            <field name="arch" type="xml">
+                <tree string="BrainPack Module Package" create="0">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="brainpack_package_action" model="ir.actions.act_window">
+            <field name="name">BrainPack Package</field>
+            <field name="res_model">brainpack.package</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="brainpack_package_menu"
+                  name="BrainPack Package"
+                  parent="base.menu_users"
+                  sequence="10"
+                  action="brainpack_package_action" groups="brainpack_access_rights.main_admin"/>
+    </data>
+</odoo>

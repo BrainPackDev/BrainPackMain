@@ -6,7 +6,7 @@ class WebsiteInherit(Website):
 
     @http.route('/', type='http', auth="user", website=True, sitemap=True)
     def index(self, **kw):
-        return super().index()
+        return super().index(**kw)
     def _login_redirect(self, uid, redirect=None):
         if redirect == '/' or redirect == '/?':
             redirect = '/web'
