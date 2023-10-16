@@ -428,6 +428,9 @@
                     <t t-elif="module.key == 'brain_pack_backend_ent'">
                          <t t-set="image_url" t-value="'/brainpack_debranding/static/description/brainPack_favicon/android-chrome-192x192.png'"/>
                     </t>
+                     <t t-elif="module.key == 'brainpack_module_packages'">
+                         <t t-set="image_url" t-value="'/brainpack_debranding/static/description/brainPack_favicon/android-chrome-192x192.png'"/>
+                    </t>
                     <t t-elif="module.key == 'brainpack_access_rights'">
                          <t t-set="image_url" t-value="'/brainpack_debranding/static/description/brainPack_favicon/android-chrome-192x192.png'"/>
                     </t>
@@ -858,6 +861,9 @@
                          <t t-set="image_url_white" t-value="'/brainpack_debranding/static/description/payment_provider_sepadirectdebit.png'"/>
                     </t>
                     <t t-elif="module.key == 'brain_pack_backend_ent'">
+                         <t t-set="image_url_white" t-value="'/brainpack_debranding/static/description/favicon_white.png'"/>
+                    </t>
+                     <t t-elif="module.key == 'brainpack_module_packages'">
                          <t t-set="image_url_white" t-value="'/brainpack_debranding/static/description/favicon_white.png'"/>
                     </t>
                     <t t-elif="module.key == 'brainpack_access_rights'">

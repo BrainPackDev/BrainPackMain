@@ -10,7 +10,7 @@
             <xpath expr="//div[hasclass('settings')]" position="inside">
                 <div class="app_settings_block" data-string="BrainPack Access Settings"
                      string="BrainPack Access Settings"
-                     data-key="brainpack_access_rights">
+                     data-key="brainpack_access_rights" groups="brainpack_access_rights.main_admin">
                     <h2>BrainPack Access Settings</h2>
                     <div class="row mt16 o_settings_container">
                         <div class="col-12 col-lg-6 o_setting_box">

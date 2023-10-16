@@ -11,7 +11,7 @@
     'version': '16.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['web','base'],
+    'depends': ['contacts'],
 
     'data': [
         'security/res_group.xml',

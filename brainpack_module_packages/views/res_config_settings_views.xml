@@ -1,0 +1,262 @@
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.brainpack.package</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="6"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="BrainPack Package" string="BrainPack Package" data-key="brainpack_module_packages" groups="brainpack_access_rights.main_admin">
+                    <h2>BrainPack Package</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brain_pack_backend_ent" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brain_pack_backend_ent"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_debranding" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_debranding"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_db_expiration" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_db_expiration"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_hr_access_rights" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_hr_access_rights"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                          <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_hr_expense_extended" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_hr_expense_extended"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_website_extended" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_website_extended"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_helpdesk_mgmt" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_helpdesk_mgmt"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_website_helpdesk_mgmt" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_website_helpdesk_mgmt"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_mail_tracking" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_mail_tracking"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brain_mail_multicompany" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brain_mail_multicompany"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_project_timesheet_time_control" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_project_timesheet_time_control"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_im_livechat" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_im_livechat"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_invoice_sale_portal_sign" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_invoice_sale_portal_sign"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_mass_mailing_extended" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_mass_mailing_extended"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                          <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_logo_on_login" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_logo_on_login"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Whatsapp Package</h2>
+                    <div class="row mt16 o_settings_container">
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_meta_whatsapp" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_meta_whatsapp"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_meta_whatsapp_marketing" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_meta_whatsapp_marketing"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_meta_whatsapp_discuss" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_meta_whatsapp_discuss"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_meta_whatsapp_chatbot" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_meta_whatsapp_chatbot"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_discuss_search_view_cr" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_discuss_search_view_cr"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Accounting Package</h2>
+                    <div class="row mt16 o_settings_container">
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_base_account_budget" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_base_account_budget"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_dynamic_accounts_report" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_dynamic_accounts_report"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                          <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_base_accounting_kit" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_base_accounting_kit"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Subscription Package</h2>
+                    <div class="row mt16 o_settings_container">
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_sale_subscription" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_sale_subscription"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Pos Debranding</h2>
+                    <div class="row mt16 o_settings_container">
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="module_brainpack_pos_debranding" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="module_brainpack_pos_debranding"
+                                       class=" o_light_label"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
