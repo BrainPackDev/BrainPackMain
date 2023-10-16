@@ -2,6 +2,7 @@
 import logging
 from odoo import _, fields, models
 from odoo.addons.base.models.ir_mail_server import MailDeliveryException
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +35,11 @@ class MailMail(models.Model):
             smtp_session = None
             # NTD
             comp_id = self.env.company.id
+            cids = request.httprequest.cookies.get('cids')
+            if cids:
+                cids = [int(cid) for cid in cids.split(',')]
+                comp_id = self.env['res.company'].sudo().browse(cids[0]).id
+
             mail_server_id = self.env['ir.mail_server'].search([('company_id', '=', comp_id)], limit=1)
             if mail_server_id:
                 try:
