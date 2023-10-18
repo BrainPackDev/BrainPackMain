@@ -20,11 +20,15 @@ from odoo.addons.sale.controllers import portal as sale_portal
 class CustomerPortal(payment_portal.PaymentPortal):
 
     def _get_subscription_domain(self, partner):
-        return [
+        domain = [
             ('partner_id', 'in', [partner.id, partner.commercial_partner_id.id]),
             ('stage_category', 'in', ['progress', 'closed']),
             ('is_subscription', '=', True)
         ]
+        if 'website_id' in request.env.context and request.env.context.get('website_id'):
+            website = request.env['website'].sudo().browse(request.env.context.get('website_id'))
+            domain += [('company_id', '=', website.company_id.id)]
+        return domain
 
     def _prepare_home_portal_values(self, counters):
         """ Add subscription details to main account page """
@@ -111,6 +115,10 @@ class CustomerPortal(payment_portal.PaymentPortal):
     @http.route(['/my/subscription/<int:order_id>', '/my/subscription/<int:order_id>/<access_token>'],
                 type='http', auth='public', website=True)
     def subscription(self, order_id, access_token=None, message='', message_class='', report_type=None, download=False, **kw):
+        if 'website_id' in request.env.context and request.env.context.get('website_id'):
+            website = request.env['website'].sudo().browse(request.env.context.get('website_id'))
+            if website.company_id != request.env['sale.order'].sudo().browse(order_id).company_id:
+                return request.redirect('/my')
         order_sudo, redirection = self._get_subscription(access_token, order_id)
         if redirection:
             return redirection
