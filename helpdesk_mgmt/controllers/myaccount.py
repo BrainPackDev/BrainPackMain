@@ -19,8 +19,12 @@ class CustomerPortalHelpdesk(CustomerPortal):
         values = super()._prepare_home_portal_values(counters)
         if "ticket_count" in counters:
             helpdesk_model = request.env["helpdesk.ticket"]
+            domain = []
+            if 'website_id' in request.env.context and request.env.context.get('website_id'):
+                website = request.env['website'].sudo().browse(request.env.context.get('website_id'))
+                domain += [('company_id', '=', website.company_id.id)]
             ticket_count = (
-                helpdesk_model.search_count([])
+                helpdesk_model.search_count(domain)
                 if helpdesk_model.check_access_rights("read", raise_exception=False)
                 else 0
             )
@@ -79,6 +83,10 @@ class CustomerPortalHelpdesk(CustomerPortal):
         if not filterby:
             filterby = "all"
         domain = searchbar_filters.get(filterby, searchbar_filters.get("all"))["domain"]
+
+        if 'website_id' in request.env.context and request.env.context.get('website_id'):
+            website = request.env['website'].sudo().browse(request.env.context.get('website_id'))
+            domain += [('company_id', '=', website.company_id.id)]
 
         if not groupby:
             groupby = "none"
@@ -166,6 +174,10 @@ class CustomerPortalHelpdesk(CustomerPortal):
         ["/my/ticket/<int:ticket_id>"], type="http", auth="public", website=True
     )
     def portal_my_ticket(self, ticket_id, access_token=None, **kw):
+        if 'website_id' in request.env.context and request.env.context.get('website_id'):
+            website = request.env['website'].sudo().browse(request.env.context.get('website_id'))
+            if website.company_id != request.env['helpdesk.ticket'].sudo().browse(ticket_id).company_id:
+                return request.redirect('/my')
         try:
             ticket_sudo = self._document_check_access(
                 "helpdesk.ticket", ticket_id, access_token=access_token
