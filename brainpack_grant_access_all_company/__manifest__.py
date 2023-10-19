@@ -10,7 +10,10 @@
     """,
     'depends': ['portal'],
     'data': [
-
+        'data/mail_template_data.xml',
+        'views/assign_company.xml',
+        'views/portal_wizard_views.xml',
+        'security/ir.model.access.csv',
     ],
     'assets': {
             'web.assets_frontend': [

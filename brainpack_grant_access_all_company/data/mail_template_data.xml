@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+         <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('name', '=', 'mail_template_data_portal_welcome'),
+            ('module','=','portal')] "/>
+            </function>
+            <value eval=" {'noupdate': False} "/>
+        </function>
+
+        <record id="portal.mail_template_data_portal_welcome" model="mail.template">
+            <field name="email_from">{{ object.user_id.company_id.email_formatted or ''}}</field>
+        </record>
+
+         <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('name', '=', 'mail_template_data_portal_welcome'),
+            ('module','=','portal')] "/>
+            </function>
+            <value eval=" {'noupdate': True} "/>
+        </function>
+    </data>
+</odoo>

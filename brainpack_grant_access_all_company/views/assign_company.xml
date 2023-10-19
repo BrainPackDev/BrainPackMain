@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="assign_company_view_form" model="ir.ui.view">
+        <field name="name">assign.company.form</field>
+        <field name="model">assign.company</field>
+        <field name="arch" type="xml">
+            <form string="Assign Company To Portal User">
+                <group class="oe_title">
+                    <field name="company_id" readonly="1" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_grant_access" string="Grant Portal Access" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="assign_company_wizard_action" model="ir.actions.act_window">
+        <field name="name">Assign Company</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">assign.company</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="assign_company_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="assign_company_view_re_invite_form" model="ir.ui.view">
+        <field name="name">assign.company.form</field>
+        <field name="model">assign.company</field>
+        <field name="arch" type="xml">
+            <form string="Assign Company To Portal User">
+                <group class="oe_title">
+                    <field name="company_id" readonly="1" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_invite_again" string="Re-Invite" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="assign_company_wizard_action_re_invite" model="ir.actions.act_window">
+        <field name="name">Assign Company</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">assign.company</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="assign_company_view_re_invite_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

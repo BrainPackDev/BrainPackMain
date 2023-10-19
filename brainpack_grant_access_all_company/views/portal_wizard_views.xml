@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="portal_access_wizard" model="ir.ui.view">
+        <field name="name">portal.access.management.members</field>
+        <field name="model">portal.wizard</field>
+        <field name="inherit_id" ref="portal.wizard_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_invite_again']" position="replace">
+                <field name="re_invite_disable" invisible="1"/>
+                <button string="Re-Invite" name="action_invite_again" type="object" class="btn-secondary disable_btn_re_invite"
+                                attrs="{'invisible': ['|','|', '|', ('is_portal', '=', False), ('is_internal', '=', True), ('email_state', '!=', 'ok'),('re_invite_disable','=',False)]}" disabled="disabled"/>
+                <button string="Re-Invite" name="action_invite_again" type="object" class="btn-secondary"
+                                attrs="{'invisible': ['|','|', '|', ('is_portal', '=', False), ('is_internal', '=', True), ('email_state', '!=', 'ok'),('re_invite_disable','!=',False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
