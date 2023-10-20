@@ -1,0 +1,104 @@
+.bp-text-blue {
+    color: #3A7CE1;
+}
+
+.bp-btn-blue {
+    --bs-btn-bg: #3A7CE1;
+    --bs-btn-hover-bg: #3A7CE1;
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-font-weight: 600;
+}
+
+.bp-bg-gray {
+    background-color: #F5F5F5;
+}
+
+.bp-fs-62px {
+    font-size: 62px;
+}
+@media (max-width: 575px) {
+    .bp-fs-62px {
+        font-size: 20px;
+    }
+}
+
+.bp-fs-42px {
+    font-size: 42px;
+}
+@media (max-width: 575px) {
+    .bp-fs-42px {
+        font-size: 20px;
+    }
+}
+
+.bp-fs-32px {
+    font-size: 32px;
+}
+@media (max-width: 575px) {
+    .bp-fs-32px {
+        font-size: 20px;
+    }
+}
+
+.bp-fs-22px {
+    font-size: 22px;
+}
+@media (max-width: 575px) {
+    .bp-fs-22px {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 575px) {
+    .fs-5 {
+        font-size: 1rem !important;
+    }
+}
+
+.bp-amount {
+    display: inline-block;
+}
+
+.bp-pricing img {
+    width: 116px;
+}
+.bp-pricing .bp-more {
+    text-align: center;
+    font-size: 24px; font-weight: 600;
+}
+.bp-pricing .bp-model .bp-toggle {
+    position: relative;
+    display: inline-flex;
+    width: 64px; height: 26px;
+    border: 1px solid #3A7CE1;
+    border-radius: 25px;
+    cursor: pointer;
+}
+.bp-pricing .bp-model .bp-toggle::before {
+    position: absolute;
+    content: "";
+    top: 2px;
+    width: 20px; height: 20px;
+    background-color: #3A7CE1;
+    border-radius: 20px;
+}
+.bp-pricing .bp-model .bp-toggle.bp-monthly::before {
+    left: 2px;
+}
+.bp-pricing .bp-model .bp-toggle.bp-yearly::before {
+    right: 2px;
+}
+@media (min-width: 576px) {
+    .bp-offer .bp-plan {
+        min-width: 500px;
+    }
+}
+@media (max-width: 575px) {
+    .bp-offer .bp-plan {
+        min-width: 300px;
+    }
+}
+.d-sm-inline-flex.d-none{
+     display: none !important;
+}
