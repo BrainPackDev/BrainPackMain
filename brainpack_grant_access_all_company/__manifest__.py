@@ -13,6 +13,7 @@
         'data/mail_template_data.xml',
         'views/assign_company.xml',
         'views/portal_wizard_views.xml',
+        'views/res_config_settings.xml',
         'security/ir.model.access.csv',
     ],
     'assets': {
