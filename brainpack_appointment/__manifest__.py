@@ -51,6 +51,7 @@
             'brainpack_appointment/static/src/xml/appointment_no_slot.xml',
         ],
         'web.assets_backend': [
+            'brainpack_appointment/static/src/css/style.css',
             'brainpack_appointment/static/src/scss/appointment_type_views.scss',
             'brainpack_appointment/static/src/scss/web_calendar.scss',
             'brainpack_appointment/static/src/js/appointment_invite_form_renderer.js',
