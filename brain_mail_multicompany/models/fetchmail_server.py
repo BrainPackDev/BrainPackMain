@@ -94,6 +94,24 @@ class MailThread(models.AbstractModel):
         # 1. Handle reply
         #    if destination = alias with different model -> consider it is a forward and not a reply
         #    if destination = alias with same model -> check contact settings as they still apply
+
+        # mail_trace = self.env['mailing.trace'].search([('message_id', '=', message_dict.get('references'))])
+        # if mail_trace:
+        #     if mail_trace.model in ['mailing.contact', 'res.partner']:
+        #         reply_model = mail_trace.model
+        #         reply_thread_id = mail_trace.res_id
+        #         dest_aliases = self.env['mail.alias']
+        #         user_id = self._mail_find_user_for_gateway(email_from, alias=dest_aliases).id or self._uid
+        #         route = self.sudo()._routing_check_route(
+        #             message, message_dict,
+        #             ('crm.lead', 0, custom_values, user_id, dest_aliases),
+        #             raise_exception=False)
+        #         if route:
+        #             _logger.info(
+        #                 'Routing mail from %s to %s with Message-Id %s: direct reply to msg: model: %s, thread_id: %s, custom_values: %s, uid: %s',
+        #                 email_from, email_to, message_id, reply_model, reply_thread_id, custom_values, self._uid)
+        #             return [route]
+
         if reply_model and reply_thread_id:
             reply_model_id = self.env['ir.model']._get_id(reply_model)
             other_model_aliases = self.env['mail.alias'].search([
