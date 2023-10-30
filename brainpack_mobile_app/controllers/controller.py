@@ -322,6 +322,39 @@ class WebServiceMobile(http.Controller):
         _logger.info("*****************messages api ended**")
         return self._response("dynamic_route", response, self.ctype)
 
+    @http.route('/api/v1/get/frame_url', csrf=False, type='json', auth='none', methods=['POST'])
+    def get_iframe_url(self, **kwargs):
+        response = self._authenticate()
+        response.update({'request_type': "POST"})
+        if response.get("success") and self._mData:
+            request_data = self._mData
+            verify_access = self._verify_access_token(
+                request_data.get('user_id'), request_data.get('access_token'))
+            if not verify_access.get('status'):
+                response.update({
+                    "success": False,
+                    "key_token": False,
+                    "success_msg": "Invalid Key token",
+                    'err_msg': invalid_request_string
+                })
+                return self._response("dynamic_route", response, self.ctype)
+            if request_data.get('menu_id'):
+                menu = request.env['ir.ui.menu'].with_user(request_data.get('user_id')).search([('id', '=', request_data.get('menu_id'))])
+                if menu:
+                    base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                    url = base_url + "/web#menu_id=" + str(request_data.get('menu_id'))
+                    response.update({
+                        "success": True,
+                        "success_msg": "Messages data found!",
+                        'status': "1",
+                        'frame_url': url,
+                    })
+                else:
+                    response.update(
+                        {"success": False, "key_token": True, "success_msg": "Menu Id Not Found On System!", 'status': "2"})
+
+        return self._response("dynamic_route", response, self.ctype)
+
     @http.route('/api/v1/send/message', csrf=False, type='json', auth='none', methods=['POST'])
     def send_message(self, **kwargs):
         response = self._authenticate()
