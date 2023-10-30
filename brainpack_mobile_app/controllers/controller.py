@@ -345,7 +345,7 @@ class WebServiceMobile(http.Controller):
                     url = base_url + "/web#menu_id=" + str(request_data.get('menu_id'))
                     response.update({
                         "success": True,
-                        "success_msg": "Messages data found!",
+                        "success_msg": "Url Get Successfully!",
                         'status': "1",
                         'frame_url': url,
                     })
