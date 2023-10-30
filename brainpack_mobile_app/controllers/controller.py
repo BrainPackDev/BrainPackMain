@@ -45,6 +45,7 @@ class WebServiceMobile(http.Controller):
             webservice_id])
         algo = webservice.algo
         hash_val = webservice.get_hash()
+        _logger.info("***********hash_val******",hash_val)
         if 'auth' in dir(self) and self.auth and hash_val == self.auth.encode('ascii'):
             return {"success": True, "message": "API Authorization Successful"}
         else:
