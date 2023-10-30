@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="app_push_notification_form_inhierted" model="ir.ui.view">
+        <field name="name">app.push.notification.form</field>
+        <field name="model">app.push.notification</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="send_notitfcation" string="Process for Notitfcation" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])] }"/>
+                    <button name="cancel_notification" string="Cancel  Notitfcation" type="object" attrs="{'invisible': [('state', 'not in', ['scheduled'])] }"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="app_notification_title" attrs="{'readonly': [('state', 'not in', ['draft'])] }" required="1"  />
+                            <field name="message" attrs="{'readonly': [('state', 'not in', ['draft'])] }"/>
+                            <field name="app_notification_image" attrs="{'readonly': [('state', 'not in', ['draft'])] }"/>
+                         
+                            <field name="state_ids" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])] }"/>
+<!--                            <field name="city_ids" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])] }"/>-->
+<!--                            <field name="user_type_ids" widget="many2many_tags" options="{'no_quick_create': True}"/>-->
+                            <field name="users_ids" invisible="1" widget="many2many_tags" domain="[('fcm_token', '!=', False)]"/>
+                            
+                        </group>
+                        <group>
+                            <field name="account_ids" readonly="1"   domain="[('is_mobile_app_notification', '=', True)]"/>
+                            <field name="is_show_user" />
+                            <field name="post_method" attrs="{'readonly': [('state', 'not in', ['draft'])] }"/>
+                            <field name="scheduled_date" attrs="{'readonly': [('state', 'not in', ['draft'])] , 'required': [('post_method', '=', 'scheduled')]}"/>
+                            <field name="message_id" string="Message"/>
+                        </group>
+                    </group>
+                    <notebook>
+                         <page string="Result" name="result" attrs="{'invisible': [('state', 'in', ['draft', 'scheduled', 'cancel'])]}">
+                            <group>
+                                <group name="push_account_mobile">
+                                    <field name="sent_count"  readonly="1"/>
+                                    <field name="failure_count"  readonly="1"/>
+                                    <field name="failed_tokens" readonly="1"/>
+                                    <field name="fail_msg" invisible="1" />
+                                </group>
+                            </group>
+                        </page>
+                        <page string="User List" name="user" attrs="{'invisible': [('is_show_user', '=', False)]}">
+                            <group>
+                                <group name="user_list">
+                                    <field name="total_users" readonly="1"/>
+                                    <field name="users_ids"  widget="many2many_tags"  />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="app_push_notification_view_kanban" model="ir.ui.view">
+        <field name="name">app.push.notification.view.kanban</field>
+        <field name="model">app.push.notification</field>
+        <field name="arch" type="xml">
+            <kanban js_class="social_post_kanban_view">
+                <field name="message"/>
+                <field name="create_uid"/>
+                <field name="app_notification_image"/>
+                <field name="post_method"/>
+                <field name="scheduled_date"/>
+                <field name="state"/>
+                <field name="account_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_social_post_kanban d-flex flex-column p-0">
+                            <div class="o_social_post_header d-flex justify-content-between border-bottom py-2 px-3">
+                               
+                                <div>
+                                    <field t-if="record.state != fail" name="state" widget="label_selection" options="{'classes': {'draft': 'secondary', 'posting': 'warning', 'posted': 'success'}}"/>
+                                    <span t-else="" class="badge badge-danger">Failed</span> <!-- OPW-2161231 -->
+                                </div>
+                            </div>
+
+                        
+                         
+                            <div class="d-flex flex-grow-0 align-items-center px-3 py-2">
+                               <h2> <field  name="app_notification_title"  />
+                               
+                           </h2>
+                            </div>
+                           
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <record id="app_push_notification_tree_inhierted" model="ir.ui.view">
+        <field name="name">app.push.notification.tree</field>
+        <field name="model">app.push.notification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="state"/>
+                <field name="account_ids"/>
+                <field name="app_notification_title"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_app_push_notification" model="ir.actions.act_window">
+        <field name="name">Push Notification</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">app.push.notification</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Push Notification.
+          </p>
+          <p>
+            Manage and edit your push notification from here.
+          </p>
+        </field>
+    </record>
+
+    <record id="app_push_notification_view_search" model="ir.ui.view">
+        <field name="name">app.push.notification.view.search</field>
+        <field name="model">app.push.notification</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="message" string="Post Message"/>
+                <field name="create_uid" string="Published By"/>
+                <field name="create_date" string="Published By"/>
+                <searchpanel>
+                    <field name="state" icon="fa-tasks"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+    <menuitem
+        id="menu_app_push_notification"
+        parent="contacts.menu_contacts"
+        name="Push Notification"
+        action="action_app_push_notification"
+        sequence="52" />
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="webservice_account_tree_id" model="ir.ui.view">
+            <field name="name">webservice.account.tree</field>
+            <field name="model">webservice.account</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Webservice Account">
+                    <field name="name"/>
+                    <field name="key"/>
+                    <field name="algo"/>
+                    <field name="key_state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="webservice_account_form" model="ir.ui.view">
+            <field name="name">webservice.account.form</field>
+            <field name="model">webservice.account</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Webservice Account">
+                    <header>
+                        <button name="set_to_confirm" string="Confirm" type="object" class="oe_highlight" icon="fa-circle-o-notch" attrs= "{'invisible':[('key_state','!=', 'draft')]}"/>
+                        <button name="set_to_draft" string="Set to Draft" type="object" class="oe_highlight" icon="fa-circle-o-notch" attrs= "{'invisible':[('key_state','=','draft')]}"/>
+                        <field name="key_state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <div class="oe_edit_only">
+                                <label for="name" string="Name"/>
+                            </div>
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Key Identifier" attrs= "{'readonly':[('key_state','=','confirm')]}"/>
+                            </h1>
+                        </div>
+                        <div class="oe_title">
+                            <div>
+                                <label for="key" string="Api Secret Key" placeholder="Click on the ==> Generate Api Secret Key	"/>
+                            </div>
+                            <div>
+                                <field name="key" readonly="1"/>
+                                <button name="generate_secret_key" string="Generate Api Secret Key" type="object" class="oe_link" icon="fa-arrow-right" attrs= "{'invisible':[('key_state','=','confirm')]}"/>
+                            </div>
+                        </div>
+                        <group>
+                            <field name="algo" attrs= "{'readonly':[('key_state','=','confirm')]}"/>
+                        </group>
+                        <div style="color:red;"> NOTE: Convert the Key with the selected Authorization Algo and send it in the request HEADER with  'Authorization' name Key.  </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_webservice_account" model="ir.actions.act_window">
+            <field name="name">Webservice Account</field>
+            <field name="res_model">webservice.account</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+    </data>
+</odoo>

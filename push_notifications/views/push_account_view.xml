@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="push_account_view_form_inherited" model="ir.ui.view">
+        <field name="name">push.account.view.form</field>
+        <field name="model">push.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="is_mobile_app_notification" />
+
+                    </group>
+                    <notebook>
+                        <page string="Firebase Account Details For Mobile App" name="mobile_app_firebase_details" attrs="{'invisible': [('is_mobile_app_notification', '=', False)]}">
+                            <group>
+                                <group name="push_account_mobile">
+                                    <field name="app_firebase_use_own_account"  />
+                                    <field name="app_firebase_project_id" />
+                                    <field name="app_firebase_web_api_key" />
+                                    <field name="app_firebase_push_certificate_key" />
+                                    <field name="app_firebase_sender_id"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group name="push_account_mobile">
+                                    <field name="app_firebase_admin_key_file"  class="o_social_post_form_attachments"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="push_account_view_tree_inherited" model="ir.ui.view">
+        <field name="name">push.account.view.tree</field>
+        <field name="model">push.account</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="is_mobile_app_notification" />
+            </tree>
+        </field>
+    </record>
+ <record id="action_push_account_notification" model="ir.actions.act_window">
+        <field name="name">Push Notification Account</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">push.account</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Account
+          </p>
+        </field>
+    </record>
+    <menuitem
+        id="menu_push_account_notification"
+        parent="contacts.menu_contacts"
+        name="Push Notification Account"
+        action="action_push_account_notification"
+        sequence="51" />
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+    <data noupdate="1">
+        <record id="webservice_config" model="webservice.account">
+            <field name="name">Default Webservice</field>
+            <field name="key">XXXXXXXXXXXXXXX</field>
+
+
+        </record>
+    </data>
+</odoo>

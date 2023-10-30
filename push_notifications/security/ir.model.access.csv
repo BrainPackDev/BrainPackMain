@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_app_push_notification_manager,app_push_notification.manager,model_app_push_notification,,1,1,1,1
+access_app_push_account_notification_manager,app_push_account_notification.manager,model_push_account,,1,1,1,1
