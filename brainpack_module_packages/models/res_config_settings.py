@@ -19,6 +19,7 @@ class ResConfigSettings(models.TransientModel):
     module_brainpack_logo_on_login = fields.Boolean("BrainPack Logo on Login")
     module_brainpack_debranding = fields.Boolean("BrainPack Base")
     module_brain_pack_backend_ent = fields.Boolean("Backend Enterprise Theme")
+    module_brainpack_crm_utm_extended = fields.Boolean("UTM Package")
 
 
     module_brainpack_meta_whatsapp_chatbot = fields.Boolean("Whatsapp Chatbot")
@@ -34,6 +35,18 @@ class ResConfigSettings(models.TransientModel):
 
     module_brainpack_pos_debranding = fields.Boolean('POS Debranding')
 
+    @api.onchange('module_brainpack_crm_utm_extended')
+    def on_module_brainpack_crm_utm_extended(self):
+        ModuleSudo = self.env['ir.module.module'].sudo()
+        modules = ModuleSudo.search(
+            [('name', '=', 'module_brainpack_crm_utm_extended'.replace("module_", ''))])
+        if not modules and self.module_brainpack_crm_utm_extended:
+            return {
+                'warning': {
+                    'title': _('Warning!'),
+                    'message': _('BrainPack UTM Pack modile not exist!'),
+                }
+            }
     @api.onchange('module_brainpack_pos_debranding')
     def on_module_brainpack_pos_debranding(self):
         ModuleSudo = self.env['ir.module.module'].sudo()

@@ -1,0 +1,46 @@
+<odoo>
+    <record id="crm_lead_view_form_inherit_brainpack_website_extended" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit.brainpack_website_extended.crm.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="brainpack_website_extended.crm_lead_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//group[@name='opportunity_partner']/field[@name='website_url']" position="replace">
+            </xpath>
+             <xpath expr="//sheet/group/group[5]/field[@name='website_url']" position="replace">
+            </xpath>
+        </field>
+     </record>
+
+    <record id="crm_lead_view_form_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit.event.crm.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='lead']/group/group[4]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//page[@name='lead']/group/group[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='extra']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='lead']" position="after">
+                <page name="utm_package" string="UTM Package">
+                    <group>
+                        <group string="UTM Package">
+                             <field name="website_url" string="URL"/>
+                             <field name="utm_id"/>
+                             <field name="utm_source" string="UTM source"/>
+                             <field name="utm_medium" string="UTM Medium"/>
+                             <field name="utm_campaign" string="UTM Campaign"/>
+                             <field name="utm_term"/>
+                             <field name="utm_content"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
