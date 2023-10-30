@@ -28,6 +28,7 @@ class WebServiceAccount(models.Model):
 		# required = True
 
 	)
+	hash_val = fields.Char(string="Hash Val")
 	algo = fields.Selection(
 		string = 'Authorization Algo',
 		selection = [('base64', 'Base64')],
@@ -56,6 +57,7 @@ class WebServiceAccount(models.Model):
 
 	def generate_secret_key(self):
 		self.key = _default_unique_key(18)
+		self.hash_val = base64.b64encode(self.key.encode())
 		print(">>>>>>>>>>>", self.key)
 
 
