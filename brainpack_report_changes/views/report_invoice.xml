@@ -407,7 +407,7 @@
                                 </strong>
                             </div>
                             <div class="col-3 text-end"
-                                 style="font-size: 50px;border-left: 1px solid;padding-top:5px;padding-bottom:5px;">
+                                 style="font-size: 35px;border-left: 1px solid;padding-top:5px;padding-bottom:5px;">
                                 <strong t-field="o.amount_total"
                                         t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
