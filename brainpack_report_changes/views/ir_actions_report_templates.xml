@@ -1,0 +1,449 @@
+<odoo>
+
+    <template id="custom_external_layout_standard">
+        <div class="header">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-7">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                 style="height: fit-content;max-height: 80px;"/>
+                        </div>
+                        <div class="col-5 text-center" style="border-left:3px solid #000000;">
+                            <div>
+                                <strong t-if="env.context.get('proforma', False) or is_pro_forma"
+                                        style="font-size:20px;">PRO-FORMA INVOICE
+                                </strong>
+                                <strong t-elif="o.state in ['draft','sent']" style="font-size:20px;">QUOTATION</strong>
+                                <strong t-else="" style="font-size:20px;">SALES ORDER</strong>
+                                <br/>
+                                <strong style="font-size:30px;">#
+                                    <t t-esc="o.name"/>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-6 text-end" style="font-weight: 500;">
+                    <span>
+                        <t t-esc="o.company_id.name"/>
+                    </span>
+                    <br/>
+                    Tax ID
+                    <span>
+                        <t t-esc="o.company_id.vat"/>
+                    </span>
+                    <br/>
+                    <span t-if="o.company_id.street">
+                        <t t-esc="o.company_id.street"/>
+                        <br/>
+                    </span>
+                    <span t-if="o.company_id.street2">
+                        <t t-esc="o.company_id.street2"/>
+                        <br/>
+                    </span>
+
+                    <span>
+                        <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                        </span>
+                        <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>,
+                        </span>
+                        <span t-if="o.company_id.country_id">
+                            <t t-esc="o.company_id.country_id.name"/>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name"
+             t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </template>
+
+    <template id="report_saleorder_document_report">
+        <t t-call="brainpack_report_changes.custom_external_layout_standard">
+
+
+            <div class="page">
+                <style>
+                    table {
+                    font-size: 15px;
+                    }
+                    table.table_odd_color tbody tr:nth-child(odd) {
+                    background-color: #eeeeee;
+                    }
+                    table td,table th{
+                    padding:5px 10px !important;
+                    }
+                </style>
+                <div class="oe_structure"/>
+                <!--            <div class="page">-->
+                <div class="row">
+                    <div class="col-5">
+                        <span>Client Name</span>
+                        <br/>
+                        <strong style="font-weight:600;font-size:20px;">
+                            <t t-esc="o.partner_id.name"/>
+                        </strong>
+                        <br/>
+                        <span t-if="o.company_id.street">
+                            <t t-esc="o.company_id.street"/>
+                            <br/>
+                        </span>
+                        <span t-if="o.company_id.street2">
+                            <t t-esc="o.company_id.street2"/>
+                            <br/>
+                        </span>
+                        <span>
+                            <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                            </span>
+                            <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>-
+                            </span>
+                            <span t-if="o.company_id.zip"><t t-esc="o.company_id.zip"/>,
+                            </span>
+                            <span t-if="o.company_id.country_id">
+                                <t t-esc="o.company_id.country_id.name"/>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="col-7 align-items-center" style="border-left:1px solid #b7b9bd;">
+                        <div class="row text-center align-items-center">
+                            <div class="col-6">
+                                <span class="mb-1">Order Date:</span>
+                                <br/>
+                                <strong class="m-0" t-field="o.date_order" t-options='{"widget": "date"}'
+                                        style="font-size:20px;"/>
+                            </div>
+                            <div class="col-6">
+                                <span class="mb-1">Sales Person:</span>
+                                <br/>
+                                <strong class="m-0" t-field="o.user_id" style="font-size:20px;"/>
+                            </div>
+                        </div>
+                        <div class="row text-center align-items-center mt-3">
+                            <div class="col-6">
+                                <span class="mb-1">Recurrence:</span>
+                                <br/>
+                                <strong class="m-0" t-field="o.recurrence_id" style="font-size:20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <t t-set="lines_to_report" t-value="o._get_order_lines_to_report()"/>
+                <!--                <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>-->
+                <table class="table table-sm o_main_table table-borderless mt-5 table_odd_color">
+                    <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_description" class="text-start" style="width:500px;">Item &amp; Description
+                            </th>
+                            <th name="th_quantity" class="text-end">Quantity</th>
+                            <th name="th_priceunit" class="text-end">Unit Price</th>
+                            <!--                            <th name="th_discount" t-if="display_discount" class="text-end"-->
+                            <!--                                groups="product.group_discount_per_so_line">-->
+                            <!--                                <span>Disc.%</span>-->
+                            <!--                            </th>-->
+                            <!--                            <th name="th_taxes" class="text-end">Taxes</th>-->
+                            <th name="th_subtotal" class="text-end">
+                                <span groups="account.group_show_line_subtotals_tax_excluded">Sub-Total</span>
+                                <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody" style="font-weight:600;border-top: 0px !important;">
+
+                        <t t-set="current_subtotal" t-value="0"/>
+
+                        <t t-foreach="lines_to_report" t-as="line">
+
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                               groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                               groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''"
+                                style="font-weight:500;border-top: 0px !important;">
+                                <t t-if="not line.display_type">
+                                    <td name="td_name">
+                                        <span style="font-weight:500;" t-field="line.name"/>
+                                    </td>
+                                    <td name="td_quantity" class="text-end">
+                                        <span t-field="line.product_uom_qty" style="font-weight:500;"/>
+                                        <span t-field="line.product_uom" style="font-weight:500;"/>
+                                    </td>
+                                    <td name="td_priceunit" class="text-end">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <!--                                    <td t-if="display_discount" class="text-end"-->
+                                    <!--                                        groups="product.group_discount_per_so_line">-->
+                                    <!--                                        <span t-field="line.discount"/>-->
+                                    <!--                                    </td>-->
+                                    <!--                                    <td name="td_taxes" class="text-end">-->
+                                    <!--                                        <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>-->
+                                    <!--                                    </td>-->
+                                    <td t-if="not line.is_downpayment" name="td_subtotal"
+                                        class="text-end o_price_total">
+                                        <span t-field="line.price_subtotal"
+                                              groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <span t-field="line.price_total"
+                                              groups="account.group_show_line_subtotals_tax_included"/>
+                                    </td>
+                                </t>
+                                <t t-elif="line.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99">
+                                        <span style="font-weight:500;" t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99">
+                                        <span t-field="line.name" style="font-weight:500;"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                <tr class="is-subtotal text-end">
+                                    <td name="td_section_subtotal" colspan="99">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span
+                                                t-out="current_subtotal"
+                                                t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+
+                <div class="clearfix" name="so_total_summary">
+                    <div id="" class="row" name="total" style="page-break-inside: avoid;">
+                        <div class="col-12">
+                            <table class="table table-sm table-borderless text-right" style="text-align: right;">
+                                <!-- Tax totals -->
+                                <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                                    <tr class="o_subtotal">
+                                        <td style="font-weight:600;">
+                                            <t t-if="subtotal['name'] == 'Untaxed Amount'">
+                                                Total Excluding Taxes
+                                            </t>
+                                            <t t-else="">
+                                                <strong t-esc="subtotal['name']"/>
+                                            </t>
+                                        </td>
+
+                                        <td class="text-end">
+                                            <span
+                                                    t-att-class="oe_subtotal_footer_separator"
+                                                    t-esc="subtotal['formatted_amount']"
+                                            />
+                                        </td>
+                                    </tr>
+
+                                    <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                                    <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]"
+                                       t-as="amount_by_group">
+                                        <tr>
+                                            <t t-if="tax_totals['display_tax_base']">
+                                                <td style="font-weight:600;">
+                                                    <span t-esc="amount_by_group['tax_group_name']"/>
+                                                    <span class="text-nowrap">on
+                                                        <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-end o_price_total">
+                                                    <span class="text-nowrap"
+                                                          t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td style="font-weight:600;">
+                                                    <span class="text-nowrap"
+                                                          t-esc="amount_by_group['tax_group_name']"/>
+                                                </td>
+                                                <td class="text-end o_price_total">
+                                                    <span class="text-nowrap"
+                                                          t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </t>
+
+                                <t t-if="'formatted_rounding_amount' in tax_totals and tax_totals['rounding_amount'] != 0">
+                                    <td>Rounding</td>
+                                    <td class="text-end">
+                                        <span t-esc="tax_totals['formatted_rounding_amount']"/>
+                                    </td>
+                                </t>
+
+                                <!--Total amount with all taxes-->
+                                <tr class="border-black o_total">
+                                    <td style="font-weight:600;">
+                                        <strong>Total Including Taxes</strong>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="tax_totals['formatted_amount_total_rounded']"
+                                              t-if="'formatted_amount_total_rounded' in tax_totals"/>
+                                        <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bank_details" t-if="o.company_id.partner_id.bank_ids"
+                     style="page-break-inside: avoid;font-size:15px;margin-top:6rem;">
+                    <div class="row" style="border-bottom: 1px solid;padding:5px 10px !important;">
+                        <div class="col-9" style="padding-top:5px;padding-bottom:5px;">
+                            Bank info
+                        </div>
+                        <div class="col-3 text-end" style="padding-top:5px;padding-bottom:5px;">
+                            Total Due
+                        </div>
+                    </div>
+                    <t t-foreach="o.company_id.partner_id.bank_ids" t-as="bank">
+                        <div class="row" style="border-bottom: 1px solid;padding-top:5px;padding-bottom:5px;padding:5px 10px !important;
+                                align-items: center;">
+                            <div class="col-9" style="padding-top:5px;padding-bottom:5px;">
+                                <span>Account Name&#160;&#160;:</span>
+                                <strong>
+                                    <t t-esc="o.company_id.name"/>
+                                </strong>
+                                <span>&#160;&#160;Account Number:&#160;&#160;</span>
+                                <strong>
+                                    <t t-esc="bank.acc_number"/>
+                                </strong>
+                                <br/>
+                                <span>Bank&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</span>
+                                <strong>
+                                    <t t-esc="bank.bank_name"/>
+                                </strong>
+                                <br/>
+                                <span>IBAN&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</span>
+                                <strong>CY30 0020 0195 0000 3570 3783 2214</strong>
+                                <br/>
+                                <span>Swift (BIC)&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</span>
+                                <strong t-if="bank.bank_id.bic">
+                                    <t t-esc="bank.bank_id.bic"/>
+                                </strong>
+                            </div>
+                            <div class="col-3 text-end"
+                                 style="font-size: 50px;border-left: 1px solid;padding-top:5px;padding-bottom:5px;">
+                                <strong t-field="o.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <div t-if="o.signature" class="mt-4 ml64 mr4" name="signature">
+                    <div class="offset-8">
+                        <strong>Signature</strong>
+                    </div>
+                    <div class="offset-8">
+                        <img t-att-src="image_data_uri(o.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                    </div>
+                    <div class="offset-8 text-center">
+                        <p t-field="o.signed_by"/>
+                    </div>
+                </div>
+
+                <div style="page-break-before:always;"/>
+                <div t-if="o.sale_order_option_ids and o.state in ['draft', 'sent']"
+                     style="page-break-inside: avoid;margin-top:5rem;">
+                    <t t-set="has_option_discount"
+                       t-value="any(option.discount != 0.0 for option in o.sale_order_option_ids)"/>
+                    <h5 name="">
+                        <strong>Options</strong>
+                    </h5>
+                    <table name="" class="table table-sm table_odd_color table-borderless">
+                        <thead>
+                            <tr>
+                                <th name="th_option_name" class="text-start">Item &amp; Description</th>
+                                <th t-if="has_option_discount" name="th_option_discount"
+                                    groups="product.group_discount_per_so_line" class="text-start">Disc.%
+                                </th>
+                                <th name="th_option_price_unit" class="text-end">Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-foreach="o.sale_order_option_ids" t-as="option">
+                                <td name="td_option_name">
+                                    <span t-field="option.name"/>
+                                </td>
+                                <td t-if="has_option_discount" name="td_option_discount"
+                                    groups="product.group_discount_per_so_line">
+                                    <strong t-if="option.discount != 0.0" class="text-info">
+                                        <t t-out="((option.discount % 1) and '%s' or '%d') % option.discount"/>%
+                                    </strong>
+                                </td>
+                                <td name="td_option_price_unit">
+                                    <strong class="text-end">
+                                        <div t-field="option.price_unit"
+                                             t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                             t-att-style="option.discount and 'text-decoration: line-through' or None"
+                                             t-att-class="option.discount and 'text-danger' or None"/>
+                                        <div t-if="option.discount">
+                                            <t t-out="'%.2f' % ((1-option.discount / 100.0) * option.price_unit)"/>
+                                        </div>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        * Should the client choose the entire package - additional 15% discount will be given on all
+                        items - will be applied on the payment invoice
+                    </p>
+                    <p>
+                        * Should the client choose more then 1 item - additional 10% discount will be given on all
+                        items - will be applied on the payment invoice
+                    </p>
+                    <p>
+                        * <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/> cannot guarantee that any asset will accept any kind of deal. If <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/>
+                        will not be able to create even 1 deal with any relevant asset all payment for this item will
+                        berefunded. If <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/> will be able to get at least 1 quality proposal from an online asset, no
+                        refund will be made.
+                    </p>
+                </div>
+
+                <!--            </div>-->
+                <!--            </div>-->
+                <!--             <div class="footer" style="margin-top: 200px;white-space:nowrap;">-->
+
+            </div>
+        </t>
+    </template>
+
+    <template id="report_saleorder_document_brainpack">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="brainpack_report_changes.report_saleorder_document_report"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="sale.report_saleorder">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="brainpack_report_changes.report_saleorder_document_brainpack" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
