@@ -36,6 +36,7 @@
                              <field name="utm_campaign" string="UTM Campaign"/>
                              <field name="utm_term"/>
                              <field name="utm_content"/>
+                             <field name="source_website"/>
                         </group>
                     </group>
                 </page>
