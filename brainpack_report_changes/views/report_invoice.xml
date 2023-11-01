@@ -4,10 +4,10 @@
             <div class="header">
                 <div class="row align-items-center">
                     <div class="col-6">
-                        <div class="row" style="align-items: center;">
+                        <div class="row">
                             <div class="col-6">
                                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
-                                     style="height: fit-content;max-height: 80px;    width: 90%;"/>
+                                     style="height: fit-content;max-height: 80px;"/>
                             </div>
                             <div class="col-6 text-left" style="border-left:3px solid #000000;padding-left: 38px;">
                                 <div>
@@ -187,10 +187,10 @@
                                         t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                         <span>Unit Price</span>
                                     </th>
-                                    <!--                                    <th name="th_price_unit" t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
-                                    <!--                                        <span>Disc.%</span>-->
-                                    <!--                                    </th>-->
-                                    <!--                                    <th name="th_taxes" t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Taxes</span></th>-->
+                                    <th name="th_price_unit" t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                        <span>Disc.%</span>
+                                    </th>
+                                    <th name="th_taxes" t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Taxes</span></th>
                                     <th name="th_subtotal" class="text-end">
                                         <span groups="account.group_show_line_subtotals_tax_excluded">Sub-Total</span>
                                         <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
@@ -221,12 +221,12 @@
                                             <td t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                                 <span class="text-nowrap" t-field="line.price_unit"/>
                                             </td>
-                                            <!--                                            <td t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
-                                            <!--                                                <span class="text-nowrap" t-field="line.discount"/>-->
-                                            <!--                                            </td>-->
-                                            <!--                                            <td t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
-                                            <!--                                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>-->
-                                            <!--                                            </td>-->
+                                            <td t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span class="text-nowrap" t-field="line.discount"/>
+                                            </td>
+                                            <td t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
+                                            </td>
                                             <td class="text-end o_price_total">
                                                 <span class="text-nowrap" t-field="line.price_subtotal"
                                                       groups="account.group_show_line_subtotals_tax_excluded"/>
@@ -416,11 +416,11 @@
                     </t>
                     </div>
 
-                    <!--                    <p t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference" name="payment_communication" class="mt-4">-->
-                    <!--                        Please use the following communication for your payment : <b><span t-field="o.payment_reference"/></b>-->
-                    <!--                    </p>-->
-                    <!--                    <t t-set="payment_term_details" t-value="o.payment_term_details"/>-->
-                    <!--                    <div t-field="o.invoice_payment_term_id.note" name="payment_term"/>-->
+                    <p t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference" name="payment_communication" class="mt-4">
+                        Please use the following communication for your payment : <b><span t-field="o.payment_reference"/></b>
+                    </p>
+                    <t t-set="payment_term_details" t-value="o.payment_term_details"/>
+                    <div t-field="o.invoice_payment_term_id.note" name="payment_term"/>
                     <!--                    <t t-if="o.invoice_payment_term_id.display_on_invoice and payment_term_details">-->
                     <!--                        <div t-if='o.show_payment_term_details' id="total_payment_term_details_table" class="row">-->
                     <!--                            <div t-attf-class="#{'col-7' if report_type != 'html' else 'col-sm-7 col-md-6'} mt-2 mb-2">-->
@@ -449,9 +449,9 @@
                     <!--                            </div>-->
                     <!--                        </div>-->
                     <!--                    </t>-->
-                    <!--                    <div t-if="not is_html_empty(o.narration)" name="comment">-->
-                    <!--                        <span t-field="o.narration"/>-->
-                    <!--                    </div>-->
+                    <div t-if="not is_html_empty(o.narration)" name="comment">
+                        <span t-field="o.narration"/>
+                    </div>
                     <!--                    <p t-if="not is_html_empty(o.fiscal_position_id.note)" name="note">-->
                     <!--                        <span t-field="o.fiscal_position_id.note"/>-->
                     <!--                    </p>-->
