@@ -334,7 +334,7 @@
                                 </strong>
                                 <br/>
                                 <span>IBAN&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</span>
-                                <strong>CY30 0020 0195 0000 3570 3783 2214</strong>
+                                <strong t-if="bank.bank_id.iban_number"><t t-esc="bank.bank_id.iban_number"/> </strong>
                                 <br/>
                                 <span>Swift (BIC)&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</span>
                                 <strong t-if="bank.bank_id.bic">
