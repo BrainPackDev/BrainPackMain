@@ -29,6 +29,7 @@
                 <page name="utm_package" string="UTM Package">
                     <group>
                         <group string="UTM Package">
+                             <field name="source_website"/>
                              <field name="website_url" string="URL"/>
                              <field name="utm_id"/>
                              <field name="utm_source" string="UTM source"/>
@@ -36,7 +37,6 @@
                              <field name="utm_campaign" string="UTM Campaign"/>
                              <field name="utm_term"/>
                              <field name="utm_content"/>
-                             <field name="source_website"/>
                         </group>
                     </group>
                 </page>
