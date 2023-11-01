@@ -11,3 +11,4 @@ class CrmLead(models.Model):
     utm_content = fields.Char('UTM Content',tracking=True)
     utm_id = fields.Char('UTM Campaign ID',tracking=True)
     website_url = fields.Char('Website URL',tracking=True)
+    source_website = fields.Char('Source Website',tracking=True)
