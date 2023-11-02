@@ -173,6 +173,7 @@
                                 style="font-weight:500;border-top: 0px !important;">
                                 <t t-if="not line.display_type">
                                     <td name="td_name">
+                                        <strong t-field="line.product_id"></strong><br/><br/>
                                         <span style="font-weight:500;" t-field="line.name"/>
                                     </td>
                                     <td name="td_quantity" class="text-end">
@@ -384,6 +385,7 @@
                         <tbody class="sale_tbody">
                             <tr t-foreach="o.sale_order_option_ids" t-as="option">
                                 <td name="td_option_name">
+                                    <strong t-field="line.product_id"></strong><br/><br/>
                                     <span t-field="option.name"/>
                                 </td>
                                 <td t-if="has_option_discount" name="td_option_discount"
@@ -407,20 +409,10 @@
                         </tbody>
                     </table>
 
-                    <p>
-                        * Should the client choose the entire package - additional 15% discount will be given on all
-                        items - will be applied on the payment invoice
-                    </p>
-                    <p>
-                        * Should the client choose more then 1 item - additional 10% discount will be given on all
-                        items - will be applied on the payment invoice
-                    </p>
-                    <p>
-                        * <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/> cannot guarantee that any asset will accept any kind of deal. If <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/>
-                        will not be able to create even 1 deal with any relevant asset all payment for this item will
-                        berefunded. If <t t-esc="o.company_id.general_comopany_name or o.company_id.name"/> will be able to get at least 1 quality proposal from an online asset, no
-                        refund will be made.
-                    </p>
+                    <t t-if="not is_html_empty(o.note)">
+                        <hr class="my-0"/>
+                        <div t-field="o.note"/>
+                    </t>
                 </div>
 
                 <!--            </div>-->
