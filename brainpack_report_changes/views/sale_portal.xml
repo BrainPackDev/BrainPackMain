@@ -1,0 +1,11 @@
+<odoo>
+    <!-- Sale order (quotations): product name  bold added -->
+    <template id="sale_order_portal_content_inherit" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//section[@id='details']/div[hasclass('table-responsive')]/table/tbody/t/tr/t/td[@id='product_name']" position="replace">
+            <td id="product_name">
+                <strong t-field="line.product_id"></strong><br/><br/>
+                <span t-field="line.name"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

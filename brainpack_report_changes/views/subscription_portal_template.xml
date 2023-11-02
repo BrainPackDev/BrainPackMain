@@ -1,0 +1,7 @@
+<odoo>
+     <template id="subscription_inherit" inherit_id="sale_subscription.subscription">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]/div[1]/div[hasclass('oe_website_contract')]/div[hasclass('card-body')]/div[3]/div/table/tbody/t/tr/t[@t-if='not line.display_type']/td[hasclass('line-description')]" position="replace">
+            <td class="line-description"><strong t-field="line.product_id"></strong><br/><br/><span t-field="line.name"/></td>
+        </xpath>
+    </template>
+</odoo>
