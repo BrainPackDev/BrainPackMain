@@ -410,8 +410,7 @@
                     </table>
 
                     <t t-if="not is_html_empty(o.note)">
-                        <hr class="my-0"/>
-                        <div t-field="o.note"/>
+                        <div class="mt-5" t-field="o.note"/>
                     </t>
                 </div>
 
