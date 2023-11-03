@@ -35,7 +35,13 @@ class MailMail(models.Model):
             smtp_session = None
             # NTD
             comp_id = self.env.company.id
-            cids = request.httprequest.cookies.get('cids')
+            # cids = request.httprequest.cookies.get('cids')
+            cids = []
+            try:
+                cids = request.httprequest.cookies.get('cids')
+            except Exception as e:
+                print(" Exception on request ", e)
+                pass
             if cids:
                 cids = [int(cid) for cid in cids.split(',')]
                 comp_id = self.env['res.company'].sudo().browse(cids[0]).id
