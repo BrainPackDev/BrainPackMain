@@ -50,6 +50,11 @@
             'brainpack_debranding/static/src/css/front_style.css',
             'brainpack_debranding/static/src/js/error_dialogs.js',
         ],
+        'mail.assets_discuss_public': [
+            'brainpack_debranding/static/src/js/dialog.js',
+            'brainpack_debranding/static/src/js/error_dialogs.js',
+            'brainpack_debranding/static/src/xml/error_dialog.xml',
+        ],
     },
     'pre_init_hook': 'pre_init_hook',
     'post_init_hook': 'post_init_hook',
