@@ -60,7 +60,7 @@ class WebServiceMobile(http.Controller):
             res = {"success": False, "message": "EndPoint not Found.", }
         return res
 
-    @http.route('/api/v1/login', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/login', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def prolitus_login(self, **kwargs):
         _logger.info("***********/api/v1/login api started******")
         response = self._authenticate()
@@ -173,7 +173,7 @@ class WebServiceMobile(http.Controller):
         ]
         return werkzeug.wrappers.Response(body, headers=headers)
 
-    @http.route('/api/v1/get/channels/<int:user_id>', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/get/channels/<int:user_id>', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def get_channel_data(self, user_id=False, **kwargs):
         if not user_id:
             user_id = kwargs.get('user_id')
@@ -246,7 +246,7 @@ class WebServiceMobile(http.Controller):
             'error_msg': 'Password Do not match'
         }
 
-    @http.route('/api/v1/get/messages', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/get/messages', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def get_messages_data(self, **kwargs):
         response = self._authenticate()
         response.update({'request_type': "POST"})
@@ -322,7 +322,7 @@ class WebServiceMobile(http.Controller):
         _logger.info("*****************messages api ended**")
         return self._response("dynamic_route", response, self.ctype)
 
-    @http.route('/api/v1/get/frame_url', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/get/frame_url', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def get_iframe_url(self, **kwargs):
         response = self._authenticate()
         response.update({'request_type': "POST"})
@@ -355,7 +355,7 @@ class WebServiceMobile(http.Controller):
 
         return self._response("dynamic_route", response, self.ctype)
 
-    @http.route('/api/v1/send/message', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/send/message', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def send_message(self, **kwargs):
         response = self._authenticate()
         response.update({'request_type': "POST"})

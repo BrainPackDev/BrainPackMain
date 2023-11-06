@@ -139,7 +139,7 @@ class DeviceDetails(WebServiceMobile):
     #             response, uid, request_data.get('access_token'))
     #     return self._response("dynamic_route", response, self.ctype)
 
-    @http.route('/api/v1/add/device_details/<int:id>', csrf=False, type='json', auth='none', methods=['POST'])
+    @http.route('/api/v1/add/device_details/<int:id>', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def add_device_details(self, **kwargs):
         uid = kwargs.get('id')
         response = self._authenticate()
