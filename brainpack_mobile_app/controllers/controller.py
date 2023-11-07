@@ -63,66 +63,71 @@ class WebServiceMobile(http.Controller):
     @http.route('/api/v1/login', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def prolitus_login(self, **kwargs):
         _logger.info("***********/api/v1/login api started******")
-        response = self._authenticate()
-        response.update({'request_type': "POST"})
+        # response = self._authenticate(
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
+        # response.update({'request_type': "POST"})
         request_data = self._mData
-        if response.get("success") and request_data:
-            db_name = tools.config['db_name']
-            try:
-                request.session.authenticate(str(db_name), str(
-                    request_data.get('login')), str(request_data.get('password')))
-                session_info = request.env['ir.http'].session_info()
-                _logger.info("==LOGIN REQUESTED==")
-
-                user_secert = request.env['user.login.secret'].sudo().search(
-                    [('user_id', '=', session_info['uid'])], limit=1)
-                if not user_secert:
-                    user_secert = request.env['user.login.secret'].sudo().create({
-                        'user_id': session_info['uid'],
-                        'access_token': _default_unique_key(default_token_size)
-                    })
-                else:
-                    user_secert.write({
-                        'access_token': _default_unique_key(default_token_size)
-                    })
-
-                resuser = request.env['res.users'].sudo()
-                user_id = resuser.browse(
-                    [int(session_info['uid'])])
-
-                menu_items = []
-                menu_records = request.env['ir.ui.menu'].search(
-                    [('parent_id', '=', False)])
-                for menu in menu_records:
-                    menu_items.append({
-                        'menu_name': menu.complete_name,
-                        'menu_id': menu.id,
-                        'main_menu': True if menu.complete_name == 'Discuss' else False,
-                        'icon_image': 'data:image/png;base64,'+menu.web_icon_data.decode('utf-8') if menu.web_icon_data else False,
-                    })
-                response.update({
-                    "success": True,
-                    "key_token": True,
-                    "success_msg": "Valid Key token",
+        # if response.get("success") and request_data:
+        db_name = tools.config['db_name']
+        try:
+            request.session.authenticate(str(db_name), str(
+                request_data.get('login')), str(request_data.get('password')))
+            session_info = request.env['ir.http'].session_info()
+            _logger.info("==LOGIN REQUESTED==",)
+            user_secert = request.env['user.login.secret'].sudo().search(
+                [('user_id', '=', session_info['uid'])], limit=1)
+            if not user_secert:
+                user_secert = request.env['user.login.secret'].sudo().create({
                     'user_id': session_info['uid'],
-                    'access_token': user_secert.access_token,
-                    'status': '0',
-                    'menu_items':menu_items,
+                    'access_token': _default_unique_key(default_token_size)
                 })
-            except Exception as e:
+            else:
+                user_secert.write({
+                    'access_token': _default_unique_key(default_token_size)
+                })
 
-                _logger.info("==LOGIN FAILED=={}".format(e))
-                response.update({
-                    "success": False,
-                    "key_token": False,
-                    "success_msg": "Invalid Key token",
-                    'status': '1',
-                    'user_id': False
+            resuser = request.env['res.users'].sudo()
+            user_id = resuser.browse(
+                [int(session_info['uid'])])
+
+            menu_items = []
+            menu_records = request.env['ir.ui.menu'].search(
+                [('parent_id', '=', False)])
+            for menu in menu_records:
+                menu_items.append({
+                    'menu_name': menu.complete_name,
+                    'menu_id': menu.id,
+                    'main_menu': True if menu.complete_name == 'Discuss' else False,
+                    'icon_image': 'data:image/png;base64,'+menu.web_icon_data.decode('utf-8') if menu.web_icon_data else False,
                 })
-        else:
-            uid = False
-            access_token = False
-            response = self.false_response_update(response, uid, access_token)
+            response.update({
+                "success": True,
+                "key_token": True,
+                "success_msg": "Valid Key token",
+                'user_id': session_info['uid'],
+                'access_token': user_secert.access_token,
+                'status': '0',
+                'menu_items':menu_items,
+            })
+        except Exception as e:
+
+            _logger.info("==LOGIN FAILED=={}".format(e))
+            response.update({
+                "success": False,
+                "key_token": False,
+                "success_msg": "Invalid Key token",
+                'status': '1',
+                'user_id': False
+            })
+        # else:
+        #     uid = False
+        #     access_token = False
+        #     response = self.false_response_update(response, uid, access_token)
         _logger.info("***********/api/v1/login api ended******")
         return self._response("dynamic_route", response, self.ctype)
 
@@ -178,7 +183,13 @@ class WebServiceMobile(http.Controller):
         if not user_id:
             user_id = kwargs.get('user_id')
         uid = user_id
-        response = self._authenticate()
+        # response = self._authenticate()
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
         response.update({'request_type': "POST"})
         request_data = self._mData
 
@@ -248,9 +259,15 @@ class WebServiceMobile(http.Controller):
 
     @http.route('/api/v1/get/messages', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def get_messages_data(self, **kwargs):
-        response = self._authenticate()
+        # response = self._authenticate()
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
         response.update({'request_type': "POST"})
-        if response.get("success") and self._mData:
+        if self._mData:
             request_data = self._mData
             verify_access = self._verify_access_token(
                 request_data.get('user_id'), request_data.get('access_token'))
@@ -319,14 +336,25 @@ class WebServiceMobile(http.Controller):
             else:
                 response.update(
                     {"success": False, "key_token": True, "success_msg": "Channel Not Found in Paramater!", 'status': "2"})
+        else:
+            response.update({
+                'status': 'Fail',
+                'message': 'Data not found.'
+            })
         _logger.info("*****************messages api ended**")
         return self._response("dynamic_route", response, self.ctype)
 
     @http.route('/api/v1/get/frame_url', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def get_iframe_url(self, **kwargs):
-        response = self._authenticate()
+        # response = self._authenticate()
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
         response.update({'request_type': "POST"})
-        if response.get("success") and self._mData:
+        if self._mData:
             request_data = self._mData
             verify_access = self._verify_access_token(
                 request_data.get('user_id'), request_data.get('access_token'))
@@ -352,14 +380,24 @@ class WebServiceMobile(http.Controller):
                 else:
                     response.update(
                         {"success": False, "key_token": True, "success_msg": "Menu Id Not Found On System!", 'status': "2"})
-
+        else:
+            response.update({
+                'status': 'Fail',
+                'message': 'Data not found.'
+            })
         return self._response("dynamic_route", response, self.ctype)
 
     @http.route('/api/v1/send/message', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def send_message(self, **kwargs):
-        response = self._authenticate()
+        # response = self._authenticate()
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
         response.update({'request_type': "POST"})
-        if response.get("success") and self._mData:
+        if self._mData:
             request_data = self._mData
             verify_access = self._verify_access_token(
                 request_data.get('user_id'), request_data.get('access_token'))
@@ -452,5 +490,10 @@ class WebServiceMobile(http.Controller):
                 response.update(
                     {"success": False, "key_token": True, "success_msg": "Required Parameter Missing! (Channel Id)",
                      'status': "2"})
+        else:
+            response.update({
+                'status': 'Fail',
+                'message': 'Data not found.'
+            })
         _logger.info("*****************messages api ended**")
         return self._response("dynamic_route", response, self.ctype)

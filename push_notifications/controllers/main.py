@@ -7,9 +7,10 @@ from odoo.addons.brainpack_mobile_app.controllers.controller import WebServiceMo
 from odoo import registry as registry_get
 import logging
 import json
+from odoo.http import content_disposition, request
 _logger = logging.getLogger(__name__)
 
-
+mime = 'text/xml'
 class DeviceDetails(WebServiceMobile):
 
     # @http.route('/api/v1/remove/notification/<int:id>', csrf=False, type='json', auth='none', methods=['POST'])
@@ -142,10 +143,16 @@ class DeviceDetails(WebServiceMobile):
     @http.route('/api/v1/add/device_details/<int:id>', csrf=False, type='json', auth='none', methods=['POST'], cors="*")
     def add_device_details(self, **kwargs):
         uid = kwargs.get('id')
-        response = self._authenticate()
+        # response = self._authenticate()
+        self._mData = request.httprequest.data and json.loads(
+            request.httprequest.data.decode('utf-8')) or {}
+        self.ctype = request.httprequest.headers.get(
+            'Content-Type') == mime and mime or 'json'
+        self.header = request.httprequest.headers
+        response = {}
         response.update({'request_type': "POST"})
         request_data = self._mData
-        if response.get("success"):
+        if self._mData:
             verify_acess = self._verify_access_token(
                 uid, request_data.get('access_token'))
             if not verify_acess.get('status'):
@@ -191,6 +198,8 @@ class DeviceDetails(WebServiceMobile):
                 except Exception as e:
                     response = self.exception_response_update(response, uid, e)
         else:
-            response = self.false_response_update(
-                response, uid, request_data.get('access_token'))
+            response.update({
+                'status': 'Fail',
+                'message': 'Data not found.'
+            })
         return self._response("dynamic_route", response, self.ctype)
