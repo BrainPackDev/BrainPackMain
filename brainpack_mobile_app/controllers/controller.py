@@ -220,7 +220,7 @@ class WebServiceMobile(http.Controller):
                     if len(persona_member) == 1:
                         channel_display_name = persona_member.custom_channel_name or persona_member.partner_id.name
                 if channel.channel_type == 'group':
-                    channel_display_name = ','.join([member.custom_channel_name or member.partner_id.name for member in channel.sudo().channel_member_ids])
+                    channel_display_name = ','.join([member.custom_channel_name or member.partner_id.name or '' for member in channel.sudo().channel_member_ids])
 
                 channel_data_dict = (channel.sudo().with_user(user_id).channel_info_custom()[0])
                 channel_data_dict.update({

@@ -16,7 +16,7 @@ class Channel(models.Model):
         )
 
         partners =  self.channel_partner_ids.ids
-        if message.author_id:
+        if message.author_id and message.author_id.id in partners:
             partners.remove(message.author_id.id)
         if partners:
             domain= []
