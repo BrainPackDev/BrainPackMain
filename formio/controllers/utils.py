@@ -1,6 +1,3 @@
-# Copyright 2023 Nova Code (https://www.novacode.nl)
-# See LICENSE file for full licensing details.
-
 import json
 import logging
 import uuid

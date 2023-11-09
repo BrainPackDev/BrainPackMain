@@ -1,14 +1,10 @@
-# Copyright Nova Code (http://www.novacode.nl)
-# See LICENSE file for full licensing details.
-
 {
     'name': 'Forms',
     'summary': 'Form Builder for backend, portal and website forms - to collect any information you need for your business.',
     'version': '16.0.10.4',
     'license': 'LGPL-3',
-    'author': 'Nova Code',
-    'website': 'https://www.novacode.nl',
-    'live_test_url': 'https://demo16.novacode.nl',
+    'author': 'BrainPack',
+    'website': 'https://www.brainpack.io',
     'category': 'Forms/Forms',
     'depends': [
         'base',

@@ -1,6 +1,3 @@
-# Copyright Nova Code (http://www.novacode.nl)
-# See LICENSE file for full licensing details.
-
 import ast
 import json
 import logging
