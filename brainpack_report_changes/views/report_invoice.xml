@@ -195,7 +195,7 @@
                                         <span>Disc.%</span>
                                     </th>
                                     <t t-if="lines.mapped('tax_ids')">
-                                        <th name="th_taxes" t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Taxes</span></th>
+                                        <th name="th_taxes" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Taxes</span></th>
                                     </t>
 
                                     <th name="th_subtotal" class="text-end">
@@ -231,7 +231,7 @@
                                                 <span class="text-nowrap" t-field="line.discount"/>
                                             </td>
                                             <t t-if="lines.mapped('tax_ids')">
-                                                <td t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <td t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                                     <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
                                                 </td>
                                              </t>
