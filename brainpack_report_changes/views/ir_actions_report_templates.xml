@@ -77,6 +77,9 @@
                     table {
                     font-size: 15px;
                     }
+                    table th{
+                    font-size: 16px;
+                    }
                     table.table_odd_color tbody tr:nth-child(odd) {
                     background-color: #eeeeee;
                     }
@@ -90,7 +93,7 @@
                     <div class="col-5">
                         <span>Client Name</span>
                         <br/>
-                        <strong style="font-weight:600;font-size:20px;">
+                        <strong style="font-weight:600;font-size:16pt;">
                             <t t-esc="o.partner_id.name"/>
                         </strong>
                         <br/>
@@ -115,24 +118,24 @@
                         </span>
                     </div>
                     <div class="col-7 align-items-center" style="border-left:1px solid #b7b9bd;">
-                        <div class="row text-center align-items-center">
+                        <div class="row align-items-center" style="width:75%;margin:auto;">
                             <div class="col-6">
                                 <span class="mb-1">Order Date:</span>
                                 <br/>
                                 <strong class="m-0" t-field="o.date_order" t-options='{"widget": "date"}'
-                                        style="font-size:20px;"/>
+                                        style="font-size:16pt;"/>
                             </div>
                             <div class="col-6">
                                 <span class="mb-1">Sales Person:</span>
                                 <br/>
-                                <strong class="m-0" t-field="o.user_id" style="font-size:20px;"/>
+                                <strong class="m-0" t-field="o.user_id" style="font-size:16pt;"/>
                             </div>
                         </div>
-                        <div class="row text-center align-items-center mt-3">
+                        <div class="row align-items-center mt-3" style="width:75%;margin:auto;">
                             <div class="col-6">
                                 <span class="mb-1">Recurrence:</span>
                                 <br/>
-                                <strong class="m-0" t-field="o.recurrence_id" style="font-size:20px;"/>
+                                <strong class="m-0" t-field="o.recurrence_id" style="font-size:16pt;"/>
                             </div>
                         </div>
                     </div>
@@ -151,7 +154,9 @@
                                 groups="product.group_discount_per_so_line">
                                 <span>Disc.%</span>
                             </th>
-                            <th name="th_taxes" class="text-end">Taxes</th>
+                            <t t-if="lines_to_report.mapped('tax_id')">
+                                <th name="th_taxes" class="text-end">Taxes</th>
+                            </t>
                             <th name="th_subtotal" class="text-end">
                                 <span groups="account.group_show_line_subtotals_tax_excluded">Sub-Total</span>
                                 <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
@@ -187,9 +192,11 @@
                                         groups="product.group_discount_per_so_line">
                                         <span t-field="line.discount"/>
                                     </td>
-                                    <td name="td_taxes" class="text-end">
-                                        <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>
-                                    </td>
+                                    <t t-if="lines_to_report.mapped('tax_id')">
+                                        <td name="td_taxes" class="text-end">
+                                            <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>
+                                        </td>
+                                    </t>
                                     <td t-if="not line.is_downpayment" name="td_subtotal"
                                         class="text-end o_price_total">
                                         <span t-field="line.price_subtotal"
