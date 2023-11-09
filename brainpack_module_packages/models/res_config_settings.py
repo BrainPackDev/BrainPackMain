@@ -34,6 +34,20 @@ class ResConfigSettings(models.TransientModel):
     module_sale_subscription = fields.Boolean("Sale Subscription")
 
     module_brainpack_pos_debranding = fields.Boolean('POS Debranding')
+    module_brainpack_appointment = fields.Boolean('BrainPack Appointments')
+
+    @api.onchange('module_brainpack_appointment')
+    def on_module_brainpack_appointment(self):
+        ModuleSudo = self.env['ir.module.module'].sudo()
+        modules = ModuleSudo.search(
+            [('name', '=', 'module_brainpack_appointment'.replace("module_", ''))])
+        if not modules and self.module_brainpack_appointment:
+            return {
+                'warning': {
+                    'title': _('Warning!'),
+                    'message': _('BrainPack Appointments module not exist!'),
+                }
+            }
 
     @api.onchange('module_brainpack_crm_utm_extended')
     def on_module_brainpack_crm_utm_extended(self):
@@ -47,6 +61,7 @@ class ResConfigSettings(models.TransientModel):
                     'message': _('BrainPack UTM Pack modile not exist!'),
                 }
             }
+
     @api.onchange('module_brainpack_pos_debranding')
     def on_module_brainpack_pos_debranding(self):
         ModuleSudo = self.env['ir.module.module'].sudo()
