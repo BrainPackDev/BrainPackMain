@@ -9,7 +9,30 @@
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
                                  style="height: fit-content;max-height: 80px;width:90%;"/>
                         </div>
-                        <div class="col-5 text-center" style="border-left:3px solid #000000;">
+                        <t t-if="o.partner_id.lang">
+                            <t t-if="o.partner_id.lang == 'he_IL'">
+                                <style>
+                                    .left-3{
+                                        border-right:3px solid #000000;
+                                    }
+                                </style>
+                            </t>
+                            <t t-else="">
+                                <style>
+                                    .left-3{
+                                        border-left:3px solid #000000;
+                                    }
+                                </style>
+                            </t>
+                        </t>
+                        <t t-else="">
+                                <style>
+                                    .left-3{
+                                        border-left:3px solid #000000;
+                                    }
+                                </style>
+                            </t>
+                        <div class="col-5 text-center left-3">
                             <div>
                                 <strong t-if="env.context.get('proforma', False) or is_pro_forma"
                                         style="font-size:20px;">PRO-FORMA INVOICE
@@ -87,6 +110,38 @@
                     padding:5px 10px !important;
                     }
                 </style>
+                <t t-if="o.partner_id.lang">
+                            <t t-if="o.partner_id.lang == 'he_IL'">
+                                <style>
+                                    .left-1{
+                                        border-right:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-right:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
+                            <t t-else="">
+                                <style>
+                                    .left-1{
+                                        border-left:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-left:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
+                        </t>
+                        <t t-else="">
+                                <style>
+                                    .left-1{
+                                        border-left:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-left:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
                 <div class="oe_structure"/>
                 <!--            <div class="page">-->
                 <div class="row">
@@ -168,7 +223,7 @@
 <!--                            </span>-->
 <!--                        </span>-->
                     </div>
-                    <div class="col-7 align-items-center" style="border-left:1px solid #b7b9bd;">
+                    <div class="col-7 align-items-center left-1-grey">
                         <div class="row align-items-center" style="width:75%;margin:auto;">
                             <div class="col-6">
                                 <span class="mb-1">Order Date:</span>
@@ -400,8 +455,8 @@
                                     <t t-esc="bank.bank_id.bic"/>
                                 </strong>
                             </div>
-                            <div class="col-3 text-end"
-                                 style="font-size: 35px;border-left: 1px solid;padding-top:5px;padding-bottom:5px;">
+                            <div class="col-3 text-end left-1"
+                                 style="font-size: 35px;padding-top:5px;padding-bottom:5px;">
                                 <strong t-field="o.amount_total"
                                         t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
