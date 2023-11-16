@@ -467,10 +467,12 @@
                         </tbody>
                     </table>
 
-                    <t t-if="not is_html_empty(o.note)">
-                        <div class="mt-5" t-field="o.note"/>
-                    </t>
+
                 </div>
+
+                <t t-if="not is_html_empty(o.note)">
+                    <div class="mt-5" t-field="o.note"/>
+                </t>
 
                 <!--            </div>-->
                 <!--            </div>-->
