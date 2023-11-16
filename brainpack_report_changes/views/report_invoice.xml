@@ -92,23 +92,23 @@
                                     <t t-esc="o.partner_id.name"/>
                                 </strong>
                                 <br/>
-                                <span t-if="o.company_id.street">
-                                    <t t-esc="o.company_id.street"/>
+                                <span t-if="o.partner_id.street">
+                                    <t t-esc="o.partner_id.street"/>
                                     <br/>
                                 </span>
-                                <span t-if="o.company_id.street2">
-                                    <t t-esc="o.company_id.street2"/>
+                                <span t-if="o.partner_id.street2">
+                                    <t t-esc="o.partner_id.street2"/>
                                     <br/>
                                 </span>
                                 <span>
-                                    <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                                    <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,
                                     </span>
-                                    <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>-
+                                    <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>-
                                     </span>
-                                    <span t-if="o.company_id.zip"><t t-esc="o.company_id.zip"/>,
+                                    <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,
                                     </span>
-                                    <span t-if="o.company_id.country_id">
-                                        <t t-esc="o.company_id.country_id.name"/>
+                                    <span t-if="o.partner_id.country_id">
+                                        <t t-esc="o.partner_id.country_id.name"/>
                                     </span>
                                 </span>
                             </div>
