@@ -88,29 +88,78 @@
                             <div class="col-5">
                                 <span>Client Name</span>
                                 <br/>
-                                <strong style="font-weight:600;font-size:16pt;">
-                                    <t t-esc="o.partner_id.name"/>
-                                </strong>
-                                <br/>
-                                <span t-if="o.partner_id.street">
-                                    <t t-esc="o.partner_id.street"/>
-                                    <br/>
-                                </span>
-                                <span t-if="o.partner_id.street2">
-                                    <t t-esc="o.partner_id.street2"/>
-                                    <br/>
-                                </span>
-                                <span>
-                                    <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,
-                                    </span>
-                                    <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>-
-                                    </span>
-                                    <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,
-                                    </span>
-                                    <span t-if="o.partner_id.country_id">
-                                        <t t-esc="o.partner_id.country_id.name"/>
-                                    </span>
-                                </span>
+
+                                <address t-ignore="true" class="mb-0" itemscope="itemscope" itemtype="http://schema.org/Organization">
+                                    <strong style="font-weight:600;font-size:16pt;">
+                                         <div t-if="o.partner_id">
+                                            <t t-if="o.partner_id.display_name">
+                                                <span itemprop="name" t-esc="o.partner_id.display_name"/>
+                                            </t>
+                                        </div>
+                                    </strong>
+                                    <div t-if="o.partner_id.vat">Tax ID <span itemprop="vatID" t-esc="o.partner_id.vat"/></div>
+                                    <div itemprop="address" itemscope="itemscope" itemtype="http://schema.org/PostalAddress">
+                                        <span t-if="o.partner_id.street and o.partner_id.street2">
+                                            <t t-esc="o.partner_id.street"/>, <t t-esc="o.partner_id.street2"/>
+                                            <br/>
+                                        </span>
+                                        <span t-if="o.partner_id.street and not o.partner_id.street2">
+                                            <t t-esc="o.partner_id.street"/>
+                                            <br/>
+                                        </span>
+                                        <span t-if="not o.partner_id.street and o.partner_id.street2">
+                                            <t t-esc="o.partner_id.street2"/>
+                                            <br/>
+                                        </span>
+
+                                        <div t-if="o.partner_id.city" class="d-flex align-items-baseline">
+                                            <span>
+                                                <div>
+                                                    <span itemprop="addressLocality">
+                                                        <t t-if="o.partner_id.city">
+                                                            <t t-esc="o.partner_id.city"/>
+                                                        </t>
+                                                         <t t-if="o.partner_id.state_id">
+                                                            <t t-esc="o.partner_id.state_id.name"/>
+                                                        </t>
+                                                        <t t-if="o.partner_id.zip">
+                                                            <t t-esc="o.partner_id.zip"/>
+                                                        </t>
+                                                    </span>
+                                                    <br/>
+                                                    <span itemprop="addressCountry" t-esc="o.partner_id.country_id.name"/>
+                                                </div>
+                                            </span>
+                                        </div>
+<!--                                        <div t-if="o.partner_id.phone"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.phone"/></div>-->
+<!--                                        <div t-if="o.partner_id.mobile"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.mobile"/></div>-->
+<!--                                        <div t-if="o.partner_id.email"><span itemprop="email" t-esc="o.partner_id.email"/></div>-->
+                                    </div>
+
+                                </address>
+<!--                                <strong style="font-weight:600;font-size:16pt;">-->
+<!--                                    <t t-esc="o.partner_id.name"/>-->
+<!--                                </strong>-->
+<!--                                <br/>-->
+<!--                                <span t-if="o.partner_id.street">-->
+<!--                                    <t t-esc="o.partner_id.street"/>-->
+<!--                                    <br/>-->
+<!--                                </span>-->
+<!--                                <span t-if="o.partner_id.street2">-->
+<!--                                    <t t-esc="o.partner_id.street2"/>-->
+<!--                                    <br/>-->
+<!--                                </span>-->
+<!--                                <span>-->
+<!--                                    <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,-->
+<!--                                    </span>-->
+<!--                                    <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>- -->
+<!--                                    </span>-->
+<!--                                    <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,-->
+<!--                                    </span>-->
+<!--                                    <span t-if="o.partner_id.country_id">-->
+<!--                                        <t t-esc="o.partner_id.country_id.name"/>-->
+<!--                                    </span>-->
+<!--                                </span>-->
                             </div>
                             <div class="col-7 align-items-center" style="border-left:1px solid #e8e9eb;">
                                 <div class="row align-items-center" style="width:75%;margin:auto;">
