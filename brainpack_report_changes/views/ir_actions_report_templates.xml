@@ -2,36 +2,36 @@
 
     <template id="custom_external_layout_standard">
         <div class="header">
-            <div class="row align-items-center">
+<!--            <t t-if="o.partner_id.lang">-->
+<!--                <t t-if="o.partner_id.lang == 'he_IL'">-->
+<!--                    <style>-->
+<!--                        .left-3{-->
+<!--                            border-right:3px solid #000000;-->
+<!--                        }-->
+<!--                    </style>-->
+<!--                </t>-->
+<!--                <t t-else="">-->
+<!--                    <style>-->
+<!--                        .left-3{-->
+<!--                            border-left:3px solid #000000;-->
+<!--                        }-->
+<!--                    </style>-->
+<!--                </t>-->
+<!--            </t>-->
+<!--            <t t-else="">-->
+                <style>
+                    .left-3{
+                        border-left:3px solid #000000;
+                    }
+                </style>
+<!--            </t>-->
+            <div class="row align-items-center" t-att-data-oe-lang="o.partner_id.lang">
                 <div class="col-6">
                     <div class="row" style="align-items: center;">
                         <div class="col-7">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
                                  style="height: fit-content;max-height: 80px;width:90%;"/>
                         </div>
-                        <t t-if="o.partner_id.lang">
-                            <t t-if="o.partner_id.lang == 'he_IL'">
-                                <style>
-                                    .left-3{
-                                        border-right:3px solid #000000;
-                                    }
-                                </style>
-                            </t>
-                            <t t-else="">
-                                <style>
-                                    .left-3{
-                                        border-left:3px solid #000000;
-                                    }
-                                </style>
-                            </t>
-                        </t>
-                        <t t-else="">
-                                <style>
-                                    .left-3{
-                                        border-left:3px solid #000000;
-                                    }
-                                </style>
-                            </t>
                         <div class="col-5 text-center left-3">
                             <div>
                                 <strong t-if="env.context.get('proforma', False) or is_pro_forma"
@@ -81,7 +81,7 @@
         </div>
 
         <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name"
-             t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+             t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o.partner_id.lang">
             <t t-call="web.address_layout"/>
             <t t-raw="0"/>
         </div>
@@ -191,37 +191,8 @@
                                         </div>
                                     </span>
                                 </div>
-<!--                                <div t-if="o.partner_id.phone"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.phone"/></div>-->
-<!--                                <div t-if="o.partner_id.mobile"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.mobile"/></div>-->
-<!--                                <div t-if="o.partner_id.email"><span itemprop="email" t-esc="o.partner_id.email"/></div>-->
                             </div>
                         </address>
-
-<!--                        <address t-field="o.partner_id"-->
-<!--                            t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>-->
-<!--                        <strong style="font-weight:600;font-size:16pt;">-->
-<!--                            <t t-esc="o.partner_id.name"/>-->
-<!--                        </strong>-->
-<!--                        <br/>-->
-<!--                        <span t-if="o.company_id.street">-->
-<!--                            <t t-esc="o.partner_id.street"/>-->
-<!--                            <br/>-->
-<!--                        </span>-->
-<!--                        <span t-if="o.company_id.street2">-->
-<!--                            <t t-esc="o.partner_id.street2"/>-->
-<!--                            <br/>-->
-<!--                        </span>-->
-<!--                        <span>-->
-<!--                            <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,-->
-<!--                            </span>-->
-<!--                            <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>- -->
-<!--                            </span>-->
-<!--                            <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,-->
-<!--                            </span>-->
-<!--                            <span t-if="o.partner_id.country_id">-->
-<!--                                <t t-esc="o.partner_id.country_id.name"/>-->
-<!--                            </span>-->
-<!--                        </span>-->
                     </div>
                     <div class="col-7 align-items-center left-1-grey">
                         <div class="row align-items-center" style="width:75%;margin:auto;">
@@ -250,7 +221,7 @@
                 <!--                <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>-->
                 <table class="table table-sm o_main_table table-borderless mt-5 table_odd_color">
                     <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                    <thead style="display: table-row-group">
+                    <thead style="display: table-row-group;">
                         <tr>
                             <th name="th_description" class="text-start" style="width:500px;">Item &amp; Description
                             </th>
@@ -529,10 +500,6 @@
                     <div class="mt-5" t-field="o.note"/>
                 </t>
 
-                <!--            </div>-->
-                <!--            </div>-->
-                <!--             <div class="footer" style="margin-top: 200px;white-space:nowrap;">-->
-
             </div>
         </t>
     </template>
@@ -540,7 +507,8 @@
     <template id="report_saleorder_document_brainpack">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="brainpack_report_changes.report_saleorder_document_report"/>
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-call="brainpack_report_changes.report_saleorder_document_report" t-lang="lang"/>
             </t>
         </t>
     </template>

@@ -2,6 +2,30 @@
     <data>
         <template id="custom_external_layout_invoice_standard">
             <div class="header">
+<!--                <t t-if="o.partner_id.lang">-->
+<!--                    <t t-if="o.partner_id.lang == 'he_IL'">-->
+<!--                        <style>-->
+<!--                            .left-3{-->
+<!--                                border-right:3px solid #000000;-->
+<!--                            }-->
+<!--                        </style>-->
+<!--                    </t>-->
+<!--                    <t t-else="">-->
+<!--                        <style>-->
+<!--                            .left-3{-->
+<!--                                border-left:3px solid #000000;-->
+<!--                            }-->
+<!--                        </style>-->
+<!--                    </t>-->
+<!--                </t>-->
+<!--                <t t-else="">-->
+                        <style>
+                            .left-3{
+                                border-left:3px solid #000000;
+                            }
+                        </style>
+<!--            </t>-->
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="row align-items-center">
                     <div class="col-6">
                         <div class="row" style="align-items: center;">
@@ -9,29 +33,6 @@
                                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
                                      style="height: fit-content;max-height: 80px;width:90%;"/>
                             </div>
-                             <t t-if="o.partner_id.lang">
-                                    <t t-if="o.partner_id.lang == 'he_IL'">
-                                        <style>
-                                            .left-3{
-                                                border-right:3px solid #000000;
-                                            }
-                                        </style>
-                                    </t>
-                                    <t t-else="">
-                                        <style>
-                                            .left-3{
-                                                border-left:3px solid #000000;
-                                            }
-                                        </style>
-                                    </t>
-                                </t>
-                                <t t-else="">
-                                        <style>
-                                            .left-3{
-                                                border-left:3px solid #000000;
-                                            }
-                                        </style>
-                            </t>
                             <div class="col-6 text-left left-3" style="padding-left: 38px;">
                                 <div>
                                     <strong t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
@@ -106,6 +107,56 @@
             <t t-call="brainpack_report_changes.custom_external_layout_invoice_standard">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="mt-5">
+                    <style>
+                        table {
+                        font-size: 15px;
+                        }
+                        table th{
+                        font-size: 16px;
+                        }
+                        table.table_odd_color tbody tr:nth-child(odd) {
+                        background-color: #f7f7f7;
+                        }
+                        table td,table th{
+                        padding:5px 10px !important;
+                        }
+                        table.table_odd_color td{
+                        padding-top:10px !important;
+                        padding-bottom:10px !important;
+                        }
+                    </style>
+                    <t t-if="o.partner_id.lang">
+                            <t t-if="o.partner_id.lang == 'he_IL'">
+                                <style>
+                                    .left-1{
+                                        border-right:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-right:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
+                            <t t-else="">
+                                <style>
+                                    .left-1{
+                                        border-left:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-left:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
+                        </t>
+                        <t t-else="">
+                                <style>
+                                    .left-1{
+                                        border-left:1px solid #000000;
+                                    }
+                                    .left-1-grey{
+                                        border-left:1px solid #b7b9bd;
+                                    }
+                                </style>
+                            </t>
                     <div class="page">
                         <div class="row">
                             <div class="col-5">
@@ -154,68 +205,11 @@
                                                 </div>
                                             </span>
                                         </div>
-<!--                                        <div t-if="o.partner_id.phone"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.phone"/></div>-->
-<!--                                        <div t-if="o.partner_id.mobile"> <span class="o_force_ltr" itemprop="telephone" t-esc="o.partner_id.mobile"/></div>-->
-<!--                                        <div t-if="o.partner_id.email"><span itemprop="email" t-esc="o.partner_id.email"/></div>-->
                                     </div>
 
                                 </address>
-<!--                                <strong style="font-weight:600;font-size:16pt;">-->
-<!--                                    <t t-esc="o.partner_id.name"/>-->
-<!--                                </strong>-->
-<!--                                <br/>-->
-<!--                                <span t-if="o.partner_id.street">-->
-<!--                                    <t t-esc="o.partner_id.street"/>-->
-<!--                                    <br/>-->
-<!--                                </span>-->
-<!--                                <span t-if="o.partner_id.street2">-->
-<!--                                    <t t-esc="o.partner_id.street2"/>-->
-<!--                                    <br/>-->
-<!--                                </span>-->
-<!--                                <span>-->
-<!--                                    <span t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/>,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="o.partner_id.state_id"><t t-esc="o.partner_id.state_id.name"/>- -->
-<!--                                    </span>-->
-<!--                                    <span t-if="o.partner_id.zip"><t t-esc="o.partner_id.zip"/>,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="o.partner_id.country_id">-->
-<!--                                        <t t-esc="o.partner_id.country_id.name"/>-->
-<!--                                    </span>-->
-<!--                                </span>-->
                             </div>
-                            <t t-if="o.partner_id.lang">
-                            <t t-if="o.partner_id.lang == 'he_IL'">
-                                <style>
-                                    .left-1{
-                                        border-right:1px solid #000000;
-                                    }
-                                    .left-1-grey{
-                                        border-right:1px solid #b7b9bd;
-                                    }
-                                </style>
-                            </t>
-                            <t t-else="">
-                                <style>
-                                    .left-1{
-                                        border-left:1px solid #000000;
-                                    }
-                                    .left-1-grey{
-                                        border-left:1px solid #b7b9bd;
-                                    }
-                                </style>
-                            </t>
-                        </t>
-                        <t t-else="">
-                                <style>
-                                    .left-1{
-                                        border-left:1px solid #000000;
-                                    }
-                                    .left-1-grey{
-                                        border-left:1px solid #b7b9bd;
-                                    }
-                                </style>
-                            </t>
+
                             <div class="col-7 align-items-center left-1-grey">
                                 <div class="row align-items-center" style="width:75%;margin:auto;">
                                     <div class="col-6">
@@ -258,24 +252,7 @@
                                 </div>
                             </div>
                         </div>
-                        <style>
-                            table {
-                            font-size: 15px;
-                            }
-                            table th{
-                            font-size: 16px;
-                            }
-                            table.table_odd_color tbody tr:nth-child(odd) {
-                            background-color: #f7f7f7;
-                            }
-                            table td,table th{
-                            padding:5px 10px !important;
-                            }
-                            table.table_odd_color td{
-                            padding-top:10px !important;
-                            padding-bottom:10px !important;
-                            }
-                        </style>
+
 
                         <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
 
@@ -533,50 +510,10 @@
                     </p>
                     <t t-set="payment_term_details" t-value="o.payment_term_details"/>
                     <div t-field="o.invoice_payment_term_id.note" name="payment_term"/>
-                    <!--                    <t t-if="o.invoice_payment_term_id.display_on_invoice and payment_term_details">-->
-                    <!--                        <div t-if='o.show_payment_term_details' id="total_payment_term_details_table" class="row">-->
-                    <!--                            <div t-attf-class="#{'col-7' if report_type != 'html' else 'col-sm-7 col-md-6'} mt-2 mb-2">-->
-                    <!--                                <table class="table table-sm" style="page-break-inside: avoid;">-->
-                    <!--                                    <th class="border-black text-start">-->
-                    <!--                                        Due Date-->
-                    <!--                                    </th>-->
-                    <!--                                    <th class="border-black text-end">-->
-                    <!--                                        Amount Due-->
-                    <!--                                    </th>-->
-                    <!--                                    <th t-if="o.show_discount_details" class="border-black text-end">-->
-                    <!--                                        Discount-->
-                    <!--                                    </th>-->
-                    <!--                                    <t t-foreach="payment_term_details" t-as="term">-->
-                    <!--                                        <tr>-->
-                    <!--                                            <td t-esc="term.get('date')" class="text-start"/>-->
-                    <!--                                            <td t-options='{"widget": "monetary", "display_currency": o.currency_id}' t-esc="term.get('amount')" class="text-end"/>-->
-                    <!--                                            <td t-if="term.get('discount_date')" class="text-end">-->
-                    <!--                                                <span t-options='{"widget": "monetary", "display_currency": o.currency_id}'-->
-                    <!--                                                      t-esc="term.get('discount_amount_currency')"/> if paid before-->
-                    <!--                                                <span t-esc="term.get('discount_date')"/>-->
-                    <!--                                            </td>-->
-                    <!--                                        </tr>-->
-                    <!--                                    </t>-->
-                    <!--                                </table>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </t>-->
+
                     <div t-if="not is_html_empty(o.narration)" name="comment">
                         <span t-field="o.narration"/>
                     </div>
-                    <!--                    <p t-if="not is_html_empty(o.fiscal_position_id.note)" name="note">-->
-                    <!--                        <span t-field="o.fiscal_position_id.note"/>-->
-                    <!--                    </p>-->
-                    <!--                    <p t-if="o.invoice_incoterm_id" name="incoterm">-->
-                    <!--                        <strong>Incoterm: </strong><span t-field="o.invoice_incoterm_id.code"/> - <span t-field="o.invoice_incoterm_id.name"/>-->
-                    <!--                    </p>-->
-                    <!--                    <div id="qrcode" t-if="o.display_qr_code and o.amount_residual > 0">-->
-                    <!--                        <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>-->
-                    <!--                        <p t-if="qr_code_url">-->
-                    <!--                            <strong class="text-center">Scan me with your banking app.</strong><br/><br/>-->
-                    <!--                            <img class="border border-dark rounded" t-att-src="qr_code_url"/>-->
-                    <!--                        </p>-->
-                    <!--                    </div>-->
                 </div>
             </t>
         </template>
