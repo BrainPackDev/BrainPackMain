@@ -11,6 +11,7 @@
     'depends': ['sale','account','sale_subscription'],
     'data': [
         'data/report_data.xml',
+        'data/mail_template.xml',
         'views/res_company.xml',
         'views/ir_actions_report_templates.xml',
         'views/report_invoice.xml',
