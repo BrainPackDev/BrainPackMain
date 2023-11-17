@@ -2,38 +2,39 @@
     <data>
         <template id="custom_external_layout_invoice_standard">
             <div class="header">
-<!--                <t t-if="o.partner_id.lang">-->
-<!--                    <t t-if="o.partner_id.lang == 'he_IL'">-->
-<!--                        <style>-->
-<!--                            .left-3{-->
-<!--                                border-right:3px solid #000000;-->
-<!--                            }-->
-<!--                        </style>-->
-<!--                    </t>-->
-<!--                    <t t-else="">-->
-<!--                        <style>-->
-<!--                            .left-3{-->
-<!--                                border-left:3px solid #000000;-->
-<!--                            }-->
-<!--                        </style>-->
-<!--                    </t>-->
-<!--                </t>-->
-<!--                <t t-else="">-->
+                <t t-if="o.partner_id.lang">
+                    <t t-if="o.partner_id.lang == 'he_IL'">
+                        <style>
+                            .left-3{
+                                border-right:3px solid #000000;
+                            }
+                        </style>
+                    </t>
+                    <t t-else="">
                         <style>
                             .left-3{
                                 border-left:3px solid #000000;
                             }
                         </style>
-<!--            </t>-->
-                <t t-set="o" t-value="o.with_context(lang=lang)"/>
-                <div class="row align-items-center">
+                    </t>
+                </t>
+                <t t-else="">
+                    <style>
+                        .left-3{
+                            border-left:3px solid #000000;
+                        }
+                    </style>
+                 </t>
+<!--                <t t-set="o" t-value="o.with_context(lang=lang)"/>-->
+                <t t-if="o.env.user.lang == 'he_IL'">
+                    <div class="row align-items-center">
                     <div class="col-6">
                         <div class="row" style="align-items: center;">
                             <div class="col-6">
                                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
                                      style="height: fit-content;max-height: 80px;width:90%;"/>
                             </div>
-                            <div class="col-6 text-left left-3" style="padding-left: 38px;">
+                            <div class="col-6 text-end left-3" style="padding-left: 38px;">
                                 <div>
                                     <strong t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
                                             style="font-size:20px;">INVOICE
@@ -85,11 +86,217 @@
                             <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>,
                             </span>
                             <span t-if="o.company_id.country_id">
-                                <t t-esc="o.company_id.country_id.name"/>
+                                <t t-esc="o.company_id.country_id.with_context(lang='en_US').name"/>
                             </span>
                         </span>
                     </div>
                 </div>
+                </t>
+                <t t-else="">
+                    <t t-if="o.partner_id.lang">
+                        <t t-if="o.partner_id.lang == 'he_IL'">
+                            <div class="row align-items-center">
+                                <div class="col-6 text-start" style="font-weight: 500;">
+                                <span>
+                                    <t t-esc="o.company_id.name"/>
+                                </span>
+                                <br/>
+                                Tax ID
+                                <span>
+                                    <t t-esc="o.company_id.vat"/>
+                                </span>
+                                <br/>
+                                <span t-if="o.company_id.street">
+                                    <t t-esc="o.company_id.street"/>
+                                    <br/>
+                                </span>
+                                <span t-if="o.company_id.street2">
+                                    <t t-esc="o.company_id.street2"/>
+                                    <br/>
+                                </span>
+
+                                <span>
+                                    <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                                    </span>
+                                    <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>,
+                                    </span>
+                                    <span t-if="o.company_id.country_id">
+                                        <t t-esc="o.company_id.country_id.with_context(lang='en_US').name"/>
+                                    </span>
+                                </span>
+                            </div>
+                        <div class="col-6">
+                            <div class="row" style="align-items: center;">
+                                <div class="col-6 text-right left-3" >
+                                    <div>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
+                                                style="font-size:20px;">INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'draft'"
+                                                style="font-size:20px;">DRAFT INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'cancel'"
+                                                style="font-size:20px;">CANCELLED INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_refund'" style="font-size:20px;">CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_refund'" style="font-size:20px;">VENDOR CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_invoice'" style="font-size:20px;">VENDOR BILL
+                                        </strong>
+                                        <br/>
+                                        <strong style="font-size:25px;">
+                                            <t t-if="o.name.split('/',1)[1]">#
+                                                <t t-esc="o.name.split('/',1)[1]"/></t>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="col-6" style="padding-left: 38px;">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                         style="height: fit-content;max-height: 80px;width:90%;"/>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                        </t>
+                        <t t-else="">
+                            <div class="row align-items-center">
+                        <div class="col-6">
+                            <div class="row" style="align-items: center;">
+                                <div class="col-6">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                         style="height: fit-content;max-height: 80px;width:90%;"/>
+                                </div>
+                                <div class="col-6 text-left left-3" style="padding-left: 38px;">
+                                    <div>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
+                                                style="font-size:20px;">INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'draft'"
+                                                style="font-size:20px;">DRAFT INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'cancel'"
+                                                style="font-size:20px;">CANCELLED INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_refund'" style="font-size:20px;">CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_refund'" style="font-size:20px;">VENDOR CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_invoice'" style="font-size:20px;">VENDOR BILL
+                                        </strong>
+                                        <br/>
+                                        <strong style="font-size:25px;">
+                                            <t t-if="o.name.split('/',1)[1]">#
+                                                <t t-esc="o.name.split('/',1)[1]"/></t>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6 text-end" style="font-weight: 500;">
+                            <span>
+                                <t t-esc="o.company_id.name"/>
+                            </span>
+                            <br/>
+                            Tax ID
+                            <span>
+                                <t t-esc="o.company_id.vat"/>
+                            </span>
+                            <br/>
+                            <span t-if="o.company_id.street">
+                                <t t-esc="o.company_id.street"/>
+                                <br/>
+                            </span>
+                            <span t-if="o.company_id.street2">
+                                <t t-esc="o.company_id.street2"/>
+                                <br/>
+                            </span>
+
+                            <span>
+                                <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                                </span>
+                                <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>,
+                                </span>
+                                <span t-if="o.company_id.country_id">
+                                    <t t-esc="o.company_id.country_id.with_context(lang='en_US').name"/>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="row align-items-center">
+                        <div class="col-6">
+                            <div class="row" style="align-items: center;">
+                                <div class="col-6">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                         style="height: fit-content;max-height: 80px;width:90%;"/>
+                                </div>
+                                <div class="col-6 text-left left-3" style="padding-left: 38px;">
+                                    <div>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
+                                                style="font-size:20px;">INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'draft'"
+                                                style="font-size:20px;">DRAFT INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_invoice' and o.state == 'cancel'"
+                                                style="font-size:20px;">CANCELLED INVOICE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'out_refund'" style="font-size:20px;">CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_refund'" style="font-size:20px;">VENDOR CREDIT NOTE
+                                        </strong>
+                                        <strong t-if="o.move_type == 'in_invoice'" style="font-size:20px;">VENDOR BILL
+                                        </strong>
+                                        <br/>
+                                        <strong style="font-size:25px;">
+                                            <t t-if="o.name.split('/',1)[1]">#
+                                                <t t-esc="o.name.split('/',1)[1]"/></t>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6 text-end" style="font-weight: 500;">
+                            <span>
+                                <t t-esc="o.company_id.name"/>
+                            </span>
+                            <br/>
+                            Tax ID
+                            <span>
+                                <t t-esc="o.company_id.vat"/>
+                            </span>
+                            <br/>
+                            <span t-if="o.company_id.street">
+                                <t t-esc="o.company_id.street"/>
+                                <br/>
+                            </span>
+                            <span t-if="o.company_id.street2">
+                                <t t-esc="o.company_id.street2"/>
+                                <br/>
+                            </span>
+
+                            <span>
+                                <span t-if="o.company_id.city"><t t-esc="o.company_id.city"/>,
+                                </span>
+                                <span t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/>,
+                                </span>
+                                <span t-if="o.company_id.country_id">
+                                    <t t-esc="o.company_id.country_id.with_context(lang='en_US').name"/>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    </t>
+                </t>
+
             </div>
 
             <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name"
