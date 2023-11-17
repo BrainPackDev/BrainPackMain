@@ -318,6 +318,11 @@
                             </t>
                 <div class="oe_structure"/>
                 <!--            <div class="page">-->
+                <t t-set="cut_lang" t-value="o.partner_id.lang"/>
+                <t t-if="o.env.user.lang == 'he_IL'">
+                    <t t-set="cut_lang" t-value="o.env.user.lang"/>
+                </t>
+
                 <div class="row">
                     <div class="col-5">
                         <span>Client Name</span>
@@ -448,13 +453,24 @@
                                             <span t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>
                                         </td>
                                     </t>
-                                    <td t-if="not line.is_downpayment" name="td_subtotal"
-                                        class="text-end o_price_total">
-                                        <span t-field="line.price_subtotal"
-                                              groups="account.group_show_line_subtotals_tax_excluded"/>
-                                        <span t-field="line.price_total"
-                                              groups="account.group_show_line_subtotals_tax_included"/>
-                                    </td>
+                                    <t t-if="cut_lang == 'he_IL'">
+                                        <td t-if="not line.is_downpayment" name="td_subtotal"
+                                            class="text-end o_price_total" style="direction: ltr;">
+                                            <span t-field="line.price_subtotal"
+                                                  groups="account.group_show_line_subtotals_tax_excluded"/>
+                                            <span t-field="line.price_total"
+                                                  groups="account.group_show_line_subtotals_tax_included"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td t-if="not line.is_downpayment" name="td_subtotal"
+                                            class="text-end o_price_total">
+                                            <span t-field="line.price_subtotal"
+                                                  groups="account.group_show_line_subtotals_tax_excluded"/>
+                                            <span t-field="line.price_total"
+                                                  groups="account.group_show_line_subtotals_tax_included"/>
+                                        </td>
+                                    </t>
                                 </t>
                                 <t t-elif="line.display_type == 'line_section'">
                                     <td name="td_section_line" colspan="99">
@@ -472,13 +488,24 @@
 
                             <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
                                 <tr class="is-subtotal text-end">
-                                    <td name="td_section_subtotal" colspan="99">
-                                        <strong class="mr16">Subtotal</strong>
-                                        <span
-                                                t-out="current_subtotal"
-                                                t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
-                                        />
-                                    </td>
+                                     <t t-if="cut_lang == 'he_IL'">
+                                        <td name="td_section_subtotal" colspan="99" style="direction:ltr;">
+                                            <strong class="mr16">Subtotal</strong>
+                                            <span
+                                                    t-out="current_subtotal"
+                                                    t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                            />
+                                        </td>
+                                     </t>
+                                    <t t-else="">
+                                        <td name="td_section_subtotal" colspan="99">
+                                            <strong class="mr16">Subtotal</strong>
+                                            <span
+                                                    t-out="current_subtotal"
+                                                    t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                            />
+                                        </td>
+                                    </t>
                                 </tr>
                             </t>
                         </t>
@@ -502,12 +529,22 @@
                                             </t>
                                         </td>
 
-                                        <td class="text-end">
-                                            <span
-                                                    t-att-class="oe_subtotal_footer_separator"
-                                                    t-esc="subtotal['formatted_amount']"
-                                            />
-                                        </td>
+                                        <t t-if="cut_lang == 'he_IL'">
+                                            <td class="text-end" style="direction:ltr;">
+                                                <span
+                                                        t-att-class="oe_subtotal_footer_separator"
+                                                        t-esc="subtotal['formatted_amount']"
+                                                />
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td class="text-end">
+                                                <span
+                                                        t-att-class="oe_subtotal_footer_separator"
+                                                        t-esc="subtotal['formatted_amount']"
+                                                />
+                                            </td>
+                                        </t>
                                     </tr>
 
                                     <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
@@ -521,20 +558,36 @@
                                                         <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
                                                     </span>
                                                 </td>
-                                                <td class="text-end o_price_total">
-                                                    <span class="text-nowrap"
-                                                          t-esc="amount_by_group['formatted_tax_group_amount']"/>
-                                                </td>
+                                                <t t-if="cut_lang == 'he_IL'">
+                                                    <td class="text-end o_price_total" style="direction:ltr;">
+                                                        <span class="text-nowrap"
+                                                              t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-end o_price_total">
+                                                        <span class="text-nowrap"
+                                                              t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                    </td>
+                                                </t>
                                             </t>
                                             <t t-else="">
                                                 <td style="font-weight:600;">
                                                     <span class="text-nowrap"
                                                           t-esc="amount_by_group['tax_group_name']"/>
                                                 </td>
-                                                <td class="text-end o_price_total">
-                                                    <span class="text-nowrap"
-                                                          t-esc="amount_by_group['formatted_tax_group_amount']"/>
-                                                </td>
+                                                <t t-if="cut_lang == 'he_IL'">
+                                                    <td class="text-end o_price_total" style="direction:ltr;">
+                                                        <span class="text-nowrap"
+                                                              t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-end o_price_total">
+                                                        <span class="text-nowrap"
+                                                              t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                    </td>
+                                                </t>
                                             </t>
                                         </tr>
                                     </t>
@@ -542,9 +595,16 @@
 
                                 <t t-if="'formatted_rounding_amount' in tax_totals and tax_totals['rounding_amount'] != 0">
                                     <td>Rounding</td>
-                                    <td class="text-end">
-                                        <span t-esc="tax_totals['formatted_rounding_amount']"/>
-                                    </td>
+                                    <t t-if="cut_lang == 'he_IL'">
+                                        <td class="text-end" style="direction:ltr;">
+                                            <span t-esc="tax_totals['formatted_rounding_amount']"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td class="text-end">
+                                            <span t-esc="tax_totals['formatted_rounding_amount']"/>
+                                        </td>
+                                    </t>
                                 </t>
 
                                 <!--Total amount with all taxes-->
@@ -552,11 +612,20 @@
                                     <td style="font-weight:600;">
                                         <strong>Total Including Taxes</strong>
                                     </td>
-                                    <td class="text-end">
-                                        <span t-esc="tax_totals['formatted_amount_total_rounded']"
-                                              t-if="'formatted_amount_total_rounded' in tax_totals"/>
-                                        <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>
-                                    </td>
+                                     <t t-if="cut_lang == 'he_IL'">
+                                        <td class="text-end" style="direction:ltr;">
+                                            <span t-esc="tax_totals['formatted_amount_total_rounded']"
+                                                  t-if="'formatted_amount_total_rounded' in tax_totals"/>
+                                            <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>
+                                        </td>
+                                     </t>
+                                    <t t-else="">
+                                        <td class="text-end">
+                                            <span t-esc="tax_totals['formatted_amount_total_rounded']"
+                                                  t-if="'formatted_amount_total_rounded' in tax_totals"/>
+                                            <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>
+                                        </td>
+                                    </t>
                                 </tr>
 
                             </table>
@@ -571,10 +640,12 @@
                             Bank info
                         </div>
                         <div class="col-3 text-end" style="padding-top:5px;padding-bottom:5px;">
-                            Total Due
+<!--                            Total Due-->
                         </div>
                     </div>
+                    <t t-set="count" t-value="0"/>
                     <t t-foreach="o.company_id.partner_id.bank_ids" t-as="bank">
+                         <t t-set="count" t-value="count + 1"/>
                         <div class="row" style="border-bottom: 1px solid;padding-top:5px;padding-bottom:5px;padding:5px 10px !important;
                                 align-items: center;">
                             <div class="col-9" style="padding-top:5px;padding-bottom:5px;">
@@ -600,12 +671,26 @@
                                     <t t-esc="bank.bank_id.bic"/>
                                 </strong>
                             </div>
-                            <div class="col-3 text-end left-1"
+                            <t t-if="cut_lang == 'he_IL'">
+                                <div class="col-3 text-end left-1"
+                                     style="font-size: 35px;padding-top:5px;padding-bottom:5px;    direction: ltr;">
+                                    <t t-if="count == 1">
+                                        <strong t-field="o.amount_total"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
+                                    </t>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="col-3 text-end left-1"
                                  style="font-size: 35px;padding-top:5px;padding-bottom:5px;">
-                                <strong t-field="o.amount_total"
-                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
-                                        t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
+                                <t t-if="count == 1">
+                                    <strong t-field="o.amount_total"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            t-att-style="'color:' + o.company_id.brain_pack_report_font_color +';'"/>
+                                </t>
                             </div>
+                            </t>
                         </div>
                     </t>
                 </div>
@@ -643,7 +728,7 @@
                         <tbody class="sale_tbody">
                             <tr t-foreach="o.sale_order_option_ids" t-as="option">
                                 <td name="td_option_name">
-                                    <strong t-field="line.product_id"></strong><br/><br/>
+                                    <strong t-field="option.product_id"></strong><br/><br/>
                                     <span t-field="option.name"/>
                                 </td>
                                 <td t-if="has_option_discount" name="td_option_discount"
@@ -652,7 +737,21 @@
                                         <t t-out="((option.discount % 1) and '%s' or '%d') % option.discount"/>%
                                     </strong>
                                 </td>
-                                <td name="td_option_price_unit">
+                                <t t-if="cut_lang == 'he_IL'">
+                                    <td name="td_option_price_unit">
+                                        <strong class="text-end">
+                                            <div t-field="option.price_unit"
+                                                 t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
+                                                 t-att-style="option.discount and 'text-decoration: line-through' or None"
+                                                 t-att-class="option.discount and 'text-danger' or None"/>
+                                            <div t-if="option.discount">
+                                                <t t-out="'%.2f' % ((1-option.discount / 100.0) * option.price_unit)"/>
+                                            </div>
+                                        </strong>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td name="td_option_price_unit" style=" direction: ltr;">
                                     <strong class="text-end">
                                         <div t-field="option.price_unit"
                                              t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'
@@ -663,6 +762,7 @@
                                         </div>
                                     </strong>
                                 </td>
+                                </t>
                             </tr>
                         </tbody>
                     </table>
@@ -671,7 +771,8 @@
                 </div>
 
                 <t t-if="not is_html_empty(o.note)">
-                    <div class="mt-5" t-field="o.note"/>
+                    <h4 style="font-weight:600;" class="mt-5"><strong style="font-weight:600;">Terms &amp; Conditions</strong></h4>
+                    <div class="mt-2" t-field="o.note"/>
                 </t>
 
             </div>
