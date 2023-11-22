@@ -1,0 +1,55 @@
+<odoo>
+    <record model="ir.ui.view" id="affinda_workspace_form_view">
+        <field name="name">affinda.workspace.form</field>
+        <field name="model">affinda.workspace</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Create WorkSpace" name="action_create_workspace" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('identifier','!=',False)]}"/>
+                    <button string="Delete WorkSpace" name="action_delete_workspace" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('identifier','=',False)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_show_collection" type="object" class="oe_stat_button" icon="fa-bars" attrs="{'invisible':[('count_collections','&lt;',1)]}">
+                            <div class="o_stat_info">
+                                <field name="count_collections" class="o_stat_value"/>
+                                <span class="o_stat_text">Collection(s)</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="affinda_organization" required="1" attrs="{'readonly': [('identifier','!=',False)]}" domain="[('identifier','!=',False)]"/>
+                        <field name="name" required="1" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="identifier" readonly="1"/>
+                        <field name="visibility" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="rejectInvalidDocuments" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="rejectDuplicates" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="documentSplitter" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="affinda_workspace_tree_view">
+        <field name="name">affinda.workspace.tree</field>
+        <field name="model">affinda.workspace</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="affinda_organization"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+     <record model="ir.actions.act_window" id="affinda_workspace_action">
+        <field name="name">Workspace</field>
+        <field name="res_model">affinda.workspace</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="affinda_workspace_menu" name="Workspace" parent="affinda_menu" action="affinda_workspace_action"
+              sequence="2"/>
+</odoo>

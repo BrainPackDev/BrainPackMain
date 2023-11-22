@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_affinda_organization,access_affinda_organization,model_affinda_organization,base.group_user,1,1,1,1
+access_affinda_workspace,access_affinda_workspace,model_affinda_workspace,base.group_user,1,1,1,1
+access_affinda_workspace_collection,access_affinda_workspace_collection,model_affinda_workspace_collection,base.group_user,1,1,1,1
+access_affinda_document,access_affinda_document,model_affinda_document,,1,1,1,1

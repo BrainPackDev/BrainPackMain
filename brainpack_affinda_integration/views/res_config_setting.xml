@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_affinda_config" model="ir.ui.view">
+            <field name="name">res.config.settings.affinda.config</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Affinda Integration" string="Affinda Integration" data-key="brainpack_affinda_integration" groups="base.group_system">
+                        <div id="affinda_config_view">
+                            <h2>Affinda Integration</h2>
+                            <div class="row mt16 o_settings_container" name="affinda_setting_container">
+                                <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_left_pane">
+                                        <field name='affinda_integration' string="Affinda Integration"/>
+                                    </div>
+                                    <div class="o_setting_right_pane">
+                                        <label for="affinda_integration" string="Affinda Integration" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_right_pane">
+                                        <label for="affinda_api_url" string="Api Url"/>
+                                        <field name='affinda_api_url' string="Api Url"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_right_pane">
+                                        <label for="affinda_api_key" string="Api Key"/>
+                                        <field name='affinda_api_key' string="Api Key"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
