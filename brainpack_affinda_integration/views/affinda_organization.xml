@@ -1,0 +1,53 @@
+<odoo>
+    <record model="ir.ui.view" id="affinda_organization_form_view">
+        <field name="name">affinda.organization.form</field>
+        <field name="model">affinda.organization</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Create Organization" name="action_create_organization" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('identifier','!=',False)]}"/>
+                    <button string="Delete Organization" name="action_delete_organization" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('identifier','=',False)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_show_workspaces" type="object" class="oe_stat_button" icon="fa-bars" attrs="{'invisible':[('count_workspaces','&lt;',1)]}">
+                            <div class="o_stat_info">
+                                <field name="count_workspaces" class="o_stat_value"/>
+                                <span class="o_stat_text">Workspace(s)</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name" required="1" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="avatar" widget="image" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="identifier" readonly="1"/>
+                        <field name="resthookSignatureKey" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="affinda_organization_tree_view">
+        <field name="name">affinda.organization.tree</field>
+        <field name="model">affinda.organization</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+     <record model="ir.actions.act_window" id="affinda_organization_action">
+        <field name="name">Organization</field>
+        <field name="res_model">affinda.organization</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="affinda_menu" name="Affinda" web_icon="brainpack_affinda_integration,static/description/icon.png"/>
+
+    <menuitem id="affinda_organization_menu" name="Organization" parent="affinda_menu" action="affinda_organization_action"
+              sequence="1"/>
+</odoo>
