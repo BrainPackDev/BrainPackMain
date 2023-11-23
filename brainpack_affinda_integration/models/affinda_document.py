@@ -5,1505 +5,16 @@ import json
 import ast
 import re
 from odoo.exceptions import UserError, ValidationError
+import logging
 
-# test_dict = {}
-# test_dict = {
-#   'bankAccountNumber': None,
-#   'bankBsb': None,
-#   'bankIban': None,
-#   'bankSortCode': None,
-#   'bankSwift': None,
-#   'bpayBillerCode': None,
-#   'bpayReference': None,
-#   'currencyCode': {
-#     'id': 91892883,
-#     'rectangle': None,
-#     'rectangles': [
-#
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'ILS',
-#     'parsed': {
-#       'id': 69,
-#       'label': 'ILS',
-#       'value': 'ILS',
-#       'synonyms': None,
-#       'collection': None,
-#       'description': None,
-#       'organization': None
-#     },
-#     'confidence': None,
-#     'classificationConfidence': None,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'JZguvEaB',
-#     'contentType': 'enum',
-#     'parent': None
-#   },
-#   'customerBillingAddress': {
-#     'id': 91892841,
-#     'rectangle': {
-#       'x0': 28.938334,
-#       'y0': 220.9361,
-#       'x1': 120.91979,
-#       'y1': 257.16968,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 28.938334,
-#         'y0': 220.9361,
-#         'x1': 120.91979,
-#         'y1': 257.16968,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'Tes city Tarapacá 123213 Chile',
-#     'parsed': {
-#       'formatted': None,
-#       'streetNumber': None,
-#       'street': None,
-#       'apartmentNumber': None,
-#       'city': None,
-#       'postalCode': None,
-#       'state': None,
-#       'country': None,
-#       'rawInput': 'Tes city Tarapacá 123213 Chile',
-#       'countryCode': None,
-#       'latitude': None,
-#       'longitude': None
-#     },
-#     'confidence': 0.964,
-#     'classificationConfidence': 0.964,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'IIrmUFpr',
-#     'contentType': 'location',
-#     'parent': None
-#   },
-#   'customerBusinessNumber': {
-#     'id': 91892842,
-#     'rectangle': {
-#       'x0': 59.500137,
-#       'y0': 206.29315,
-#       'x1': 97.49604,
-#       'y1': 213.50299,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 59.500137,
-#         'y0': 206.29315,
-#         'x1': 97.49604,
-#         'y1': 213.50299,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '1234567',
-#     'parsed': '1234567',
-#     'confidence': 0.902,
-#     'classificationConfidence': 0.902,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'sQTrimjN',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'customerCompanyName': {
-#     'id': 91892843,
-#     'rectangle': {
-#       'x0': 29.732218,
-#       'y0': 188.82288,
-#       'x1': 173.61119,
-#       'y1': 200.38727,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 29.732218,
-#         'y0': 188.82288,
-#         'x1': 173.61119,
-#         'y1': 200.38727,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'Etamar Company, Etamar',
-#     'parsed': 'Etamar Company, Etamar',
-#     'confidence': 0.969,
-#     'classificationConfidence': 0.969,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'YCquITSP',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'customerContactName': None,
-#   'customerDeliveryAddress': None,
-#   'customerEmail': None,
-#   'customerNumber': None,
-#   'customerPhoneNumber': None,
-#   'customerVat': None,
-#   'invoiceDate': {
-#     'id': 91892844,
-#     'rectangle': {
-#       'x0': 293.07248,
-#       'y0': 188.67004,
-#       'x1': 360.4007,
-#       'y1': 198.85895,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 293.07248,
-#         'y0': 188.67004,
-#         'x1': 360.4007,
-#         'y1': 198.85895,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '11/16/2023',
-#     'parsed': '2023-11-16',
-#     'confidence': 0.976,
-#     'classificationConfidence': 0.976,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'sRakysMP',
-#     'contentType': 'date',
-#     'parent': None
-#   },
-#   'invoiceNumber': {
-#     'id': 91892845,
-#     'rectangle': {
-#       'x0': 199.86053,
-#       'y0': 80.26367,
-#       'x1': 283.4602,
-#       'y1': 91.620056,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 199.86053,
-#         'y0': 80.26367,
-#         'x1': 283.4602,
-#         'y1': 91.620056,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '2023-00044',
-#     'parsed': '2023-00044',
-#     'confidence': 0.976,
-#     'classificationConfidence': 0.976,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'bWFyBeNU',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'invoiceOrderDate': None,
-#   'invoicePurchaseOrderNumber': None,
-#   'openingBalance': None,
-#   'paymentAmountBase': None,
-#   'paymentAmountDue': {
-#     'id': 91892846,
-#     'rectangle': {
-#       'x0': 495.408,
-#       'y0': 446.34213,
-#       'x1': 558.7743,
-#       'y1': 462.36838,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 495.408,
-#         'y0': 446.34213,
-#         'x1': 558.7743,
-#         'y1': 462.36838,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '₪ 1.00',
-#     'parsed': '1.00',
-#     'confidence': 0.676,
-#     'classificationConfidence': 0.676,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'hTyimjpc',
-#     'contentType': 'decimal',
-#     'parent': None
-#   },
-#   'paymentAmountPaid': None,
-#   'paymentAmountTax': None,
-#   'paymentAmountTotal': {
-#     'id': 91892847,
-#     'rectangle': {
-#       'x0': 533.8134,
-#       'y0': 338.91608,
-#       'x1': 559.73895,
-#       'y1': 345.76627,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 533.8134,
-#         'y0': 338.91608,
-#         'x1': 559.73895,
-#         'y1': 345.76627,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '₪ 1.00',
-#     'parsed': '1.00',
-#     'confidence': 0.659,
-#     'classificationConfidence': 0.659,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'jeMSNwCq',
-#     'contentType': 'decimal',
-#     'parent': None
-#   },
-#   'paymentDateDue': {
-#     'id': 91892848,
-#     'rectangle': {
-#       'x0': 293.07248,
-#       'y0': 231.73022,
-#       'x1': 360.4007,
-#       'y1': 241.91913,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 293.07248,
-#         'y0': 231.73022,
-#         'x1': 360.4007,
-#         'y1': 241.91913,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': '11/16/2023',
-#     'parsed': '2023-11-16',
-#     'confidence': 0.974,
-#     'classificationConfidence': 0.974,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'RmsWpucw',
-#     'contentType': 'date',
-#     'parent': None
-#   },
-#   'paymentDelivery': None,
-#   'paymentOtherCharges': None,
-#   'paymentReference': {
-#     'id': 91892849,
-#     'rectangle': {
-#       'x0': 279.5364,
-#       'y0': 518.45636,
-#       'x1': 353.57785,
-#       'y1': 526.21936,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 279.5364,
-#         'y0': 518.45636,
-#         'x1': 353.57785,
-#         'y1': 526.21936,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'INV/2023-00044',
-#     'parsed': 'INV/2023-00044',
-#     'confidence': 0.589,
-#     'classificationConfidence': 0.589,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'CZQkkTuw',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'paymentTerms': None,
-#   'supplierAddress': {
-#     'id': 91892850,
-#     'rectangle': {
-#       'x0': 495.23514,
-#       'y0': 88.51062,
-#       'x1': 565.8834,
-#       'y1': 126.529785,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 495.23514,
-#         'y0': 88.51062,
-#         'x1': 565.8834,
-#         'y1': 126.529785,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus',
-#     'parsed': {
-#       'formatted': None,
-#       'streetNumber': None,
-#       'street': None,
-#       'apartmentNumber': None,
-#       'city': None,
-#       'postalCode': None,
-#       'state': None,
-#       'country': None,
-#       'rawInput': 'Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus',
-#       'countryCode': None,
-#       'latitude': None,
-#       'longitude': None
-#     },
-#     'confidence': 0.979,
-#     'classificationConfidence': 0.979,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'HRTaEvcW',
-#     'contentType': 'location',
-#     'parent': None
-#   },
-#   'supplierBusinessNumber': {
-#     'id': 91892851,
-#     'rectangle': {
-#       'x0': 502.2946,
-#       'y0': 74.06183,
-#       'x1': 564.35254,
-#       'y1': 81.27167,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 502.2946,
-#         'y0': 74.06183,
-#         'x1': 564.35254,
-#         'y1': 81.27167,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'CY10440092L',
-#     'parsed': 'CY10440092L',
-#     'confidence': 0.924,
-#     'classificationConfidence': 0.924,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'rvshbPQZ',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'supplierCompanyName': {
-#     'id': 91892852,
-#     'rectangle': {
-#       'x0': 445.0864,
-#       'y0': 59.38983,
-#       'x1': 563.24133,
-#       'y1': 67.075134,
-#       'pageIndex': 0
-#     },
-#     'rectangles': [
-#       {
-#         'x0': 445.0864,
-#         'y0': 59.38983,
-#         'x1': 563.24133,
-#         'y1': 67.075134,
-#         'pageIndex': 0
-#       }
-#     ],
-#     'document': 'zJlGVIfW',
-#     'pageIndex': 0,
-#     'raw': 'BrainPack.io / Memetech ltd',
-#     'parsed': 'BrainPack.io / Memetech ltd',
-#     'confidence': 0.973,
-#     'classificationConfidence': 0.973,
-#     'textExtractionConfidence': 1.0,
-#     'isVerified': False,
-#     'isClientVerified': False,
-#     'isAutoVerified': False,
-#     'dataPoint': 'rFeFJcwy',
-#     'contentType': 'text',
-#     'parent': None
-#   },
-#   'supplierEmail': None,
-#   'supplierFax': None,
-#   'supplierPhoneNumber': None,
-#   'supplierVat': None,
-#   'supplierWebsite': None,
-#   'tables': None,
-#   'tablesBeta': [
-#     {
-#       'id': 91892853,
-#       'rectangle': {
-#         'x0': 30.501642223196722,
-#         'y0': 300.4959,
-#         'x1': 565.1140097768033,
-#         'y1': 319.1043097768033,
-#         'pageIndex': 0
-#       },
-#       'rectangles': [
-#         {
-#           'x0': 30.501642223196722,
-#           'y0': 300.4959,
-#           'x1': 565.1140097768033,
-#           'y1': 319.1043097768033,
-#           'pageIndex': 0
-#         }
-#       ],
-#       'document': 'zJlGVIfW',
-#       'pageIndex': 0,
-#       'raw': None,
-#       'parsed': {
-#         'rows': [
-#           {
-#             'id': 91892869,
-#             'rectangle': {
-#               'x0': 30.501642223196722,
-#               'y0': 300.4959,
-#               'x1': 565.1140097768033,
-#               'y1': 319.1043097768033,
-#               'pageIndex': 0
-#             },
-#             'rectangles': [
-#               {
-#                 'x0': 30.501642223196722,
-#                 'y0': 300.4959,
-#                 'x1': 565.1140097768033,
-#                 'y1': 319.1043097768033,
-#                 'pageIndex': 0
-#               }
-#             ],
-#             'document': 'zJlGVIfW',
-#             'pageIndex': 0,
-#             'raw': 'BrainPack Licensing - Base Cloud Server 1.00 Units 1.00 ₪ 1.00',
-#             'parsed': {
-#               'itemDescriptionBeta': {
-#                 'id': 91892871,
-#                 'rectangle': {
-#                   'x0': 35.658752,
-#                   'y0': 305.4959,
-#                   'x1': 193.48831,
-#                   'y1': 313.9472,
-#                   'pageIndex': 0
-#                 },
-#                 'rectangles': [
-#                   {
-#                     'x0': 35.658752,
-#                     'y0': 305.4959,
-#                     'x1': 193.48831,
-#                     'y1': 313.9472,
-#                     'pageIndex': 0
-#                   }
-#                 ],
-#                 'document': 'zJlGVIfW',
-#                 'pageIndex': 0,
-#                 'raw': 'BrainPack Licensing - Base Cloud Server',
-#                 'parsed': 'BrainPack Licensing - Base Cloud Server',
-#                 'confidence': 0.998,
-#                 'classificationConfidence': 0.998,
-#                 'textExtractionConfidence': 1.0,
-#                 'isVerified': False,
-#                 'isClientVerified': False,
-#                 'isAutoVerified': False,
-#                 'dataPoint': 'arJqZwjI',
-#                 'contentType': 'text',
-#                 'parent': 91892869
-#               },
-#               'itemTotalBeta': {
-#                 'id': 91892873,
-#                 'rectangle': {
-#                   'x0': 533.8134,
-#                   'y0': 305.55957,
-#                   'x1': 559.9569,
-#                   'y1': 312.4098,
-#                   'pageIndex': 0
-#                 },
-#                 'rectangles': [
-#                   {
-#                     'x0': 533.8134,
-#                     'y0': 305.55957,
-#                     'x1': 559.9569,
-#                     'y1': 312.4098,
-#                     'pageIndex': 0
-#                   }
-#                 ],
-#                 'document': 'zJlGVIfW',
-#                 'pageIndex': 0,
-#                 'raw': '₪ 1.00',
-#                 'parsed': '1.00',
-#                 'confidence': 0.878,
-#                 'classificationConfidence': 0.878,
-#                 'textExtractionConfidence': 1.0,
-#                 'isVerified': False,
-#                 'isClientVerified': False,
-#                 'isAutoVerified': False,
-#                 'dataPoint': 'KVMQbSOq',
-#                 'contentType': 'decimal',
-#                 'parent': 91892869
-#               },
-#               'itemUnitBeta': {
-#                 'id': 91892872,
-#                 'rectangle': {
-#                   'x0': 361.88202,
-#                   'y0': 305.55957,
-#                   'x1': 382.10928,
-#                   'y1': 312.35516,
-#                   'pageIndex': 0
-#                 },
-#                 'rectangles': [
-#                   {
-#                     'x0': 361.88202,
-#                     'y0': 305.55957,
-#                     'x1': 382.10928,
-#                     'y1': 312.35516,
-#                     'pageIndex': 0
-#                   }
-#                 ],
-#                 'document': 'zJlGVIfW',
-#                 'pageIndex': 0,
-#                 'raw': 'Units',
-#                 'parsed': 'Units',
-#                 'confidence': 0.707,
-#                 'classificationConfidence': 0.707,
-#                 'textExtractionConfidence': 1.0,
-#                 'isVerified': False,
-#                 'isClientVerified': False,
-#                 'isAutoVerified': False,
-#                 'dataPoint': 'xuRjCxVR',
-#                 'contentType': 'text',
-#                 'parent': 91892869
-#               },
-#               'itemQuantityBeta': {
-#                 'id': 91892874,
-#                 'rectangle': {
-#                   'x0': 342.66565,
-#                   'y0': 305.59595,
-#                   'x1': 359.2116,
-#                   'y1': 312.35516,
-#                   'pageIndex': 0
-#                 },
-#                 'rectangles': [
-#                   {
-#                     'x0': 342.66565,
-#                     'y0': 305.59595,
-#                     'x1': 359.2116,
-#                     'y1': 312.35516,
-#                     'pageIndex': 0
-#                   }
-#                 ],
-#                 'document': 'zJlGVIfW',
-#                 'pageIndex': 0,
-#                 'raw': '1.00',
-#                 'parsed': 1.0,
-#                 'confidence': 0.997,
-#                 'classificationConfidence': 0.997,
-#                 'textExtractionConfidence': 1.0,
-#                 'isVerified': False,
-#                 'isClientVerified': False,
-#                 'isAutoVerified': False,
-#                 'dataPoint': 'LoylITwn',
-#                 'contentType': 'float',
-#                 'parent': 91892869
-#               },
-#               'itemUnitPriceBeta': {
-#                 'id': 91892870,
-#                 'rectangle': {
-#                   'x0': 454.2582,
-#                   'y0': 305.59595,
-#                   'x1': 470.80417,
-#                   'y1': 312.35516,
-#                   'pageIndex': 0
-#                 },
-#                 'rectangles': [
-#                   {
-#                     'x0': 454.2582,
-#                     'y0': 305.59595,
-#                     'x1': 470.80417,
-#                     'y1': 312.35516,
-#                     'pageIndex': 0
-#                   }
-#                 ],
-#                 'document': 'zJlGVIfW',
-#                 'pageIndex': 0,
-#                 'raw': '1.00',
-#                 'parsed': '1.00',
-#                 'confidence': 0.997,
-#                 'classificationConfidence': 0.997,
-#                 'textExtractionConfidence': 1.0,
-#                 'isVerified': False,
-#                 'isClientVerified': False,
-#                 'isAutoVerified': False,
-#                 'dataPoint': 'EJQqPpQh',
-#                 'contentType': 'decimal',
-#                 'parent': 91892869
-#               }
-#             },
-#             'confidence': None,
-#             'classificationConfidence': None,
-#             'textExtractionConfidence': 1.0,
-#             'isVerified': False,
-#             'isClientVerified': False,
-#             'isAutoVerified': False,
-#             'dataPoint': 'kCodJrel',
-#             'contentType': 'group',
-#             'parent': 91892853
-#           }
-#         ]
-#       },
-#       'confidence': None,
-#       'classificationConfidence': None,
-#       'textExtractionConfidence': 1.0,
-#       'isVerified': False,
-#       'isClientVerified': False,
-#       'isAutoVerified': False,
-#       'dataPoint': 'ftkJQmWB',
-#       'contentType': 'table',
-#       'parent': None
-#     }
-#   ],
-#   'rawText': 'Client Name \nEtamar Company, Etamar \nTax ID 1234567 Tes city Tarapacá 123213 Chile \nINVOICE \n# 2023-00044 \nInvoice Date: \n11/16/2023 \nDue Date: \n11/16/2023 \nBrainPack.io / Memetech ltd Tax ID CY10440092L Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus \nSubject: \nS00032 \nItem & Description Quantity Unit Price Sub-Total \nBrainPack Licensing - Base Cloud Server 1.00 Units 1.00 ₪ 1.00 Total IncludingTaxes ₪ 1.00 \nBank info Account Name : BrainPack.io / Memetech ltd Account Number: asd Bank : asd IBAN : sdas Swift (BIC) : asd ₪ 1.00 \nPlease use the following communication for your payment : INV/2023-00044'
-# }
+_logger = logging.getLogger(__name__)
 
-test_dict =  {
-            "bankAccountNumber": None,
-            "bankBsb": None,
-            "bankIban": None,
-            "bankSortCode": None,
-            "bankSwift": None,
-            "bpayBillerCode": None,
-            "bpayReference": None,
-            "currencyCode": {
-                "id": 91892883,
-                "rectangle": None,
-                "rectangles": [
-                    
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "ILS",
-                "parsed": {
-                    "id": 69,
-                    "label": "ILS",
-                    "value": "ILS",
-                    "synonyms": None,
-                    "collection": None,
-                    "description": None,
-                    "organization": None
-                },
-                "confidence": None,
-                "classificationConfidence": None,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "JZguvEaB",
-                "contentType": "enum",
-                "parent": None
-            },
-            "customerBillingAddress": {
-                "id": 91892841,
-                "rectangle": {
-                    "x0": 28.938334,
-                    "y0": 220.9361,
-                    "x1": 120.91979,
-                    "y1": 257.16968,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 28.938334,
-                        "y0": 220.9361,
-                        "x1": 120.91979,
-                        "y1": 257.16968,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "Tes city Tarapacá 123213 Chile",
-                "parsed": {
-                    "formatted": None,
-                    "streetNumber": None,
-                    "street": None,
-                    "apartmentNumber": None,
-                    "city": None,
-                    "postalCode": None,
-                    "state": None,
-                    "country": None,
-                    "rawInput": "Tes city Tarapacá 123213 Chile",
-                    "countryCode": None,
-                    "latitude": None,
-                    "longitude": None
-                },
-                "confidence": 0.964,
-                "classificationConfidence": 0.964,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "IIrmUFpr",
-                "contentType": "location",
-                "parent": None
-            },
-            "customerBusinessNumber": {
-                "id": 91892842,
-                "rectangle": {
-                    "x0": 59.500137,
-                    "y0": 206.29315,
-                    "x1": 97.49604,
-                    "y1": 213.50299,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 59.500137,
-                        "y0": 206.29315,
-                        "x1": 97.49604,
-                        "y1": 213.50299,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "1234567",
-                "parsed": "1234567",
-                "confidence": 0.902,
-                "classificationConfidence": 0.902,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "sQTrimjN",
-                "contentType": "text",
-                "parent": None
-            },
-            "customerCompanyName": None,
-            "customerContactName": {
-                "id": 92807947,
-                "rectangle": {
-                    "x0": 131.24352331606218,
-                    "y0": 187.27250647668396,
-                    "x1": 177.04663212435233,
-                    "y1": 201.80618523316062,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 131.24352331606218,
-                        "y0": 187.27250647668396,
-                        "x1": 177.04663212435233,
-                        "y1": 201.80618523316062,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "Etamar",
-                "parsed": "Etamar",
-                "confidence": None,
-                "classificationConfidence": None,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "lmWEjOYu",
-                "contentType": "text",
-                "parent": None
-            },
-            "customerDeliveryAddress": None,
-            "customerEmail": {
-                "id": 92045419,
-                "rectangle": {
-                    "x0": 59.4559585492228,
-                    "y0": 205.3295012953368,
-                    "x1": 98.65284974093265,
-                    "y1": 212.81654792746116,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 59.4559585492228,
-                        "y0": 205.3295012953368,
-                        "x1": 98.65284974093265,
-                        "y1": 212.81654792746116,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "1234567",
-                "parsed": "1234567",
-                "confidence": None,
-                "classificationConfidence": None,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "GIpfNtwK",
-                "contentType": "text",
-                "parent": None
-            },
-            "customerNumber": None,
-            "customerPhoneNumber": {
-                "id": 92768173,
-                "rectangle": {
-                    "x0": 59.01554404145078,
-                    "y0": 205.7699158031088,
-                    "x1": 97.7720207253886,
-                    "y1": 215.8994494818653,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 59.01554404145078,
-                        "y0": 205.7699158031088,
-                        "x1": 97.7720207253886,
-                        "y1": 215.8994494818653,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "1234567",
-                "parsed": "1234567",
-                "confidence": None,
-                "classificationConfidence": None,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "GVFfAmte",
-                "contentType": "text",
-                "parent": None
-            },
-            "customerVat": {
-                "id": 92769882,
-                "rectangle": {
-                    "x0": 59.01554404145078,
-                    "y0": 205.3295012953368,
-                    "x1": 101.7357512953368,
-                    "y1": 214.1377914507772,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 59.01554404145078,
-                        "y0": 205.3295012953368,
-                        "x1": 101.7357512953368,
-                        "y1": 214.1377914507772,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "1234567",
-                "parsed": "1234567",
-                "confidence": None,
-                "classificationConfidence": None,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "KfVWujnA",
-                "contentType": "text",
-                "parent": None
-            },
-            "invoiceDate": {
-                "id": 91892844,
-                "rectangle": {
-                    "x0": 293.07248,
-                    "y0": 188.67004,
-                    "x1": 360.4007,
-                    "y1": 198.85895,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 293.07248,
-                        "y0": 188.67004,
-                        "x1": 360.4007,
-                        "y1": 198.85895,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "11/16/2023",
-                "parsed": "2023-11-16",
-                "confidence": 0.976,
-                "classificationConfidence": 0.976,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "sRakysMP",
-                "contentType": "date",
-                "parent": None
-            },
-            "invoiceNumber": {
-                "id": 91892845,
-                "rectangle": {
-                    "x0": 199.86053,
-                    "y0": 80.26367,
-                    "x1": 283.4602,
-                    "y1": 91.620056,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 199.86053,
-                        "y0": 80.26367,
-                        "x1": 283.4602,
-                        "y1": 91.620056,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "2023-00044",
-                "parsed": "2023-00044",
-                "confidence": 0.976,
-                "classificationConfidence": 0.976,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "bWFyBeNU",
-                "contentType": "text",
-                "parent": None
-            },
-            "invoiceOrderDate": None,
-            "invoicePurchaseOrderNumber": None,
-            "openingBalance": None,
-            "paymentAmountBase": None,
-            "paymentAmountDue": {
-                "id": 91892846,
-                "rectangle": {
-                    "x0": 495.408,
-                    "y0": 446.34213,
-                    "x1": 558.7743,
-                    "y1": 462.36838,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 495.408,
-                        "y0": 446.34213,
-                        "x1": 558.7743,
-                        "y1": 462.36838,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "₪ 1.00",
-                "parsed": "1.00",
-                "confidence": 0.676,
-                "classificationConfidence": 0.676,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "hTyimjpc",
-                "contentType": "decimal",
-                "parent": None
-            },
-            "paymentAmountPaid": None,
-            "paymentAmountTax": None,
-            "paymentAmountTotal": {
-                "id": 91892847,
-                "rectangle": {
-                    "x0": 533.8134,
-                    "y0": 338.91608,
-                    "x1": 559.73895,
-                    "y1": 345.76627,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 533.8134,
-                        "y0": 338.91608,
-                        "x1": 559.73895,
-                        "y1": 345.76627,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "₪ 1.00",
-                "parsed": "1.00",
-                "confidence": 0.659,
-                "classificationConfidence": 0.659,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "jeMSNwCq",
-                "contentType": "decimal",
-                "parent": None
-            },
-            "paymentDateDue": {
-                "id": 91892848,
-                "rectangle": {
-                    "x0": 293.07248,
-                    "y0": 231.73022,
-                    "x1": 360.4007,
-                    "y1": 241.91913,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 293.07248,
-                        "y0": 231.73022,
-                        "x1": 360.4007,
-                        "y1": 241.91913,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "11/16/2023",
-                "parsed": "2023-11-16",
-                "confidence": 0.974,
-                "classificationConfidence": 0.974,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "RmsWpucw",
-                "contentType": "date",
-                "parent": None
-            },
-            "paymentDelivery": None,
-            "paymentOtherCharges": None,
-            "paymentReference": {
-                "id": 91892849,
-                "rectangle": {
-                    "x0": 279.5364,
-                    "y0": 518.45636,
-                    "x1": 353.57785,
-                    "y1": 526.21936,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 279.5364,
-                        "y0": 518.45636,
-                        "x1": 353.57785,
-                        "y1": 526.21936,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "INV/2023-00044",
-                "parsed": "INV/2023-00044",
-                "confidence": 0.589,
-                "classificationConfidence": 0.589,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "CZQkkTuw",
-                "contentType": "text",
-                "parent": None
-            },
-            "paymentTerms": None,
-            "supplierAddress": {
-                "id": 91892850,
-                "rectangle": {
-                    "x0": 495.23514,
-                    "y0": 88.51062,
-                    "x1": 565.8834,
-                    "y1": 126.529785,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 495.23514,
-                        "y0": 88.51062,
-                        "x1": 565.8834,
-                        "y1": 126.529785,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus",
-                "parsed": {
-                    "formatted": None,
-                    "streetNumber": None,
-                    "street": None,
-                    "apartmentNumber": None,
-                    "city": None,
-                    "postalCode": None,
-                    "state": None,
-                    "country": None,
-                    "rawInput": "Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus",
-                    "countryCode": None,
-                    "latitude": None,
-                    "longitude": None
-                },
-                "confidence": 0.979,
-                "classificationConfidence": 0.979,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "HRTaEvcW",
-                "contentType": "location",
-                "parent": None
-            },
-            "supplierBusinessNumber": {
-                "id": 91892851,
-                "rectangle": {
-                    "x0": 502.2946,
-                    "y0": 74.06183,
-                    "x1": 564.35254,
-                    "y1": 81.27167,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 502.2946,
-                        "y0": 74.06183,
-                        "x1": 564.35254,
-                        "y1": 81.27167,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "CY10440092L",
-                "parsed": "CY10440092L",
-                "confidence": 0.924,
-                "classificationConfidence": 0.924,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "rvshbPQZ",
-                "contentType": "text",
-                "parent": None
-            },
-            "supplierCompanyName": {
-                "id": 91892852,
-                "rectangle": {
-                    "x0": 445.0864,
-                    "y0": 59.38983,
-                    "x1": 563.24133,
-                    "y1": 67.075134,
-                    "pageIndex": 0
-                },
-                "rectangles": [
-                    {
-                        "x0": 445.0864,
-                        "y0": 59.38983,
-                        "x1": 563.24133,
-                        "y1": 67.075134,
-                        "pageIndex": 0
-                    }
-                ],
-                "document": "zJlGVIfW",
-                "pageIndex": 0,
-                "raw": "BrainPack.io / Memetech ltd",
-                "parsed": "BrainPack.io / Memetech ltd",
-                "confidence": 0.973,
-                "classificationConfidence": 0.973,
-                "textExtractionConfidence": 1.0,
-                "isVerified": False,
-                "isClientVerified": False,
-                "isAutoVerified": False,
-                "dataPoint": "rFeFJcwy",
-                "contentType": "text",
-                "parent": None
-            },
-            "supplierEmail": None,
-            "supplierFax": None,
-            "supplierPhoneNumber": None,
-            "supplierVat": None,
-            "supplierWebsite": None,
-            "tables": None,
-            "tablesBeta": [
-                {
-                    "id": 91892853,
-                    "rectangle": {
-                        "x0": 30.501642223196722,
-                        "y0": 300.4959,
-                        "x1": 565.1140097768033,
-                        "y1": 319.1043097768033,
-                        "pageIndex": 0
-                    },
-                    "rectangles": [
-                        {
-                            "x0": 30.501642223196722,
-                            "y0": 300.4959,
-                            "x1": 565.1140097768033,
-                            "y1": 319.1043097768033,
-                            "pageIndex": 0
-                        }
-                    ],
-                    "document": "zJlGVIfW",
-                    "pageIndex": 0,
-                    "raw": None,
-                    "parsed": {
-                        "rows": [
-                            {
-                                "id": 91892869,
-                                "rectangle": {
-                                    "x0": 30.501642223196722,
-                                    "y0": 300.4959,
-                                    "x1": 565.1140097768033,
-                                    "y1": 319.1043097768033,
-                                    "pageIndex": 0
-                                },
-                                "rectangles": [
-                                    {
-                                        "x0": 30.501642223196722,
-                                        "y0": 300.4959,
-                                        "x1": 565.1140097768033,
-                                        "y1": 319.1043097768033,
-                                        "pageIndex": 0
-                                    }
-                                ],
-                                "document": "zJlGVIfW",
-                                "pageIndex": 0,
-                                "raw": "BrainPack Licensing - Base Cloud Server 1.00 Units 1.00 ₪ 1.00",
-                                "parsed": {
-                                    "itemDescriptionBeta": {
-                                        "id": 91892871,
-                                        "rectangle": {
-                                            "x0": 35.658752,
-                                            "y0": 305.4959,
-                                            "x1": 193.48831,
-                                            "y1": 313.9472,
-                                            "pageIndex": 0
-                                        },
-                                        "rectangles": [
-                                            {
-                                                "x0": 35.658752,
-                                                "y0": 305.4959,
-                                                "x1": 193.48831,
-                                                "y1": 313.9472,
-                                                "pageIndex": 0
-                                            }
-                                        ],
-                                        "document": "zJlGVIfW",
-                                        "pageIndex": 0,
-                                        "raw": "BrainPack Licensing - Base Cloud Server",
-                                        "parsed": "BrainPack Licensing - Base Cloud Server11",
-                                        "confidence": 0.998,
-                                        "classificationConfidence": 0.998,
-                                        "textExtractionConfidence": 1.0,
-                                        "isVerified": False,
-                                        "isClientVerified": False,
-                                        "isAutoVerified": False,
-                                        "dataPoint": "arJqZwjI",
-                                        "contentType": "text",
-                                        "parent": 91892869
-                                    },
-                                    "itemTotalBeta": {
-                                        "id": 91892873,
-                                        "rectangle": {
-                                            "x0": 533.8134,
-                                            "y0": 305.55957,
-                                            "x1": 559.9569,
-                                            "y1": 312.4098,
-                                            "pageIndex": 0
-                                        },
-                                        "rectangles": [
-                                            {
-                                                "x0": 533.8134,
-                                                "y0": 305.55957,
-                                                "x1": 559.9569,
-                                                "y1": 312.4098,
-                                                "pageIndex": 0
-                                            }
-                                        ],
-                                        "document": "zJlGVIfW",
-                                        "pageIndex": 0,
-                                        "raw": "₪ 1.00",
-                                        "parsed": "1.00",
-                                        "confidence": 0.878,
-                                        "classificationConfidence": 0.878,
-                                        "textExtractionConfidence": 1.0,
-                                        "isVerified": False,
-                                        "isClientVerified": False,
-                                        "isAutoVerified": False,
-                                        "dataPoint": "KVMQbSOq",
-                                        "contentType": "decimal",
-                                        "parent": 91892869
-                                    },
-                                    "itemUnitBeta": {
-                                        "id": 91892872,
-                                        "rectangle": {
-                                            "x0": 361.88202,
-                                            "y0": 305.55957,
-                                            "x1": 382.10928,
-                                            "y1": 312.35516,
-                                            "pageIndex": 0
-                                        },
-                                        "rectangles": [
-                                            {
-                                                "x0": 361.88202,
-                                                "y0": 305.55957,
-                                                "x1": 382.10928,
-                                                "y1": 312.35516,
-                                                "pageIndex": 0
-                                            }
-                                        ],
-                                        "document": "zJlGVIfW",
-                                        "pageIndex": 0,
-                                        "raw": "Units",
-                                        "parsed": "Units",
-                                        "confidence": 0.707,
-                                        "classificationConfidence": 0.707,
-                                        "textExtractionConfidence": 1.0,
-                                        "isVerified": False,
-                                        "isClientVerified": False,
-                                        "isAutoVerified": False,
-                                        "dataPoint": "xuRjCxVR",
-                                        "contentType": "text",
-                                        "parent": 91892869
-                                    },
-                                    "itemQuantityBeta": {
-                                        "id": 91892874,
-                                        "rectangle": {
-                                            "x0": 342.66565,
-                                            "y0": 305.59595,
-                                            "x1": 359.2116,
-                                            "y1": 312.35516,
-                                            "pageIndex": 0
-                                        },
-                                        "rectangles": [
-                                            {
-                                                "x0": 342.66565,
-                                                "y0": 305.59595,
-                                                "x1": 359.2116,
-                                                "y1": 312.35516,
-                                                "pageIndex": 0
-                                            }
-                                        ],
-                                        "document": "zJlGVIfW",
-                                        "pageIndex": 0,
-                                        "raw": "1.00",
-                                        "parsed": 1.0,
-                                        "confidence": 0.997,
-                                        "classificationConfidence": 0.997,
-                                        "textExtractionConfidence": 1.0,
-                                        "isVerified": False,
-                                        "isClientVerified": False,
-                                        "isAutoVerified": False,
-                                        "dataPoint": "LoylITwn",
-                                        "contentType": "float",
-                                        "parent": 91892869
-                                    },
-                                    "itemUnitPriceBeta": {
-                                        "id": 91892870,
-                                        "rectangle": {
-                                            "x0": 454.2582,
-                                            "y0": 305.59595,
-                                            "x1": 470.80417,
-                                            "y1": 312.35516,
-                                            "pageIndex": 0
-                                        },
-                                        "rectangles": [
-                                            {
-                                                "x0": 454.2582,
-                                                "y0": 305.59595,
-                                                "x1": 470.80417,
-                                                "y1": 312.35516,
-                                                "pageIndex": 0
-                                            }
-                                        ],
-                                        "document": "zJlGVIfW",
-                                        "pageIndex": 0,
-                                        "raw": "1.00",
-                                        "parsed": "1.00",
-                                        "confidence": 0.997,
-                                        "classificationConfidence": 0.997,
-                                        "textExtractionConfidence": 1.0,
-                                        "isVerified": False,
-                                        "isClientVerified": False,
-                                        "isAutoVerified": False,
-                                        "dataPoint": "EJQqPpQh",
-                                        "contentType": "decimal",
-                                        "parent": 91892869
-                                    }
-                                },
-                                "confidence": None,
-                                "classificationConfidence": None,
-                                "textExtractionConfidence": 1.0,
-                                "isVerified": False,
-                                "isClientVerified": False,
-                                "isAutoVerified": False,
-                                "dataPoint": "kCodJrel",
-                                "contentType": "group",
-                                "parent": 91892853
-                            }
-                        ]
-                    },
-                    "confidence": None,
-                    "classificationConfidence": None,
-                    "textExtractionConfidence": 1.0,
-                    "isVerified": False,
-                    "isClientVerified": False,
-                    "isAutoVerified": False,
-                    "dataPoint": "ftkJQmWB",
-                    "contentType": "table",
-                    "parent": None
-                }
-            ],
-            "rawText": "Client Name \nEtamar Company, Etamar \nTax ID 1234567 Tes city Tarapacá 123213 Chile \nINVOICE \n# 2023-00044 \nInvoice Date: \n11/16/2023 \nDue Date: \n11/16/2023 \nBrainPack.io / Memetech ltd Tax ID CY10440092L Agiou Pavlou 61 Agios Andreas Nicosia, Cyprus \nSubject: \nS00032 \nItem & Description Quantity Unit Price Sub-Total \nBrainPack Licensing - Base Cloud Server 1.00 Units 1.00 ₪ 1.00 Total IncludingTaxes ₪ 1.00 \nBank info Account Name : BrainPack.io / Memetech ltd Account Number: asd Bank : asd IBAN : sdas Swift (BIC) : asd ₪ 1.00 \nPlease use the following communication for your payment : INV/2023-00044"
-        }
 class AffindaDocument(models.Model):
     _description = 'Affinda Document'
     _name = 'affinda.document'
     _inherit = ['mail.thread','mail.activity.mixin']
     _rec_name = 'file_name'
+    _order = 'write_date desc, create_date desc'
 
     affinda_workspace = fields.Many2one('affinda.workspace', 'Workspace')
     affinda_workspace_collection = fields.Many2one('affinda.workspace.collection', 'collection')
@@ -1637,6 +148,17 @@ class AffindaDocument(models.Model):
         phone = False
         vat = False
 
+        invoice_partner_id = False
+
+        delivery_city = False
+        delivery_street2 = ''
+        delivery_zip = False
+        delivery_state_id = False
+        delivery_country_id = False
+        delivery_street = False
+
+        delivery_partner_id = False
+
         if res_dict.get('customerVat'):
             if 'raw' in res_dict.get('customerVat') and res_dict.get('customerVat').get('raw'):
                 vat = res_dict.get('customerVat').get('raw')
@@ -1686,7 +208,43 @@ class AffindaDocument(models.Model):
             if 'raw' in res_dict.get('customerBillingAddress'):
                 street = res_dict.get('customerBillingAddress').get('raw')
 
+        if res_dict.get('customerDeliveryAddress'):
+            if 'parsed' in res_dict.get('customerDeliveryAddress'):
+                location_dict = res_dict.get('customerDeliveryAddress').get('parsed')
 
+            if location_dict.get('streetNumber'):
+                delivery_street2 = str(delivery_street2) + location_dict.get('streetNumber') + ', '
+            if location_dict.get('street'):
+                delivery_street2 = str(delivery_street2) + location_dict.get('street') + ' '
+
+            if location_dict.get('apartmentNumber'):
+                delivery_street2 = str(delivery_street2) + location_dict.get('apartmentNumber') + ', '
+
+            if location_dict.get('city'):
+                delivery_city = location_dict.get('city')
+
+            if location_dict.get('postalCode'):
+                delivery_zip = location_dict.get('postalCode')
+
+            if location_dict.get('state'):
+                state = self.env['res.country.state'].sudo().search([('name', '=', location_dict.get('state'))],
+                                                                    limit=1)
+                if state:
+                    delivery_state_id = state.id
+
+            if location_dict.get('country'):
+                country = self.env['res.country'].sudo().search([('name', '=', location_dict.get('country'))],
+                                                                limit=1)
+                if country:
+                    delivery_country_id = country.id
+            if location_dict.get('countryCode'):
+                country = self.env['res.country'].sudo().search([('code', '=', location_dict.get('countryCode'))],
+                                                                limit=1)
+                if country:
+                    delivery_country_id = country.id
+
+            if 'raw' in res_dict.get('customerDeliveryAddress'):
+                delivery_street = res_dict.get('customerDeliveryAddress').get('raw')
 
         if res_dict.get('customerCompanyName') and not res_dict.get('customerContactName'):
 
@@ -1798,6 +356,49 @@ class AffindaDocument(models.Model):
 
                 partner = self.env['res.partner'].sudo().create(partner_vals)
 
+        if partner:
+            invoice_partner_id = self.env['res.partner'].sudo().search([('type','=','invoice'),('parent_id','=',partner.id)],limit=1)
+
+            if city or street2 or zip or state_id or country_id or street:
+                invoice_vals = {
+                    'city': city,
+                    'street2': street2,
+                    'zip': zip,
+                    'state_id': state_id,
+                    'country_id': country_id,
+                    'street': street,
+                    'type': 'invoice',
+                }
+                if invoice_partner_id:
+                    invoice_partner_id.write(invoice_vals)
+                else:
+                    invoice_vals.update({
+                        'parent_id' : partner.id,
+                    })
+                    self.env['res.partner'].sudo().create(invoice_vals)
+
+            delivery_partner_id = self.env['res.partner'].sudo().search(
+                [('type', '=', 'delivery'), ('parent_id', '=', partner.id)], limit=1)
+
+            if delivery_city or delivery_street2 or delivery_zip or delivery_state_id or delivery_country_id or delivery_street:
+                delivery_vals = {
+                    'city': delivery_city,
+                    'street2': delivery_street2,
+                    'zip': delivery_zip,
+                    'state_id': delivery_state_id,
+                    'country_id': delivery_country_id,
+                    'street': delivery_street,
+                    'type': 'delivery',
+                }
+
+                if delivery_partner_id:
+                    delivery_partner_id.write(delivery_vals)
+                else:
+                    delivery_vals.update({
+                        'parent_id' : partner.id,
+                    })
+                    self.env['res.partner'].sudo().create(delivery_vals)
+
         return partner
 
     def parepare_move_line(self, res_dict):
@@ -1809,11 +410,15 @@ class AffindaDocument(models.Model):
                         for row in tablesBetaData.get('parsed').get('rows'):
                             if 'parsed' in row and row.get('parsed'):
                                 parsed_dict = row.get('parsed')
-                                if 'itemDescriptionBeta' in parsed_dict and parsed_dict.get('itemDescriptionBeta') and 'itemQuantityBeta' in parsed_dict and parsed_dict.get('itemQuantityBeta'):
+                                if 'itemDescriptionBeta' in parsed_dict and parsed_dict.get('itemDescriptionBeta'):
                                     product_name = parsed_dict.get('itemDescriptionBeta').get('parsed')
                                     product = self.env['product.product'].sudo().search([('name','=',product_name)])
                                     product_uom = False
                                     product_price = 1
+                                    itemQuantityBeta = 1
+
+                                    if 'itemQuantityBeta' in parsed_dict and parsed_dict.get('itemQuantityBeta'):
+                                        itemQuantityBeta = parsed_dict.get('itemQuantityBeta').get('parsed')
 
                                     if 'itemUnitBeta' in parsed_dict and parsed_dict.get('itemUnitBeta'):
                                         product_uom_id = self.env['uom.uom'].sudo().search([('name','=',parsed_dict.get('itemUnitBeta').get('parsed'))])
@@ -1835,9 +440,11 @@ class AffindaDocument(models.Model):
                                         product = self.env['product.product'].sudo().create(product_vals)
 
                                     tax_ids = []
+
+
                                     if 'itemTaxRateBeta' in parsed_dict and parsed_dict.get('itemTaxRateBeta'):
                                         tax = False
-                                        if '%' in parsed_dict.get('itemTaxRateBeta').get('parsed'):
+                                        if '%' in parsed_dict.get('itemTaxRateBeta').get('raw'):
                                             lst_tax = re.findall(r'\b\d+\b',
                                                                  parsed_dict.get('itemTaxRateBeta').get('parsed'))
                                             if lst_tax:
@@ -1847,14 +454,14 @@ class AffindaDocument(models.Model):
                                                     tax = self.env['account.tax'].sudo().search([('amount','=',float(tax_amount)),('type_tax_use','=','sale'),('amount_type','=','percent'),('company_id','=',self.company_id.id)])
                                                     if not tax:
                                                         tax = self.env['account.tax'].sudo().create({
-                                                            'name' : 'Tax ' + parsed_dict.get('itemTaxRateBeta').get('parsed'),
+                                                            'name' : 'Tax ' + parsed_dict.get('itemTaxRateBeta').get('raw'),
                                                             'amount_type' : 'percent',
                                                             'type_tax_use' : 'sale',
                                                             'amount' : float(tax_amount),
                                                             'company_id': self.company_id.id
                                                         })
                                         else:
-                                            lst_tax = re.findall(r'\b\d+\b', parsed_dict.get('itemTaxRateBeta').get('parsed'))
+                                            lst_tax = re.findall(r'\b\d+\b', parsed_dict.get('itemTaxRateBeta').get('raw'))
                                             if lst_tax:
                                                 tax_amount = lst_tax[0]
                                                 if tax_amount:
@@ -1865,7 +472,7 @@ class AffindaDocument(models.Model):
                                                     if not tax:
                                                         tax = self.env['account.tax'].sudo().create({
                                                             'name': 'Tax ' + parsed_dict.get('itemTaxRateBeta').get(
-                                                                'parsed'),
+                                                                'raw'),
                                                             'amount_type': 'fixed',
                                                             'type_tax_use': 'sale',
                                                             'amount': float(tax_amount),
@@ -1879,10 +486,66 @@ class AffindaDocument(models.Model):
                                         'price_unit': product_price,
                                         'product_uom_id': product_uom or product.uom_id.id,
                                         'tax_ids' : tax_ids,
-                                        'quantity' : parsed_dict.get('itemQuantityBeta').get('parsed'),
+                                        'quantity' : itemQuantityBeta,
                                     }
 
                                     move_lines.append(line_val)
+
+        paymentAmountTax = False
+        if 'paymentAmountTax' in res_dict and res_dict.get('paymentAmountTax'):
+            if '%' in res_dict.get('paymentAmountTax').get('raw'):
+                lst_tax = res_dict.get('paymentAmountTax').get('parsed')
+                if lst_tax:
+                    tax_amount = lst_tax
+                    # tax_amount = parsed_dict.get('itemTaxRateBeta').get('parsed').replace('%','')
+                    if tax_amount:
+                        paymentAmountTax = self.env['account.tax'].sudo().search(
+                            [('amount', '=', float(tax_amount)), ('type_tax_use', '=', 'sale'),
+                             ('amount_type', '=', 'percent'), ('company_id', '=', self.company_id.id)],limit=1)
+                        if not paymentAmountTax:
+                            paymentAmountTax = self.env['account.tax'].sudo().create({
+                                'name': 'Tax ' + res_dict.get('paymentAmountTax').get('raw'),
+                                'amount_type': 'percent',
+                                'type_tax_use': 'sale',
+                                'amount': float(tax_amount),
+                                'company_id': self.company_id.id
+                            })
+                if paymentAmountTax:
+                    for line in move_lines:
+                        line_tax_ids = line.get('tax_ids') or []
+                        line_tax_ids.append((4, paymentAmountTax.id))
+                        line.update({'tax_ids': line_tax_ids})
+            else:
+                lst_tax = res_dict.get('paymentAmountTax').get('parsed')
+                if lst_tax:
+                    tax_amount = float(lst_tax)
+                    if tax_amount:
+                        total = sum([line.get('price_unit')*line.get('quantity') for line in move_lines])
+                        if total:
+                            for line in move_lines:
+                                sub_total = line.get('price_unit')*line.get('quantity')
+                                sub_total_per = (sub_total*100)/total
+
+                                tax_amt = ((sub_total_per*tax_amount)/100)/line.get('quantity')
+
+                                paymentAmountTax = self.env['account.tax'].sudo().search(
+                                    [('amount', '=', float(tax_amt)),
+                                     ('type_tax_use', '=', 'sale'),
+                                     ('amount_type', '=', 'fixed'), ('company_id', '=', self.company_id.id)],limit=1)
+
+                                if not paymentAmountTax:
+                                    paymentAmountTax = self.env['account.tax'].sudo().create({
+                                        'name': 'Tax ' + str(tax_amt),
+                                        'amount_type': 'fixed',
+                                        'type_tax_use': 'sale',
+                                        'amount': float(tax_amt),
+                                        'company_id': self.company_id.id
+                                    })
+                                if paymentAmountTax:
+                                    line_tax_ids = line.get('tax_ids') or []
+                                    line_tax_ids.append((4, paymentAmountTax.id))
+                                    line.update({'tax_ids': line_tax_ids})
+
         return move_lines
 
     def action_create_invoice(self):
@@ -1951,7 +614,7 @@ class AffindaDocument(models.Model):
                 base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
                 attch_url = base_url + "/web/content/" + str(self.attachment_id.id)
-
+                _logger.info('Url >>>... %s ',attch_url)
                 payload = {
                     'url' : attch_url,
                     'collection' : self.affinda_workspace_collection.identifier,
