@@ -21,9 +21,10 @@
                     </div>
                     <group>
                         <field name="name" required="1" attrs="{'readonly': [('identifier','!=',False)]}"/>
-                        <field name="avatar" widget="image" attrs="{'readonly': [('identifier','!=',False)]}"/>
+                        <field name="avatar" widget="image" attrs="{'readonly': [('identifier','!=',False)]}" invisible="1"/>
                         <field name="identifier" readonly="1"/>
                         <field name="resthookSignatureKey" readonly="1"/>
+                        <field name="uploaded_doc_count" invisible="1"/>
                     </group>
                 </sheet>
             </form>

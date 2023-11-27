@@ -43,7 +43,7 @@ class AffindaDocument(models.Model):
 
     def open_credit_move(self):
         credits = self.mapped('move_id')
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_refund_type')
+        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_in_refund_type')
         if len(credits) > 1:
             action['domain'] = [('id', 'in', credits.ids)]
         elif len(credits) == 1:
@@ -57,14 +57,14 @@ class AffindaDocument(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
 
         context = {
-            'default_move_type': 'out_refund',
+            'default_move_type': 'in_refund',
         }
         action['context'] = context
         return action
 
     def open_receipt_move(self):
         receipts = self.mapped('move_id')
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_receipt_type')
+        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_in_receipt_type')
         if len(receipts) > 1:
             action['domain'] = [('id', 'in', receipts.ids)]
         elif len(receipts) == 1:
@@ -78,14 +78,14 @@ class AffindaDocument(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
 
         context = {
-            'default_move_type': 'out_receipt',
+            'default_move_type': 'in_receipt',
         }
         action['context'] = context
         return action
 
     def open_invoice_move(self):
         invoices = self.mapped('move_id')
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
+        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_in_invoice_type')
         if len(invoices) > 1:
             action['domain'] = [('id', 'in', invoices.ids)]
         elif len(invoices) == 1:
@@ -99,7 +99,7 @@ class AffindaDocument(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
 
         context = {
-            'default_move_type': 'out_invoice',
+            'default_move_type': 'in_invoice',
         }
         action['context'] = context
         return action
@@ -110,15 +110,16 @@ class AffindaDocument(models.Model):
     def create(self, vals):
         res = super(AffindaDocument, self).create(vals)
         for rec in res:
-            attachment = self.env['ir.attachment'].sudo().create({
-                 'name': rec.file_name,
-                'datas': rec.file,
-                'type': 'binary',
-                'res_model':'affinda.document',
-                'res_id':rec.id,
-            })
-            if attachment:
-                res.attachment_id = attachment.id
+            if not rec.attachment_id:
+                attachment = self.env['ir.attachment'].sudo().create({
+                     'name': rec.file_name,
+                    'datas': rec.file,
+                    'type': 'binary',
+                    'res_model':'affinda.document',
+                    'res_id':rec.id,
+                })
+                if attachment:
+                    rec.attachment_id = attachment.id
         return res
 
     def write(self, vals):
@@ -570,18 +571,18 @@ class AffindaDocument(models.Model):
             invoice_date_due = res_dict.get('paymentDateDue').get('parsed')
 
         move_vals = {
+            'affinda_move' : True,
             'partner_id' : partner.id,
             'invoice_date' : invoice_date,
             'invoice_date_due' : invoice_date_due,
             'currency_id' : currency_id.id if currency_id else self.company_id.currency_id.id,
             'company_id': self.company_id.id,
             'invoice_line_ids': [(0, 0, line) for line in invoice_line]
-
         }
 
         if self.extractor == 'invoice':
             move_vals.update({
-                'move_type': 'out_invoice',
+                'move_type': 'in_invoice',
             })
         if self.extractor == 'receipt':
             move_vals.update({
@@ -589,7 +590,7 @@ class AffindaDocument(models.Model):
             })
         if self.extractor == 'credit-note':
             move_vals.update({
-                'move_type': 'out_refund',
+                'move_type': 'in_refund',
             })
 
         move = self.env['account.move'].sudo().create(move_vals)
@@ -603,39 +604,64 @@ class AffindaDocument(models.Model):
             self.affinda_workspace = False
 
     def action_create_document(self):
-        if self.company_id.affinda_integration:
-            if self.company_id.affinda_api_url and self.company_id.affinda_api_key:
-                url = self.company_id.affinda_api_url + "/documents"
-                headers = {
-                    "Authorization": "Bearer " + self.company_id.affinda_api_key,
-                    "Content-Type": "application/json",
-                }
+        if self.company_id.affinda_subscription:
+            if self.company_id.affinda_integration:
+                if self.company_id.affinda_api_url and self.company_id.affinda_api_key:
+                    url = self.company_id.affinda_api_url + "/documents"
+                    headers = {
+                        "Authorization": "Bearer " + self.company_id.affinda_api_key,
+                        "Content-Type": "application/json",
+                    }
 
-                base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                    base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
-                attch_url = base_url + "/web/content/" + str(self.attachment_id.id)
-                _logger.info('Url >>>... %s ',attch_url)
-                payload = {
-                    'url' : attch_url,
-                    'collection' : self.affinda_workspace_collection.identifier,
-                    'workspace' : self.affinda_workspace.identifier,
-                }
-                try:
-                    response = requests.post(url,json=payload, headers=headers)
-                except requests.exceptions.ConnectionError:
-                    raise UserError(
-                        ("please check your internet connection."))
-                if response.status_code == 200:
-                    response_dict = json.loads(response.text)
-                    self.write({
-                        'document_response': response_dict.get('data'),
-                        'identifier':response_dict.get('meta',False).get('identifier',False) if response_dict.get('meta',False) else False,
-                    })
-                else:
-                    dict = json.loads(response.text)
-                    error_msg = ",".join(
-                        [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
-                    raise UserError(_(error_msg))
+                    attch_url = base_url + "/web/content/" + str(self.attachment_id.id)
+                    _logger.info('Url >>>... %s ',attch_url)
+                    payload = {
+                        'url' : attch_url,
+                        'collection' : self.affinda_workspace_collection.identifier,
+                        'workspace' : self.affinda_workspace.identifier,
+                    }
+                    try:
+                        response = requests.post(url,json=payload, headers=headers)
+                    except requests.exceptions.ConnectionError:
+                        raise UserError(
+                            ("please check your internet connection."))
+                    if response.status_code == 200:
+                        response_dict = json.loads(response.text)
+
+                        if self.affinda_workspace and self.affinda_workspace.affinda_organization:
+                            count = self.affinda_workspace.affinda_organization.uploaded_doc_count
+                            self.affinda_workspace.affinda_organization.uploaded_doc_count = count + 1
+
+                        IrConfigParam = self.env['ir.config_parameter'].sudo()
+                        document_upload_requests = IrConfigParam.get_param('brainpack_affinda_subscription.document_upload_requests', 0)
+                        document_upload_requests = float(document_upload_requests)
+                        if document_upload_requests:
+                            document_upload_requests = document_upload_requests -1
+                        print(">>>>>>>",type(document_upload_requests),document_upload_requests)
+                        IrConfigParam.sudo().set_param('brainpack_affinda_subscription.document_upload_requests',
+                                                str(document_upload_requests))
+                        if document_upload_requests == 0:
+                            companys = self.env['res.company'].sudo().search([])
+                            companys.write({'affinda_subscription':False})
+
+
+                        self.write({
+                            'document_response': response_dict.get('data'),
+                            'identifier':response_dict.get('meta',False).get('identifier',False) if response_dict.get('meta',False) else False,
+                        })
+                    else:
+                        dict = json.loads(response.text)
+                        error_msg = ",".join(
+                            [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
+                        raise UserError(_(error_msg))
+            else:
+                raise UserError(
+                    ("Please check Your credentails!."))
+        else:
+            raise UserError(
+                ("You do not have any more credits. Please contact administrator."))
 
     def action_get_document(self):
         if self.company_id.affinda_integration:
@@ -660,6 +686,10 @@ class AffindaDocument(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check Your credentails!."))
+
 
     def action_delete_document(self):
         if self.company_id.affinda_integration:
@@ -685,4 +715,7 @@ class AffindaDocument(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check your credentails!."))
 
