@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+       <record id="product_affinda_doc_request" model="product.product">
+            <field name="name">Affinda Document Request</field>
+            <field name="detailed_type">service</field>
+            <field name="recurring_invoice" eval="True"/>
+            <field name="sale_ok" eval="True"/>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+        </record>
+
+         <record id="update_upload_document_request_move" model="base.automation">
+            <field name="name">Update Document Requests</field>
+            <field name="model_id" ref="payment.model_payment_transaction"/>
+            <field name="state">code</field>
+            <field name="trigger">on_create_or_write</field>
+            <field name="active" eval="True"/>
+            <field name="trigger_field_ids" eval="[(6, 0, [ref('account_payment.field_payment_transaction__invoice_ids')])]"/>
+            <field name="filter_pre_domain">[]</field>
+            <field name="code">action = records.onchange_payment_state()</field>
+        </record>
+
+<!--         <record id="update_upload_document_request_move" model="base.automation">-->
+<!--            <field name="name">Update Document Requests</field>-->
+<!--            <field name="model_id" ref="account.model_account_move"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="trigger">on_create_or_write</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="trigger_field_ids" eval="[(6, 0, [ref('account.field_account_move__payment_state')])]"/>-->
+<!--            <field name="filter_pre_domain">[]</field>-->
+<!--            <field name="code">action = records.onchange_payment_state()</field>-->
+<!--        </record>-->
+
+<!--        <record id="update_upload_document_request" model="base.automation">-->
+<!--            <field name="name">Update Document Requests</field>-->
+<!--            <field name="model_id" ref="account.model_account_payment"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="trigger">on_create_or_write</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="trigger_field_ids" eval="[(6, 0, [ref('account.field_account_payment__reconciled_invoice_ids'),ref('account.field_account_payment__payment_state'),ref('account.field_account_payment__reconciled_invoices_type')])]"/>-->
+<!--            <field name="filter_pre_domain">[]</field>-->
+<!--            <field name="code">action = records.onchange_payment_state()</field>-->
+<!--        </record>-->
+    </data>
+</odoo>

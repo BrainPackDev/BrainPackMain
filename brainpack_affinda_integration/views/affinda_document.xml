@@ -11,7 +11,7 @@
                             class="oe_highlight" attrs="{'invisible': [('identifier','=',False)]}"/>
                     <button string="Get Document Data" name="action_get_document" type="object"
                             class="oe_highlight" attrs="{'invisible': [('identifier','=',False)]}"/>
-                     <button string="Create Invoice" name="action_create_invoice" type="object"
+                     <button string="Create Bill" name="action_create_invoice" type="object"
                             class="oe_highlight" attrs="{'invisible': ['|','|','&amp;',('identifier','=',False),('document_response','=',False),('move_count','=',1),('extractor','!=','invoice')]}"/>
                     <button string="Create Receipt" name="action_create_invoice" type="object"
                             class="oe_highlight" attrs="{'invisible': ['|','|','&amp;',('identifier','=',False),('document_response','=',False),('move_count','=',1),('extractor','!=','receipt')]}"/>
@@ -21,13 +21,13 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" name="open_invoice_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':['|',('move_count','&lt;',1),('extractor','!=','invoice')]}">
-                            <div name="move_count" class="o_field_widget o_readonly_modifier o_field_statinfo"><span class="o_stat_info o_stat_value">1</span><span class="o_stat_text">Invoice</span></div>
+                            <div name="move_count" class="o_field_widget o_readonly_modifier o_field_statinfo"><span class="o_stat_info o_stat_value">1</span><span class="o_stat_text">Vendor Bills</span></div>
                         </button>
                         <button class="oe_stat_button" name="open_receipt_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':['|',('move_count','&lt;',1),('extractor','!=','receipt')]}">
                             <div name="move_count" class="o_field_widget o_readonly_modifier o_field_statinfo"><span class="o_stat_info o_stat_value">1</span><span class="o_stat_text">Receipt</span></div>
                         </button>
                         <button class="oe_stat_button" name="open_credit_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':['|',('move_count','&lt;',1),('extractor','!=','credit-note')]}">
-                            <div name="move_count" class="o_field_widget o_readonly_modifier o_field_statinfo"><span class="o_stat_info o_stat_value">1</span><span class="o_stat_text">Credit-note</span></div>
+                            <div name="move_count" class="o_field_widget o_readonly_modifier o_field_statinfo"><span class="o_stat_info o_stat_value">1</span><span class="o_stat_text">Vendor Credit Note</span></div>
                         </button>
                     </div>
                     <group>

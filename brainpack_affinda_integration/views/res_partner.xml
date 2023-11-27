@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_form" model="ir.ui.view">
+        <field name="name">partner.form.brainpack_affinda_integration</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="open_bill_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':[('count_bills','&lt;',1)]}">
+                    <field name="count_bills"/> <span class="o_stat_text">Affinda Bills</span>
+                </button>
+                <button class="oe_stat_button" name="open_receipt_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':[('count_receipts','&lt;',1)]}">
+                    <field name="count_receipts"/> <span class="o_stat_text">Affinda Receipts</span>
+                </button>
+                 <button class="oe_stat_button" name="open_credit_move"  type="object" icon="fa-pencil-square-o" attrs="{'invisible':[('count_credit','&lt;',1)]}">
+                     <field name="count_credit"/> <span class="o_stat_text">Affinda Credit Note</span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

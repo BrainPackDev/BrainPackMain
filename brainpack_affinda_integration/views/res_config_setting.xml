@@ -13,6 +13,14 @@
                             <div class="row mt16 o_settings_container" name="affinda_setting_container">
                                 <div class="col-12 col-lg-6 o_setting_box">
                                     <div class="o_setting_left_pane">
+                                        <field name='affinda_subscription' string="Affinda Subscription"/>
+                                    </div>
+                                    <div class="o_setting_right_pane">
+                                        <label for="affinda_subscription" string="Affinda Subscription" />
+                                    </div>
+                                </div>
+                                 <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_left_pane">
                                         <field name='affinda_integration' string="Affinda Integration"/>
                                     </div>
                                     <div class="o_setting_right_pane">
@@ -29,6 +37,12 @@
                                     <div class="o_setting_right_pane">
                                         <label for="affinda_api_key" string="Api Key"/>
                                         <field name='affinda_api_key' string="Api Key"/>
+                                    </div>
+                                </div>
+                                 <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_right_pane">
+                                        <label for="expense_collection" string="Collection"/>
+                                        <field name='expense_collection' string="Collection" domain="[('company_id', '=', company_id)]"/>
                                     </div>
                                 </div>
                             </div>

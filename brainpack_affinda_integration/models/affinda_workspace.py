@@ -79,6 +79,9 @@ class AffindaWorkspace(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check Your credentails!."))
 
     def action_delete_workspace(self):
         if self.company_id.affinda_integration:
@@ -106,3 +109,6 @@ class AffindaWorkspace(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check Your credentails!."))

@@ -716,6 +716,8 @@ class AffindaOrganization(models.Model):
 
     count_workspaces = fields.Integer('Workspace Count', compute='get_count_workspaces')
 
+    uploaded_doc_count = fields.Integer('Uploaded Document Count')
+
     def action_show_workspaces(self):
         self.ensure_one()
         action = self.env["ir.actions.actions"]._for_xml_id(
@@ -756,6 +758,9 @@ class AffindaOrganization(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check Your credentails!."))
 
     def action_create_organization(self):
         if self.company_id.affinda_integration:
@@ -795,3 +800,6 @@ class AffindaOrganization(models.Model):
                     error_msg = ",".join(
                         [error.get('code') + "\n" + error.get('detail') + "\n" for error in dict.get('errors')])
                     raise UserError(_(error_msg))
+        else:
+            raise UserError(
+                ("Please check Your credentails!."))
