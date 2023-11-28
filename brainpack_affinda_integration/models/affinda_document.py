@@ -139,266 +139,364 @@ class AffindaDocument(models.Model):
     def get_partner_move(self,res_dict):
         partner = False
 
-        city = False
-        street2 = ''
-        zip = False
-        state_id = False
-        country_id = False
-        street = False
-        email = False
-        phone = False
-        vat = False
+        supplier_city = False
+        supplier_street2 = ''
+        supplier_zip = False
+        supplier_state_id = False
+        supplier_country_id = False
+        supplier_street = False
+        supplier_email = False
+        supplier_phone = False
+        supplier_website = False
+        supplier_vat = False
 
-        invoice_partner_id = False
+        if res_dict.get('supplierWebsite'):
+            if 'raw' in res_dict.get('supplierWebsite') and res_dict.get('supplierWebsite').get('raw'):
+                supplier_website = res_dict.get('supplierWebsite').get('raw')
+                
+        if res_dict.get('supplierVat'):
+            if 'raw' in res_dict.get('supplierVat') and res_dict.get('supplierVat').get('raw'):
+                supplier_vat = res_dict.get('supplierVat').get('raw')
 
-        delivery_city = False
-        delivery_street2 = ''
-        delivery_zip = False
-        delivery_state_id = False
-        delivery_country_id = False
-        delivery_street = False
+        if res_dict.get('supplierEmail'):
+            if 'raw' in res_dict.get('supplierEmail') and res_dict.get('supplierEmail').get('raw'):
+                supplier_email = res_dict.get('supplierEmail').get('raw')
 
-        delivery_partner_id = False
+        if res_dict.get('supplierPhoneNumber'):
+            if 'raw' in res_dict.get('supplierPhoneNumber') and res_dict.get('supplierPhoneNumber').get('raw'):
+                supplier_phone = res_dict.get('supplierPhoneNumber').get('raw')
 
-        if res_dict.get('customerVat'):
-            if 'raw' in res_dict.get('customerVat') and res_dict.get('customerVat').get('raw'):
-                vat = res_dict.get('customerVat').get('raw')
-
-        if res_dict.get('customerEmail'):
-            if 'raw' in res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw'):
-                email = res_dict.get('customerEmail').get('raw')
-
-        if res_dict.get('customerPhoneNumber'):
-            if 'raw' in res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw'):
-                phone = res_dict.get('customerPhoneNumber').get('raw')
-
-        if res_dict.get('customerBillingAddress'):
-            if 'parsed' in res_dict.get('customerBillingAddress'):
-                location_dict = res_dict.get('customerBillingAddress').get('parsed')
+        if res_dict.get('supplierAddress'):
+            if 'parsed' in res_dict.get('supplierAddress'):
+                location_dict = res_dict.get('supplierAddress').get('parsed')
 
             if location_dict.get('streetNumber'):
-                street2 = str(street2) + location_dict.get('streetNumber') + ', '
+                supplier_street2 = str(supplier_street2) + location_dict.get('streetNumber') + ', '
             if location_dict.get('street'):
-                street2 = str(street2) + location_dict.get('street') + ' '
+                supplier_street2 = str(supplier_street2) + location_dict.get('street') + ' '
 
             if location_dict.get('apartmentNumber'):
-                street2 = str(street2) + location_dict.get('apartmentNumber') + ', '
+                supplier_street2 = str(supplier_street2) + location_dict.get('apartmentNumber') + ', '
 
             if location_dict.get('city'):
-                city = location_dict.get('city')
+                supplier_city = location_dict.get('city')
 
             if location_dict.get('postalCode'):
-                zip = location_dict.get('postalCode')
+                supplier_zip = location_dict.get('postalCode')
 
             if location_dict.get('state'):
                 state = self.env['res.country.state'].sudo().search([('name', '=', location_dict.get('state'))], limit=1)
                 if state:
-                    state_id = state.id
+                    supplier_state_id = state.id
 
             if location_dict.get('country'):
                 country = self.env['res.country'].sudo().search([('name', '=', location_dict.get('country'))],
                                                               limit=1)
                 if country:
-                    country_id = country.id
+                    supplier_country_id = country.id
             if location_dict.get('countryCode'):
                 country = self.env['res.country'].sudo().search([('code', '=', location_dict.get('countryCode'))],
                                                               limit=1)
                 if country:
-                    country_id = country.id
+                    supplier_country_id = country.id
 
             if 'raw' in res_dict.get('customerBillingAddress'):
-                street = res_dict.get('customerBillingAddress').get('raw')
+                supplier_street = res_dict.get('customerBillingAddress').get('raw')
 
-        if res_dict.get('customerDeliveryAddress'):
-            if 'parsed' in res_dict.get('customerDeliveryAddress'):
-                location_dict = res_dict.get('customerDeliveryAddress').get('parsed')
-
-            if location_dict.get('streetNumber'):
-                delivery_street2 = str(delivery_street2) + location_dict.get('streetNumber') + ', '
-            if location_dict.get('street'):
-                delivery_street2 = str(delivery_street2) + location_dict.get('street') + ' '
-
-            if location_dict.get('apartmentNumber'):
-                delivery_street2 = str(delivery_street2) + location_dict.get('apartmentNumber') + ', '
-
-            if location_dict.get('city'):
-                delivery_city = location_dict.get('city')
-
-            if location_dict.get('postalCode'):
-                delivery_zip = location_dict.get('postalCode')
-
-            if location_dict.get('state'):
-                state = self.env['res.country.state'].sudo().search([('name', '=', location_dict.get('state'))],
-                                                                    limit=1)
-                if state:
-                    delivery_state_id = state.id
-
-            if location_dict.get('country'):
-                country = self.env['res.country'].sudo().search([('name', '=', location_dict.get('country'))],
-                                                                limit=1)
-                if country:
-                    delivery_country_id = country.id
-            if location_dict.get('countryCode'):
-                country = self.env['res.country'].sudo().search([('code', '=', location_dict.get('countryCode'))],
-                                                                limit=1)
-                if country:
-                    delivery_country_id = country.id
-
-            if 'raw' in res_dict.get('customerDeliveryAddress'):
-                delivery_street = res_dict.get('customerDeliveryAddress').get('raw')
-
-        if res_dict.get('customerCompanyName') and not res_dict.get('customerContactName'):
-
-            if res_dict.get('customerCompanyName') and res_dict.get('customerCompanyName').get('raw') != '':
+        if res_dict.get('supplierCompanyName'):
+            if res_dict.get('supplierCompanyName') and res_dict.get('supplierCompanyName').get('raw') != '':
                 partner = self.env['res.partner'].sudo().search(
-                  [('name', '=', res_dict.get('customerCompanyName').get('raw')), ('is_company', '=', True)], limit=1)
-            if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
+                    [('name', '=', res_dict.get('supplierCompanyName').get('raw')), ('is_company', '=', True),('supplier_rank','=',1)], limit=1)
+            if res_dict.get('supplierVat') and res_dict.get('supplierVat').get('raw') != '':
                 partner = self.env['res.partner'].sudo().search(
-                  [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', True)], limit=1)
-            if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
+                    [('vat', '=', res_dict.get('supplierVat').get('raw')), ('is_company', '=', True),('supplier_rank','=',1)], limit=1)
+            if res_dict.get('supplierPhoneNumber') and res_dict.get('supplierPhoneNumber').get('raw') != '':
                 partner = self.env['res.partner'].sudo().search(
-                  [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', True)],
-                  limit=1)
-            if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
+                    [('phone', '=', res_dict.get('supplierPhoneNumber').get('raw')), ('is_company', '=', True),('supplier_rank','=',1)],
+                    limit=1)
+            if res_dict.get('supplierEmail') and res_dict.get('supplierEmail').get('raw') != '':
                 partner = self.env['res.partner'].sudo().search(
-                  [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', True)], limit=1)
+                    [('email', '=', res_dict.get('supplierEmail').get('raw')), ('is_company', '=', True),('supplier_rank','=',1)], limit=1)
 
             if not partner:
                 partner_vals = {
-                  'name': res_dict.get('customerCompanyName').get('raw'),
-                  'city': city,
-                  'street2': street2,
-                  'zip': zip,
-                  'state_id': state_id,
-                  'country_id': country_id,
-                  'street': street,
-                  'email': email,
-                  'phone': phone,
-                  'vat': vat,
-                  'is_company':True
+                  'name': res_dict.get('supplierCompanyName').get('raw'),
+                  'city': supplier_city,
+                  'street2': supplier_street2,
+                  'zip': supplier_zip,
+                  'state_id': supplier_state_id,
+                  'country_id': supplier_country_id,
+                  'street': supplier_street,
+                  'email': supplier_email,
+                  'phone': supplier_phone,
+                  'vat': supplier_vat,
+                  'is_company':True,
+                   'supplier_rank':1,
                 }
 
                 partner = self.env['res.partner'].sudo().create(partner_vals)
 
-        elif not res_dict.get('customerCompanyName') and res_dict.get('customerContactName'):
 
-            if res_dict.get('customerContactName') and res_dict.get('customerContactName').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('name', '=', res_dict.get('customerContactName').get('raw')), ('is_company', '=', False)], limit=1)
-            if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', False)], limit=1)
-            if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', False)],
-                  limit=1)
-            if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', False)], limit=1)
-
-            if not partner:
-                partner_vals = {
-                  'name': res_dict.get('customerContactName').get('raw'),
-                  'city': city,
-                  'street2': street2,
-                  'zip': zip,
-                  'state_id': state_id,
-                  'country_id': country_id,
-                  'street': street,
-                  'email': email,
-                  'phone': phone,
-                  'vat': vat,
-                  'is_company': False
-                }
-
-                partner = self.env['res.partner'].sudo().create(partner_vals)
-        elif res_dict.get('customerCompanyName') and res_dict.get('customerContactName'):
-            if res_dict.get('customerContactName') and res_dict.get('customerContactName').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('name', '=', res_dict.get('customerContactName').get('raw')), ('is_company', '=', False)], limit=1)
-            if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', False)], limit=1)
-            if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', False)],
-                  limit=1)
-            if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
-                partner = self.env['res.partner'].sudo().search(
-                  [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', False)], limit=1)
-
-            if not partner:
-                company_vals = {
-                    'name' : res_dict.get('customerCompanyName').get('raw'),
-                    'city': city,
-                    'street2': street2,
-                    'zip': zip,
-                    'state_id': state_id,
-                    'country_id': country_id,
-                    'street': street,
-                    'vat': vat,
-                    'is_company': True
-                }
-                company = self.env['res.partner'].sudo().create(company_vals)
-                partner_vals = {
-                  'name': res_dict.get('customerContactName').get('raw'),
-                  'city': city,
-                  'street2': street2,
-                  'zip': zip,
-                  'state_id': state_id,
-                  'country_id': country_id,
-                  'street': street,
-                  'email': email,
-                  'phone': phone,
-                  'vat': vat,
-                  'parent_id': company.id,
-                  'is_company': False
-                }
-
-                partner = self.env['res.partner'].sudo().create(partner_vals)
-
-        if partner:
-            invoice_partner_id = self.env['res.partner'].sudo().search([('type','=','invoice'),('parent_id','=',partner.id)],limit=1)
-
-            if city or street2 or zip or state_id or country_id or street:
-                invoice_vals = {
-                    'city': city,
-                    'street2': street2,
-                    'zip': zip,
-                    'state_id': state_id,
-                    'country_id': country_id,
-                    'street': street,
-                    'type': 'invoice',
-                }
-                if invoice_partner_id:
-                    invoice_partner_id.write(invoice_vals)
-                else:
-                    invoice_vals.update({
-                        'parent_id' : partner.id,
-                    })
-                    self.env['res.partner'].sudo().create(invoice_vals)
-
-            delivery_partner_id = self.env['res.partner'].sudo().search(
-                [('type', '=', 'delivery'), ('parent_id', '=', partner.id)], limit=1)
-
-            if delivery_city or delivery_street2 or delivery_zip or delivery_state_id or delivery_country_id or delivery_street:
-                delivery_vals = {
-                    'city': delivery_city,
-                    'street2': delivery_street2,
-                    'zip': delivery_zip,
-                    'state_id': delivery_state_id,
-                    'country_id': delivery_country_id,
-                    'street': delivery_street,
-                    'type': 'delivery',
-                }
-
-                if delivery_partner_id:
-                    delivery_partner_id.write(delivery_vals)
-                else:
-                    delivery_vals.update({
-                        'parent_id' : partner.id,
-                    })
-                    self.env['res.partner'].sudo().create(delivery_vals)
+        # city = False
+        # street2 = ''
+        # zip = False
+        # state_id = False
+        # country_id = False
+        # street = False
+        # email = False
+        # phone = False
+        # vat = False
+        #
+        # invoice_partner_id = False
+        #
+        # delivery_city = False
+        # delivery_street2 = ''
+        # delivery_zip = False
+        # delivery_state_id = False
+        # delivery_country_id = False
+        # delivery_street = False
+        #
+        # delivery_partner_id = False
+        #
+        # if res_dict.get('customerVat'):
+        #     if 'raw' in res_dict.get('customerVat') and res_dict.get('customerVat').get('raw'):
+        #         vat = res_dict.get('customerVat').get('raw')
+        #
+        # if res_dict.get('customerEmail'):
+        #     if 'raw' in res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw'):
+        #         email = res_dict.get('customerEmail').get('raw')
+        #
+        # if res_dict.get('customerPhoneNumber'):
+        #     if 'raw' in res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw'):
+        #         phone = res_dict.get('customerPhoneNumber').get('raw')
+        #
+        # if res_dict.get('customerBillingAddress'):
+        #     if 'parsed' in res_dict.get('customerBillingAddress'):
+        #         location_dict = res_dict.get('customerBillingAddress').get('parsed')
+        #
+        #     if location_dict.get('streetNumber'):
+        #         street2 = str(street2) + location_dict.get('streetNumber') + ', '
+        #     if location_dict.get('street'):
+        #         street2 = str(street2) + location_dict.get('street') + ' '
+        #
+        #     if location_dict.get('apartmentNumber'):
+        #         street2 = str(street2) + location_dict.get('apartmentNumber') + ', '
+        #
+        #     if location_dict.get('city'):
+        #         city = location_dict.get('city')
+        #
+        #     if location_dict.get('postalCode'):
+        #         zip = location_dict.get('postalCode')
+        #
+        #     if location_dict.get('state'):
+        #         state = self.env['res.country.state'].sudo().search([('name', '=', location_dict.get('state'))], limit=1)
+        #         if state:
+        #             state_id = state.id
+        #
+        #     if location_dict.get('country'):
+        #         country = self.env['res.country'].sudo().search([('name', '=', location_dict.get('country'))],
+        #                                                       limit=1)
+        #         if country:
+        #             country_id = country.id
+        #     if location_dict.get('countryCode'):
+        #         country = self.env['res.country'].sudo().search([('code', '=', location_dict.get('countryCode'))],
+        #                                                       limit=1)
+        #         if country:
+        #             country_id = country.id
+        #
+        #     if 'raw' in res_dict.get('customerBillingAddress'):
+        #         street = res_dict.get('customerBillingAddress').get('raw')
+        #
+        # if res_dict.get('customerDeliveryAddress'):
+        #     if 'parsed' in res_dict.get('customerDeliveryAddress'):
+        #         location_dict = res_dict.get('customerDeliveryAddress').get('parsed')
+        #
+        #     if location_dict.get('streetNumber'):
+        #         delivery_street2 = str(delivery_street2) + location_dict.get('streetNumber') + ', '
+        #     if location_dict.get('street'):
+        #         delivery_street2 = str(delivery_street2) + location_dict.get('street') + ' '
+        #
+        #     if location_dict.get('apartmentNumber'):
+        #         delivery_street2 = str(delivery_street2) + location_dict.get('apartmentNumber') + ', '
+        #
+        #     if location_dict.get('city'):
+        #         delivery_city = location_dict.get('city')
+        #
+        #     if location_dict.get('postalCode'):
+        #         delivery_zip = location_dict.get('postalCode')
+        #
+        #     if location_dict.get('state'):
+        #         state = self.env['res.country.state'].sudo().search([('name', '=', location_dict.get('state'))],
+        #                                                             limit=1)
+        #         if state:
+        #             delivery_state_id = state.id
+        #
+        #     if location_dict.get('country'):
+        #         country = self.env['res.country'].sudo().search([('name', '=', location_dict.get('country'))],
+        #                                                         limit=1)
+        #         if country:
+        #             delivery_country_id = country.id
+        #     if location_dict.get('countryCode'):
+        #         country = self.env['res.country'].sudo().search([('code', '=', location_dict.get('countryCode'))],
+        #                                                         limit=1)
+        #         if country:
+        #             delivery_country_id = country.id
+        #
+        #     if 'raw' in res_dict.get('customerDeliveryAddress'):
+        #         delivery_street = res_dict.get('customerDeliveryAddress').get('raw')
+        #
+        # if res_dict.get('customerCompanyName') and not res_dict.get('customerContactName'):
+        #
+        #     if res_dict.get('customerCompanyName') and res_dict.get('customerCompanyName').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('name', '=', res_dict.get('customerCompanyName').get('raw')), ('is_company', '=', True)], limit=1)
+        #     if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', True)], limit=1)
+        #     if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', True)],
+        #           limit=1)
+        #     if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', True)], limit=1)
+        #
+        #     if not partner:
+        #         partner_vals = {
+        #           'name': res_dict.get('customerCompanyName').get('raw'),
+        #           'city': city,
+        #           'street2': street2,
+        #           'zip': zip,
+        #           'state_id': state_id,
+        #           'country_id': country_id,
+        #           'street': street,
+        #           'email': email,
+        #           'phone': phone,
+        #           'vat': vat,
+        #           'is_company':True
+        #         }
+        #
+        #         partner = self.env['res.partner'].sudo().create(partner_vals)
+        #
+        # elif not res_dict.get('customerCompanyName') and res_dict.get('customerContactName'):
+        #
+        #     if res_dict.get('customerContactName') and res_dict.get('customerContactName').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('name', '=', res_dict.get('customerContactName').get('raw')), ('is_company', '=', False)], limit=1)
+        #     if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', False)], limit=1)
+        #     if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', False)],
+        #           limit=1)
+        #     if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', False)], limit=1)
+        #
+        #     if not partner:
+        #         partner_vals = {
+        #           'name': res_dict.get('customerContactName').get('raw'),
+        #           'city': city,
+        #           'street2': street2,
+        #           'zip': zip,
+        #           'state_id': state_id,
+        #           'country_id': country_id,
+        #           'street': street,
+        #           'email': email,
+        #           'phone': phone,
+        #           'vat': vat,
+        #           'is_company': False
+        #         }
+        #
+        #         partner = self.env['res.partner'].sudo().create(partner_vals)
+        # elif res_dict.get('customerCompanyName') and res_dict.get('customerContactName'):
+        #     if res_dict.get('customerContactName') and res_dict.get('customerContactName').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('name', '=', res_dict.get('customerContactName').get('raw')), ('is_company', '=', False)], limit=1)
+        #     if res_dict.get('customerVat') and res_dict.get('customerVat').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('vat', '=', res_dict.get('customerVat').get('raw')), ('is_company', '=', False)], limit=1)
+        #     if res_dict.get('customerPhoneNumber') and res_dict.get('customerPhoneNumber').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('phone', '=', res_dict.get('customerPhoneNumber').get('raw')), ('is_company', '=', False)],
+        #           limit=1)
+        #     if res_dict.get('customerEmail') and res_dict.get('customerEmail').get('raw') != '':
+        #         partner = self.env['res.partner'].sudo().search(
+        #           [('email', '=', res_dict.get('customerEmail').get('raw')), ('is_company', '=', False)], limit=1)
+        #
+        #     if not partner:
+        #         company_vals = {
+        #             'name' : res_dict.get('customerCompanyName').get('raw'),
+        #             'city': city,
+        #             'street2': street2,
+        #             'zip': zip,
+        #             'state_id': state_id,
+        #             'country_id': country_id,
+        #             'street': street,
+        #             'vat': vat,
+        #             'is_company': True
+        #         }
+        #         company = self.env['res.partner'].sudo().create(company_vals)
+        #         partner_vals = {
+        #           'name': res_dict.get('customerContactName').get('raw'),
+        #           'city': city,
+        #           'street2': street2,
+        #           'zip': zip,
+        #           'state_id': state_id,
+        #           'country_id': country_id,
+        #           'street': street,
+        #           'email': email,
+        #           'phone': phone,
+        #           'vat': vat,
+        #           'parent_id': company.id,
+        #           'is_company': False
+        #         }
+        #
+        #         partner = self.env['res.partner'].sudo().create(partner_vals)
+        #
+        # if partner:
+        #     invoice_partner_id = self.env['res.partner'].sudo().search([('type','=','invoice'),('parent_id','=',partner.id)],limit=1)
+        #
+        #     if city or street2 or zip or state_id or country_id or street:
+        #         invoice_vals = {
+        #             'city': city,
+        #             'street2': street2,
+        #             'zip': zip,
+        #             'state_id': state_id,
+        #             'country_id': country_id,
+        #             'street': street,
+        #             'type': 'invoice',
+        #         }
+        #         if invoice_partner_id:
+        #             invoice_partner_id.write(invoice_vals)
+        #         else:
+        #             invoice_vals.update({
+        #                 'parent_id' : partner.id,
+        #             })
+        #             self.env['res.partner'].sudo().create(invoice_vals)
+        #
+        #     delivery_partner_id = self.env['res.partner'].sudo().search(
+        #         [('type', '=', 'delivery'), ('parent_id', '=', partner.id)], limit=1)
+        #
+        #     if delivery_city or delivery_street2 or delivery_zip or delivery_state_id or delivery_country_id or delivery_street:
+        #         delivery_vals = {
+        #             'city': delivery_city,
+        #             'street2': delivery_street2,
+        #             'zip': delivery_zip,
+        #             'state_id': delivery_state_id,
+        #             'country_id': delivery_country_id,
+        #             'street': delivery_street,
+        #             'type': 'delivery',
+        #         }
+        #
+        #         if delivery_partner_id:
+        #             delivery_partner_id.write(delivery_vals)
+        #         else:
+        #             delivery_vals.update({
+        #                 'parent_id' : partner.id,
+        #             })
+        #             self.env['res.partner'].sudo().create(delivery_vals)
 
         return partner
 
@@ -421,6 +519,8 @@ class AffindaDocument(models.Model):
                                     if 'itemQuantityBeta' in parsed_dict and parsed_dict.get('itemQuantityBeta'):
                                         itemQuantityBeta = parsed_dict.get('itemQuantityBeta').get('parsed')
 
+
+
                                     if 'itemUnitBeta' in parsed_dict and parsed_dict.get('itemUnitBeta'):
                                         product_uom_id = self.env['uom.uom'].sudo().search([('name','=',parsed_dict.get('itemUnitBeta').get('parsed'))])
                                         if product_uom_id:
@@ -428,6 +528,9 @@ class AffindaDocument(models.Model):
 
                                     if 'itemUnitPriceBeta' in parsed_dict and parsed_dict.get('itemUnitPriceBeta'):
                                         product_price = float(parsed_dict.get('itemUnitPriceBeta').get('parsed'))
+                                    else:
+                                        if 'itemTotalBeta' in parsed_dict and parsed_dict.get('itemTotalBeta'):
+                                            product_price = float(parsed_dict.get('itemTotalBeta').get('parsed'))
 
                                     if not product:
                                         product_vals = {
