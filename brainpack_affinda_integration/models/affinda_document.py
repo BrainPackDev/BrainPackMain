@@ -678,6 +678,7 @@ class AffindaDocument(models.Model):
             'affinda_move' : True,
             'partner_id' : partner.id,
             'invoice_date' : invoice_date,
+            'date' : invoice_date,
             'invoice_date_due' : invoice_date_due,
             'currency_id' : currency_id.id if currency_id else self.company_id.currency_id.id,
             'company_id': self.company_id.id,
