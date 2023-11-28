@@ -34,17 +34,17 @@ class SaleOrder(models.Model):
                     db_expiration_date = models.execute_kw(db, uid, password, 'ir.config_parameter', 'search_read',
                                                            [[['key', '=', 'database.expiration_date']]],
                                                            {'fields': ['value']})
+                    if rec.next_invoice_date:
+                        if not db_expiration_date:
+                            models.execute_kw(db, uid, password, 'ir.config_parameter', 'create',[{'value':rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S"),'key':'database.expiration_date'}])
+                        else:
+                            db_expiration_date_rec = models.execute_kw(db, uid, password, 'ir.config_parameter', 'search',
+                                             [[['key', '=', 'database.expiration_date']]])
 
-                    if not db_expiration_date:
-                        models.execute_kw(db, uid, password, 'ir.config_parameter', 'create',[{'value':rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S"),'key':'database.expiration_date'}])
-                    else:
-                        db_expiration_date_rec = models.execute_kw(db, uid, password, 'ir.config_parameter', 'search',
-                                         [[['key', '=', 'database.expiration_date']]])
-
-                        if db_expiration_date_rec:
-                            models.execute_kw(db, uid, password, 'ir.config_parameter',
-                                                                   'write',
-                                                                   [db_expiration_date_rec, {'value':rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S")}])
+                            if db_expiration_date_rec:
+                                models.execute_kw(db, uid, password, 'ir.config_parameter',
+                                                                       'write',
+                                                                       [db_expiration_date_rec, {'value':rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S")}])
 
                     rec.db_expiration_date = rec.next_invoice_date
 
