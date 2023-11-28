@@ -153,7 +153,7 @@ class AffindaDocument(models.Model):
         if res_dict.get('supplierWebsite'):
             if 'raw' in res_dict.get('supplierWebsite') and res_dict.get('supplierWebsite').get('raw'):
                 supplier_website = res_dict.get('supplierWebsite').get('raw')
-                
+
         if res_dict.get('supplierVat'):
             if 'raw' in res_dict.get('supplierVat') and res_dict.get('supplierVat').get('raw'):
                 supplier_vat = res_dict.get('supplierVat').get('raw')
@@ -231,7 +231,8 @@ class AffindaDocument(models.Model):
                   'phone': supplier_phone,
                   'vat': supplier_vat,
                   'is_company':True,
-                   'supplier_rank':1,
+                    'supplier_rank':1,
+                   'website' : supplier_website,
                 }
 
                 partner = self.env['res.partner'].sudo().create(partner_vals)
