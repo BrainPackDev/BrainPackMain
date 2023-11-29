@@ -28,6 +28,8 @@ class AffindaDocument(models.Model):
     attachment_id = fields.Many2one('ir.attachment',string="Attachment")
     identifier = fields.Char('Identifier')
     document_response = fields.Text('Document Response')
+    document_meta = fields.Text('Document Meta')
+    review_url = fields.Text('Review Url')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
     move_id = fields.Many2one('account.move',string='Move')
     move_count = fields.Integer('Move Count', compute='get_move_count')
@@ -744,7 +746,7 @@ class AffindaDocument(models.Model):
                         document_upload_requests = float(document_upload_requests)
                         if document_upload_requests:
                             document_upload_requests = document_upload_requests -1
-                        print(">>>>>>>",type(document_upload_requests),document_upload_requests)
+
                         IrConfigParam.sudo().set_param('brainpack_affinda_subscription.document_upload_requests',
                                                 str(document_upload_requests))
                         if document_upload_requests == 0:
@@ -754,7 +756,9 @@ class AffindaDocument(models.Model):
 
                         self.write({
                             'document_response': response_dict.get('data'),
+                            'document_meta': response_dict.get('meta'),
                             'identifier':response_dict.get('meta',False).get('identifier',False) if response_dict.get('meta',False) else False,
+                            'review_url':response_dict.get('meta',False).get('reviewUrl',False) if response_dict.get('meta',False) else False,
                         })
                     else:
                         dict = json.loads(response.text)
@@ -785,6 +789,11 @@ class AffindaDocument(models.Model):
                     response_dict = json.loads(response.text)
                     self.write({
                         'document_response': response_dict.get('data'),
+                        'document_meta': response_dict.get('meta'),
+                        'identifier': response_dict.get('meta', False).get('identifier', False) if response_dict.get(
+                            'meta', False) else False,
+                        'review_url': response_dict.get('meta', False).get('reviewUrl', False) if response_dict.get(
+                            'meta', False) else False,
                     })
                 else:
                     dict = json.loads(response.text)
@@ -814,6 +823,8 @@ class AffindaDocument(models.Model):
                     self.write({
                         'identifier': False,
                         'document_response': False,
+                        'document_meta': False,
+                        'review_url': False,
                     })
                 else:
                     dict = json.loads(response.text)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="brainpack_affinda_integration.reviewUrlIframe" owl="1">
+         <div class="container-fluid py-4">
+            <div id="render_review_url_iframe">
+               <iframe t-if="props.value" t-att-src="props.value" title="Document Review Url" style="width: -webkit-fill-available;height: 445px;"></iframe>
+                <t t-else="">
+                    Doumnet Review Url not set yet
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>
