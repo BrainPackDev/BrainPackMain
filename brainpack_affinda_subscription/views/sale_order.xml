@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_order_form_inherit_sale_subscription_affinda" model="ir.ui.view">
+        <field name="name">sale.order.form.bundle.sale.subscription.inherit.affinda</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="brainpack_sale_subscription.view_order_form_inherit_sale_subscription"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='db_expiration_date']" position="after">
+                <field name="total_uploaded_requests" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}" readonly="1"/>
+                <field name="remaining_uploaded_requests" attrs="{'invisible': ['|',('state', 'not in', ['sale', 'done']),('is_subscription','=',False)]}" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

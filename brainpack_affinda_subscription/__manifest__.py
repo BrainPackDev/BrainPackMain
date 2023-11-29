@@ -8,9 +8,10 @@
     'images': [],
     'summary': """
     """,
-    'depends': ['base','sale_subscription','brainpack_debranding','base_automation'],
+    'depends': ['base','sale_subscription','brainpack_debranding','base_automation','brainpack_sale_subscription'],
     'data': [
         'data/data.xml',
+        'views/sale_order.xml',
     ],
     'installable': True,
     'application': True,

@@ -41,8 +41,18 @@
                         <field name="file" filename="file_name" widget="binary" required="1"/>
                         <field name="file_name"/>
                         <field name="attachment_id"/>
-                        <field name="document_response"/>
                     </group>
+                    <notebook>
+                        <page name="response_data" string="Response Data" attrs="{'invisible': [('identifier','=',False)]}">
+                            <group>
+                                <field name="document_response"/>
+                                <field name="document_meta"/>
+                            </group>
+                        </page>
+                        <page name="review_document" string="Review Document" attrs="{'invisible': [('identifier','=',False)]}">
+                            <field name="review_url" widget="review_url_iframe" nolabel="1" style="width:100%;"/>
+                        </page>
+                    </notebook>
                 </sheet>
                  <div class="oe_chatter">
                     <field name="message_follower_ids"/>

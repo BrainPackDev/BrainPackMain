@@ -9,40 +9,35 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    def onchange_ks_next_invoice_date(self):
-        for rec in self:
+    total_uploaded_requests = fields.Float('Uploaded Requests')
+    remaining_uploaded_requests = fields.Float('Remaining Uploaded Requests')
+
+    def update_document_requests(self):
+        for rec in self.sudo().search([('is_subscription', '=', True)]):
             if rec.url and rec.db_name and rec.username and rec.password:
-                try:
-                    url = rec.url
-                    db = rec.db_name
-                    username = rec.username
-                    password = rec.password
+                url = rec.url
+                db = rec.db_name
+                username = rec.username
+                password = rec.password
 
-                    common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url), allow_none=True)
-                    models = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url), allow_none=True)
-                    uid = common.login(db, username, password)
-                    db_expiration_date = models.execute_kw(db, uid, password, 'ir.config_parameter', 'search_read',
-                                                           [[['key', '=', 'database.expiration_date']]],
-                                                           {'fields': ['value']})
+                common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url), allow_none=True)
+                models = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url), allow_none=True)
+                uid = common.login(db, username, password)
 
-                    if not db_expiration_date:
-                        models.execute_kw(db, uid, password, 'ir.config_parameter', 'create' ,
-                            [{'value' :rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S")
-                             ,'key' :'database.expiration_date'}])
-                    else:
-                        db_expiration_date_rec = models.execute_kw(db, uid, password, 'ir.config_parameter', 'search',
-                                                                   [[['key', '=', 'database.expiration_date']]])
+                organizations = models.execute_kw(db, uid, password, 'affinda.organization', 'search_read',
+                                          [[]],
+                                          {'fields': ['id', 'uploaded_doc_count']})
+                total_uploaded_requests = 0
+                for org in organizations:
+                    total_uploaded_requests = total_uploaded_requests + org.get('uploaded_doc_count')
 
-                        if db_expiration_date_rec:
-                            models.execute_kw(db, uid, password, 'ir.config_parameter',
-                                              'write',
-                                              [db_expiration_date_rec, {'value' :rec.next_invoice_date.strftime("%Y-%m-%d %H:%M:%S")}])
+                rec.write({'total_uploaded_requests': total_uploaded_requests})
 
-                    rec.db_expiration_date = rec.next_invoice_date
+                document_upload_requests = models.execute_kw(db, uid, password, 'ir.config_parameter',
+                                                             'search_read',
+                                                             [[['key', '=',
+                                                                'brainpack_affinda_subscription.document_upload_requests']]],
+                                                             {'fields': ['value']})
 
-                    for user_detail in rec.user_details_ids:
-                        user_detail.write({'active_day' :0})
-                except Exception as e:
-                    # Show error popup if any exception occurs
-                    _logger.error(e)
-                    raise ValidationError(_("Error accessing db"))
+                if document_upload_requests:
+                    rec.write({'remaining_uploaded_requests': float(document_upload_requests[0].get('value'))})
