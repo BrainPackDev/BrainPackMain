@@ -27,6 +27,7 @@
     'assets': {
         'web.assets_backend': [
             'brainpack_affinda_integration/static/src/xml/review_url_iframe.xml',
+            'brainpack_affinda_integration/static/src/css/style.css',
             'brainpack_affinda_integration/static/src/js/review_url_iframe.js',
         ],
     },
