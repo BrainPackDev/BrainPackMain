@@ -11,14 +11,19 @@ class HrExpense(models.Model):
         self.ensure_one()
         if self.documents:
             expense_total = 0
+            currency_id = False
             for doc in self.documents:
                 if doc.document_response:
                     res_dict = ast.literal_eval(doc.document_response)
                     if 'paymentAmountTotal' in res_dict and res_dict.get('paymentAmountTotal'):
                         if res_dict.get('paymentAmountTotal').get('parsed'):
                             expense_total = expense_total + float(res_dict.get('paymentAmountTotal').get('parsed'))
+                    if 'currencyCode' in res_dict and res_dict.get('currencyCode'):
+                        currency_id = self.env['res.currency'].sudo().search(
+                            [('name', '=', res_dict.get('currencyCode').get('parsed').get('value'))])
 
-            self.write({'total_amount': expense_total})
+
+            self.write({'total_amount': expense_total,'currency_id':currency_id.id if currency_id else self.company_id.currency_id.id})
 
     def affinda_doc_create(self, attachments, affinda_workspace_collection):
         self.ensure_one()
