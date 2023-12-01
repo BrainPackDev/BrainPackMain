@@ -4,6 +4,10 @@ from odoo import fields, models, api
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    sign_company_name = fields.Char('Company Name')
+    sign_company_number = fields.Char('Company Number')
+    behalf_of_company = fields.Boolean('Sign Behalf Of Company')
+
     def action_confirm(self):
         res = super(SaleOrder, self).action_confirm()
         if not self.signature:

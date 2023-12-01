@@ -1,0 +1,14 @@
+<odoo>
+     <record id="view_order_form_inherit_sign" model="ir.ui.view">
+        <field name="name">sale.order.form.bundle.sign.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='signed_on']" position="after">
+                <field name="sign_company_name"/>
+                <field name="sign_company_number"/>
+                <field name="behalf_of_company"/>
+            </xpath>
+        </field>
+     </record>
+</odoo>
