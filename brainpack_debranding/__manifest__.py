@@ -32,6 +32,7 @@
         'data/ir_config_parameter_data.xml',
         'data/res_company_data.xml',
         'data/res_config_settings.xml',
+        'data/message_debrand.xml',
     ],
     'assets': {
         'web.assets_backend': [
