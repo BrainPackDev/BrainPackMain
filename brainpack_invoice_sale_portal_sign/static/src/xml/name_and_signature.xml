@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="web.sign_name_and_signature" t-inherit-mode="extension">
+         <xpath expr="//div[hasclass('o_web_sign_name_group')]" position="after">
+            <div class="o_web_sign_company_name_group" t-if="widget and widget.getSession() and widget.getSession().in_quot_sign_add_field">
+                <label class="col-form-label" t-att-for="'o_web_sign_company_name_input_' + widget.htmlId">Company Name</label>
+                <input type="text" name="signer_company_name" t-att-id="'o_web_sign_company_name_input_' + widget.htmlId" class="o_web_sign_company_name_input form-control" placeholder="Type Company name to sign"/>
+            </div>
+             <div class="o_web_sign_company_number_group" t-if="widget and widget.getSession() and widget.getSession().in_quot_sign_add_field">
+                <label class="col-form-label" t-att-for="'o_web_sign_company_number_input_' + widget.htmlId">Company Number</label>
+                <input type="text" name="signer_company_number" t-att-id="'o_web_sign_company_number_input_' + widget.htmlId" class="o_web_sign_company_number_input form-control" placeholder="Type Company number to sign"/>
+            </div>
+             <div class="form-check o_web_sign_behalf_of_company_group mt-2" t-if="widget and widget.getSession() and widget.getSession().in_quot_sign_add_field">
+              <input class="form-check-input o_web_sign_behalf_of_company_input" type="checkbox" value="" t-att-id="'o_web_sign_behalf_of_company_input_' + widget.htmlId"/>
+              <label class="form-check-label" for="flexCheckDefault">
+                I'm Authorized to sign on behalf of the company, and then the sign
+                    you add hard code? or you can let me edit the fields or add later if I want?
+              </label>
+            </div>
+        </xpath>
+    </t>
+</templates>
