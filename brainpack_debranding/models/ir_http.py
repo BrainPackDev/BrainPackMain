@@ -39,7 +39,9 @@ def render(self):
         view_rec = False
         if isinstance(self.template, int):
             view_rec = request.env['ir.ui.view'].sudo().search([('id','=',self.template)])
-        if view_rec and view_rec.key == 'website.outsource':
+        if view_rec and view_rec.key in ['website.outsource','website_hr_recruitment.detail','website_hr_recruitment.index']:
+            pass
+        elif not view_rec and isinstance(self.template, str) and self.template in ['website_hr_recruitment.detail','website_hr_recruitment.index','website_hr_recruitment.apply']:
             pass
         else:
             message = re.sub(
