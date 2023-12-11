@@ -8,16 +8,16 @@
             <field name="uom_id" ref="uom.product_uom_unit"/>
         </record>
 
-         <record id="update_upload_document_request_move" model="base.automation">
-            <field name="name">Update Document Requests</field>
-            <field name="model_id" ref="payment.model_payment_transaction"/>
-            <field name="state">code</field>
-            <field name="trigger">on_create_or_write</field>
-            <field name="active" eval="True"/>
-            <field name="trigger_field_ids" eval="[(6, 0, [ref('account_payment.field_payment_transaction__invoice_ids')])]"/>
-            <field name="filter_pre_domain">[]</field>
-            <field name="code">action = records.onchange_payment_state()</field>
-        </record>
+<!--         <record id="update_upload_document_request_move" model="base.automation">-->
+<!--            <field name="name">Update Document Requests</field>-->
+<!--            <field name="model_id" ref="payment.model_payment_transaction"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="trigger">on_create_or_write</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="trigger_field_ids" eval="[(6, 0, [ref('account_payment.field_payment_transaction__invoice_ids')])]"/>-->
+<!--            <field name="filter_pre_domain">[]</field>-->
+<!--            <field name="code">action = records.onchange_payment_state()</field>-->
+<!--        </record>-->
 
         <record id="ir_cron_update_document_requests" model="ir.cron">
             <field name="name">Update Affinda Document Request details</field>
