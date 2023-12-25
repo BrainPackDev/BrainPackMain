@@ -13,8 +13,7 @@
              <div class="form-check o_web_sign_behalf_of_company_group mt-2" t-if="widget and widget.getSession() and widget.getSession().in_quot_sign_add_field">
               <input class="form-check-input o_web_sign_behalf_of_company_input" type="checkbox" value="" t-att-id="'o_web_sign_behalf_of_company_input_' + widget.htmlId"/>
               <label class="form-check-label" for="flexCheckDefault">
-                I'm Authorized to sign on behalf of the company, and then the sign
-                    you add hard code? or you can let me edit the fields or add later if I want?
+                I'm authorized to sign on behalf of the company.
               </label>
             </div>
         </xpath>
