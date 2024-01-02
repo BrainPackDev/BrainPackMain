@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sh_blog_filter_snippet_website_snippets" inherit_id="website.snippets" name="Blog Filter Snippet">
+        <xpath expr="//div[@id='snippet_structure']" position="before">
+            <div id="sh_blog_filter_snippet" class="o_panel">
+                <div class="o_panel_header">
+                    New Dynamic Blog Snippets
+                </div>
+                <div class="o_panel_body">
+                    <t t-snippet="sh_corpomate_theme.sh_blog_filter_s_test_1" t-thumbnail="/sh_corpomate_theme/static/src/images/extra_addons/sh_blog_filter_snippet/1.svg" />
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

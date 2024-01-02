@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    
+        <!-- ===============  ABOUT US PAGE MAIN  ================ -->        
+
+        <!-- ABOUT US PAGE 5 -->
+        <record id="sh_corpomate_page_about_us_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/aboutus5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_about_us_5"/>
+            <field name="website_indexed" eval="False"/>
+        </record>
+
+        <record id="sh_corpomate_menu_about_us_5" model="website.menu">
+            <field name="name">about us</field>
+            <field name="url">/aboutus5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">3</field>
+            <field name="page_id" ref="sh_corpomate_page_about_us_5" />            
+        </record>   
+
+        <!-- ===============  HOME PAGE MAIN  ================  -->        
+        <!-- HOME PAGE 5 -->
+        <record id="sh_corpomate_page_home_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/home5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_home_5"/>
+            <field name="website_indexed" eval="False"/>          
+        </record>
+        <record id="sh_corpomate_menu_home_5" model="website.menu">
+            <field name="name">home</field>
+            <field name="url">/home5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">1</field>
+            <field name="page_id" ref="sh_corpomate_page_home_5" />               
+        </record>
+         <!-- ===============  SERVICE PAGE MAIN  ================  -->        
+        
+        <!-- SERVICE PAGE 5 -->
+        <record id="sh_corpomate_page_service_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/service5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_service_5"/>
+            <field name="website_indexed" eval="False"/>
+        </record>
+        
+        <record id="sh_corpomate_menu_service_5" model="website.menu">
+            <field name="name">service</field>
+            <field name="url">/service5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">4</field>
+            <field name="page_id" ref="sh_corpomate_page_service_5" />               
+        </record>   
+            
+         <!-- ===============  Gallery PAGE MAIN ================ -->        
+        <!-- Gallery PAGE 5 -->
+        <record id="sh_corpomate_page_gallery_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/gallery5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_gallery_5"/>
+            <field name="website_indexed" eval="False"/>
+        </record>
+        
+        <record id="sh_corpomate_menu_gallery_5" model="website.menu">
+            <field name="name">Gallery</field>
+            <field name="url">/gallery5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">4</field>
+            <field name="page_id" ref="sh_corpomate_page_gallery_5" />               
+        </record>  
+        
+        <!-- ===============  CONTACT US PAGE MAIN  ================  -->        
+        <!-- CONTACT US PAGE 5 -->
+        <record id="sh_corpomate_page_contact_us_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/contactus5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_contact_us_5"/>
+            <field name="website_indexed" eval="False"/>
+        </record>
+        <record id="sh_corpomate_menu_contact_us_5" model="website.menu">
+            <field name="name">contact us</field>
+            <field name="url">/contactus5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">6</field>
+            <field name="page_id" ref="sh_corpomate_page_contact_us_5" />                
+        </record> 
+        
+        <!-- ===============  OUR TEAM MAIN  ================  -->        
+        
+        <record id="sh_corpomate_page_our_team_5" model="website.page">
+            <field name="website_published">True</field>
+            <field name="url">/ourteam5</field>
+            <field name="view_id" ref="sh_corpomate_theme.sh_corpomate_tmpl_our_team_5"/>
+            <field name="website_indexed" eval="False"/>
+        </record>
+    
+        <record id="sh_corpomate_menu_our_team_5" model="website.menu">
+            <field name="name">our team</field>
+            <field name="url">/ourteam5</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">5</field>
+            <field name="page_id" ref="sh_corpomate_page_our_team_5" />                
+        </record> 
+    </data>
+
+</odoo>        
+        
