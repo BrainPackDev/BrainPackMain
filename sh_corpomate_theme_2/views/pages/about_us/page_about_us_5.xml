@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ABOUT US PAGE 5 -->
+    <template id="sh_corpomate_tmpl_about_us_5" name="about us">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+
+                <section id="sh_corpomate_theme_pets_11" class="parallax s_parallax_no_overflow_hidden sh_animation_part o_colored_level" data-snippet="sh_corpomate_theme_tmpl_pets_11" data-name="About Banner" style="background-image: none;">
+                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/sh_corpomate_theme/static/src/images/theme_5/sh_pets_image_24.jpg'); background-position:center;" />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-12 sh_animation_part o_colored_level">
+                                <div class="sh_content">
+                                    <h2 class="o_default_snippet_text">About Us</h2>
+                                    <p class="o_default_snippet_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                                </div>
+                                <div class="sh_navigation">
+                                    <a href="/home5" class="btn o_default_snippet_text">home</a>
+                                    <span class="fa fa-link" />
+                                    <a href="/aboutus5" class="btn o_default_snippet_text">About</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-12 o_colored_level" />
+                        </div>
+                    </div>
+                    <div class="svg_img">
+                        <img src="/sh_corpomate_theme/static/src/images/theme_5/1.svg" loading="lazy" />
+                    </div>
+                </section>
+                <section id="sh_corpomate_theme_pets_12" class="sh_animation_part o_colored_level" data-snippet="sh_corpomate_theme_tmpl_pets_12" data-name="Img Text" style="background-image: none;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 sh_animation_part o_colored_level">
+                                <div class="sh_left_content">
+                                    <h4 class="o_default_snippet_text">Lorem ipsum dolor sit amet</h4>
+                                    <p class="o_default_snippet_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                                    <div class="sh_icon_text">
+                                        <span class="fa fa-paper-plane" />
+                                        <div class="sh_text">
+                                            <h5 class="o_default_snippet_text">Lorem ipsum</h5>
+                                            <p class="o_default_snippet_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                        </div>
+                                    </div>
+                                    <div class="sh_icon_text">
+                                        <span class="fa fa-paper-plane" />
+                                        <div class="sh_text">
+                                            <h5 class="o_default_snippet_text">Lorem ipsum</h5>
+                                            <p class="o_default_snippet_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 align-self-center sh_animation_part o_colored_level">
+                                <div class="sh_right_content">
+                                    <img src="/sh_corpomate_theme/static/src/images/theme_5/sh_pets_image_21.jpg" loading="lazy" />
+                                    <a href="https://www.youtube.com/watch?v=nanikIAFg_E&amp;list=PL-zDV7_rrd2qWMXtcs3m-aXp-_efmU4Mh&amp;index=33" class="sh_icon">
+                                        <span class="fa fa-play" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="sh_corpomate_theme_pets_13" class="js_cls_sh_corpomate_s_counter sh_animation_part oe_img_bg o_bg_img_center o_colored_level" data-snippet="sh_corpomate_theme_tmpl_pets_13" data-name="Counter" style="background-image: url(&quot;/sh_corpomate_theme/static/src/images/theme_5/sh_pets_image_22.jpg&quot;);">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 sh_animation_part o_colored_level">
+                                <div class="sh_counter">
+                                    <h2 class="js_cls_counter_number o_default_snippet_text">213</h2>
+                                    <p class="o_default_snippet_text">Lorem ipsum</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 sh_animation_part o_colored_level">
+                                <div class="sh_counter">
+                                    <h2 class="js_cls_counter_number o_default_snippet_text">213</h2>
+                                    <p class="o_default_snippet_text">Lorem ipsum</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 sh_animation_part o_colored_level">
+                                <div class="sh_counter">
+                                    <h2 class="js_cls_counter_number o_default_snippet_text">213</h2>
+                                    <p class="o_default_snippet_text">Lorem ipsum</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 sh_animation_part o_colored_level">
+                                <div class="sh_counter">
+                                    <h2 class="js_cls_counter_number o_default_snippet_text">213</h2>
+                                    <p class="o_default_snippet_text">Lorem ipsum</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="sh_corpomate_theme_pets_14" class="js_cls_get_testimonial_custom o_colored_level" data-owl_item_desktop="3" data-owl_item_mobile="1" data-owl_item_tablet="2" data-item_template="sh_corpomate_theme.sh_corpomate_theme_tmpl_pets_14_item" data-snippet="sh_corpomate_theme_tmpl_pets_14" data-name="testimonial" style="background-image: none;">
+                    <div class="container">
+                        <div class="sh_title">
+                            <h4 class="o_default_snippet_text">our testimonial</h4>
+                            <p class="o_default_snippet_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                        </div>
+                        <div class="js_cls_render_dynamic_testimonial_area o_not_editable" />
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+
+</odoo>
