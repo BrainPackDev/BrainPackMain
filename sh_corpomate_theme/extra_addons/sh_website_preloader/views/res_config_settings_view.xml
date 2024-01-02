@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_website_preloader_res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">sh.inherit.res.config.settings.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_settings']" position="after">
+                <h2>Website Preloader</h2>
+                <div class="row o_settings_container">
+                    <div class="col-12 col-md-12 o_setting_box">
+                        <group>
+                            <group>
+                                <field name="sh_is_website_preloader" />
+                                <field name="sh_back_color" widget="color" attrs="{'invisible': [('sh_is_website_preloader','=',False)],'required': [('sh_is_website_preloader', '=', True)] }" />
+                                <field name="sh_progressbar_color" widget="color" attrs="{'invisible': [('sh_is_website_preloader','=',False)],'required': [('sh_is_website_preloader', '=', True)] }" />
+                                <field name="sh_style" widget="selection" attrs="{'invisible': [('sh_is_website_preloader','=',False)],'required': [('sh_is_website_preloader', '=', True)] }" />
+                            </group>
+                        </group>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <template inherit_id="website.layout" id="sh_website_preloade_template" name="Main layout">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div id="preloader" class='js_cls_custom_website_preloader' t-attf-style="background:#{website.sh_back_color}" t-if="website.sh_is_website_preloader">
+                <div id="status">
+                    <div class="loader">
+                        <t t-esc="loader_class" />
+                        <div id="preload_class" t-attf-class="#{website.sh_style} loader-inner">
+                            <div t-attf-style="background:#{website.sh_progressbar_color}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
